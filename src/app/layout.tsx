@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "./components/layout/Navbar";
-import Footer from "./components/layout/Footer";
-import { Poppins } from "next/font/google";
+import Navbar from "../components/layout/Navbar";
+import Footer from "../components/layout/Footer";
+import { Playfair_Display, Inter } from "next/font/google";
 
-
-const poppins = Poppins({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-poppins",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-playfair",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
 });
 
 export const metadata: Metadata = {
@@ -22,10 +27,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-    >
-     <body className={`${poppins.variable} min-h-screen flex flex-col`}>
+    <html lang="en">
+      <body
+        className={`${playfair.variable} ${inter.variable} min-h-screen flex flex-col`}
+      >
         <Navbar />
 
         <main className="grow">{children}</main>

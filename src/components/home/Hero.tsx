@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import BookingForm from "../common/BookingForm";
 
 const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -61,7 +62,6 @@ const Hero = () => {
       {/* Hero Overlay Content */}
       <div className="absolute inset-0 z-10">
         <div className="max-w-7xl mx-auto h-full px-6 lg:px-10">
-          
           {/* Hero Text */}
           <div className="pt-32 md:pt-36 max-w-xl">
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white leading-tight">
@@ -78,59 +78,10 @@ const Hero = () => {
           </div>
 
           {/* Booking Form */}
-          <div className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 w-full px-4 z-20">
-            <div className="max-w-6xl mx-auto bg-bgmain backdrop-blur-md rounded-2xl p-6 shadow-2xl">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                
-                {/* Check In */}
-                <div>
-                  <label className="block text-textmain text-sm font-semibold mb-2">
-                    CHECK-IN
-                  </label>
-
-                  <input
-                    type="date"
-                    className="w-full px-4 py-3 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary text-textmain"
-                  />
-                </div>
-
-                {/* Check Out */}
-                <div>
-                  <label className="block text-textmain text-sm font-semibold mb-2">
-                    CHECK-OUT
-                  </label>
-
-                  <input
-                    type="date"
-                    className="w-full px-4 py-3 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary text-textmain"
-                  />
-                </div>
-
-                {/* Guests */}
-                <div>
-                  <label className="block text-textmain text-sm font-semibold mb-2">
-                    GUESTS
-                  </label>
-
-                  <select className="w-full px-4 py-3 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary text-textmain">
-                    <option>1 Adult</option>
-                    <option>2 Adults</option>
-                    <option>3 Adults</option>
-                    <option>4 Adults</option>
-                    <option>2 Adults + 1 Child</option>
-                    <option>2 Adults + 2 Children</option>
-                  </select>
-                </div>
-
-                {/* CTA */}
-                <div className="flex items-end">
-                  <button className="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 rounded-lg transition duration-300 shadow-md">
-                    CHECK AVAILABILITY
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <BookingForm
+            className="absolute bottom-20 md:bottom-24 left-1/2 -translate-x-1/2 w-full px-4 z-20"
+            containerClassName="max-w-6xl mx-auto"
+          />
         </div>
       </div>
 

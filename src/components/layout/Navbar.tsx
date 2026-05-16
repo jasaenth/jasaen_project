@@ -22,11 +22,9 @@ const Navbar = () => {
 
   return (
     <nav
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isHomePage
-          ? "bg-black/40 backdrop-blur-md"
-          : "bg-white/95 backdrop-blur-md shadow-md"
-      }`}
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-bgmain/40 backdrop-blur-md`
+          
+          }
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-7">
         <div className="flex justify-between items-center h-20">
@@ -34,7 +32,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="shrink-0">
             <Image
-              src={isHomePage ? "/logowhite.png" : "/logo.png"}
+              src={ "/logo.png"}
               alt="Jasaen Hotel Logo"
               width={160}
               height={60}
@@ -54,9 +52,9 @@ const Navbar = () => {
                   href={link.href}
                   className={`font-medium uppercase tracking-wide text-sm transition duration-300 ${
                     isActive
-                      ? "text-secondary underline underline-offset-4 decoration-2"
+                      ? "text-primary underline underline-offset-4 decoration-2"
                       : isHomePage
-                      ? "text-white hover:text-secondary"
+                      ? "text-textmain hover:text-primary"
                       : "text-textmain hover:text-primary"
                   }`}
                 >
@@ -68,7 +66,7 @@ const Navbar = () => {
 
           {/* Desktop Button */}
           <div className="hidden md:block">
-            <button className="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 text-xs rounded-sm transition duration-300 shadow-md">
+            <button className="bg-primary hover:bg-secondary text-white font-semibold py-3 px-6 text-xs rounded-sm transition duration-300 shadow-md">
               BOOK NOW
             </button>
           </div>
@@ -77,7 +75,7 @@ const Navbar = () => {
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className={isHomePage ? "text-white" : "text-textmain"}
+              className={isHomePage ? "text-black" : "text-textmain"}
             >
               <svg
                 className="h-7 w-7"
