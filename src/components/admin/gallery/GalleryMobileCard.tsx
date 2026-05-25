@@ -2,12 +2,12 @@
 
 import Image from "next/image";
 import { Eye, Pencil, Trash2 } from "lucide-react";
-import { GalleryImage } from "./galleryData";
+import { GalleryItem } from "@/types/gallery";
 
 interface Props {
-  item: GalleryImage;
-  onView: (item: GalleryImage) => void;
-  onEdit: (item: GalleryImage) => void;
+  item: GalleryItem;
+  onView: (item: GalleryItem) => void;
+  onEdit: (item: GalleryItem) => void;
   onDelete: (id: string) => void;
 }
 
@@ -29,30 +29,37 @@ const GalleryMobileCard = ({
       </div>
 
       <div className="mt-4">
-        <h3 className="font-semibold text-lg">{item.title}</h3>
+        <h3 className="font-semibold text-lg">
+          {item.title}
+        </h3>
+
         <p className="text-textmuted text-sm mt-1">
-          {item.category}
+          {item.tag}
+        </p>
+
+        <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+          {item.subtitle}
         </p>
       </div>
 
       <div className="flex gap-3 mt-5">
         <button
           onClick={() => onView(item)}
-          className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg"
+          className="flex-1 bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 transition"
         >
           <Eye size={18} className="mx-auto" />
         </button>
 
         <button
           onClick={() => onEdit(item)}
-          className="flex-1 bg-yellow-100 text-yellow-700 py-2 rounded-lg"
+          className="flex-1 bg-yellow-100 text-yellow-700 py-2 rounded-lg hover:bg-yellow-200 transition"
         >
           <Pencil size={18} className="mx-auto" />
         </button>
 
         <button
-          onClick={() => onDelete(item.id)}
-          className="flex-1 bg-red-100 text-red-700 py-2 rounded-lg"
+          onClick={() => onDelete(item._id)}
+          className="flex-1 bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 transition"
         >
           <Trash2 size={18} className="mx-auto" />
         </button>

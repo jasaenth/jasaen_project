@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import { Eye, Pencil, Trash2 } from "lucide-react";
-import { GalleryImage } from "./galleryData";
 import GalleryMobileCard from "./GalleryMobileCard";
+import { GalleryItem } from "@/types/gallery";
 
 interface Props {
-  items: GalleryImage[];
-  onView: (item: GalleryImage) => void;
-  onEdit: (item: GalleryImage) => void;
+  items: GalleryItem[];
+  onView: (item: GalleryItem) => void;
+  onEdit: (item: GalleryItem) => void;
   onDelete: (id: string) => void;
 }
 
@@ -20,11 +20,11 @@ const GalleryGrid = ({
 }: Props) => {
   return (
     <>
-      {/* Desktop Grid */}
+      {/* Desktop */}
       <div className="hidden lg:grid grid-cols-2 xl:grid-cols-4 gap-6">
         {items.map((item) => (
           <div
-            key={item.id}
+            key={item._id}
             className="bg-white rounded-2xl border border-borderlight shadow-sm overflow-hidden"
           >
             <div className="relative h-52">
@@ -42,7 +42,7 @@ const GalleryGrid = ({
               </h3>
 
               <p className="text-textmuted text-sm mt-1">
-                {item.category}
+                {item.tag}
               </p>
 
               <div className="flex justify-end gap-3 mt-4">
@@ -61,7 +61,7 @@ const GalleryGrid = ({
                 </button>
 
                 <button
-                  onClick={() => onDelete(item.id)}
+                  onClick={() => onDelete(item._id)}
                   className="text-red-600 hover:text-red-800"
                 >
                   <Trash2 size={18} />
@@ -76,7 +76,7 @@ const GalleryGrid = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:hidden">
         {items.map((item) => (
           <GalleryMobileCard
-            key={item.id}
+            key={item._id}
             item={item}
             onView={onView}
             onEdit={onEdit}

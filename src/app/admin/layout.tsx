@@ -1,10 +1,13 @@
-// app/admin/layout.tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Toaster } from "react-hot-toast";
 import AdminSidebar from "@/components/admin/layout/AdminSidebar";
 import AdminNavbar from "@/components/admin/layout/AdminNavbar";
+
+import { useAppDispatch } from "@/hooks/redux";
+import { setUser, clearUser } from "@/store/slices/authSlice";
 
 export default function AdminLayout({
   children,
@@ -12,43 +15,112 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
-  const isLoginPage = pathname === "/admin/login";
+  const [isMobileMenuOpen, setIsMobileMenuOpen] =
+    useState(false);
+
+  const [isMobile, setIsMobile] =
+    useState(false);
+
+  const publicRoutes = [
+    "/admin/login",
+    "/admin/register",
+  ];
+
+  const isPublicPage =
+    publicRoutes.includes(pathname);
 
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
     };
+
     checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+
+    window.addEventListener(
+      "resize",
+      checkMobile
+    );
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        checkMobile
+      );
   }, []);
 
-  // Close mobile menu when route changes
+  useEffect(() => {
+    if (isPublicPage) return;
+
+    const fetchMe = async () => {
+      try {
+        const res = await fetch(
+          "/api/admin-auth/me",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
+
+        if (!res.ok) {
+          dispatch(clearUser());
+          router.replace("/admin/login");
+          return;
+        }
+
+        const data = await res.json();
+
+        dispatch(setUser(data.user));
+      } catch {
+        dispatch(clearUser());
+        router.replace("/admin/login");
+      }
+    };
+
+    fetchMe();
+  }, [
+    dispatch,
+    router,
+    pathname,
+    isPublicPage,
+  ]);
+
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  if (isLoginPage) {
+  if (isPublicPage) {
     return <>{children}</>;
   }
 
   return (
-    <div className="bg-white  min-h-screen">
-      <AdminSidebar 
+    <div className="bg-white min-h-screen">
+      <Toaster position="top-right" />
+      <AdminSidebar
         isMobileOpen={isMobileMenuOpen}
-        onMobileClose={() => setIsMobileMenuOpen(false)}
+        onMobileClose={() =>
+          setIsMobileMenuOpen(false)
+        }
       />
-      
-      <div className={`transition-all duration-300 ${
-        !isMobile ? "lg:ml-72" : "ml-0"
-      }`}>
-        <AdminNavbar 
-          onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          isMobileMenuOpen={isMobileMenuOpen}
+
+      <div
+        className={`transition-all duration-300 ${
+          !isMobile ? "lg:ml-72" : "ml-0"
+        }`}
+      >
+        <AdminNavbar
+          onMenuClick={() =>
+            setIsMobileMenuOpen(
+              !isMobileMenuOpen
+            )
+          }
+          isMobileMenuOpen={
+            isMobileMenuOpen
+          }
         />
+
         <main className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">
             {children}

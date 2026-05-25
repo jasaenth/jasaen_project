@@ -1,8 +1,10 @@
 "use client";
 
 interface Props {
-  status: "active" | "inactive";
-  setStatus: (status: "active" | "inactive") => void;
+  status: "ACTIVE" | "INACTIVE";
+  setStatus: (
+    status: "ACTIVE" | "INACTIVE"
+  ) => void;
 }
 
 const RoomStatusSelector = ({
@@ -22,16 +24,16 @@ const RoomStatusSelector = ({
       <div className="space-y-4">
         <button
           type="button"
-          onClick={() => setStatus("active")}
+          onClick={() => setStatus("ACTIVE")}
           className={`w-full flex items-center gap-4 p-4 rounded-xl border transition ${
-            status === "active"
+            status === "ACTIVE"
               ? "border-green-500 bg-green-50"
               : "border-borderlight"
           }`}
         >
           <div
             className={`w-5 h-5 rounded-full border-2 ${
-              status === "active"
+              status === "ACTIVE"
                 ? "border-green-600 bg-green-600"
                 : "border-gray-400"
             }`}
@@ -50,16 +52,16 @@ const RoomStatusSelector = ({
 
         <button
           type="button"
-          onClick={() => setStatus("inactive")}
+          onClick={() => setStatus("INACTIVE")}
           className={`w-full flex items-center gap-4 p-4 rounded-xl border transition ${
-            status === "inactive"
+            status === "INACTIVE"
               ? "border-red-500 bg-red-50"
               : "border-borderlight"
           }`}
         >
           <div
             className={`w-5 h-5 rounded-full border-2 ${
-              status === "inactive"
+              status === "INACTIVE"
                 ? "border-red-600 bg-red-600"
                 : "border-gray-400"
             }`}

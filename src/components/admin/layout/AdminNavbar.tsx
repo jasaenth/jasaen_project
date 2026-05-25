@@ -18,6 +18,9 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
+import { useRouter } from "next/navigation";
+import { clearUser } from "@/store/slices/authSlice";
 
 const pageTitles: Record<string, { title: string; subtitle: string }> = {
   "/admin/dashboard": { 
@@ -65,7 +68,8 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const pageInfo = pageTitles[pathname] || { 
     title: "Admin Panel", 
@@ -105,6 +109,23 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
   ];
 
   const unreadCount = notifications.filter(n => !n.read).length;
+  
+  const user = useAppSelector((state) => state.auth.user);
+
+  const handleLogout = async () => {
+    try {
+      await fetch("/api/admin-auth/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+
+      dispatch(clearUser());
+
+      router.replace("/admin/login");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
 
   return (
     <>
@@ -193,8 +214,8 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
                     <User className="w-4 h-4 text-white" />
                   </div>
                   <div className="hidden md:block text-left">
-                    <p className="text-sm font-semibold text-gray-800 ">Admin</p>
-                    <p className="text-xs text-gray-500 ">Super Admin</p>
+                    <p className="text-sm font-semibold text-gray-800 ">{user?.fullName}</p>
+                    <p className="text-xs text-gray-500 ">{user?.role}</p>
                   </div>
                   <ChevronDown className="hidden md:block w-4 h-4 text-gray-500" />
                 </button>
@@ -207,14 +228,16 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
                           <User className="w-5 h-5 text-white" />
                         </div>
                         <div>
-                          <p className="font-semibold text-gray-800 ">Admin</p>
-                          <p className="text-xs text-gray-500 ">admin@jasaenhotel.com</p>
+                          <p className="font-semibold text-gray-800 ">{user?.fullName}</p>
+                          <p className="text-xs text-gray-500 ">{user?.email}</p>
                         </div>
                       </div>
                     </div>
                     
                     <div className="border-t border-gray-200 dark:border-gray-700 py-2">
-                      <button className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50  w-full transition">
+                      <button 
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50  w-full transition">
                         <LogOut className="w-4 h-4" /> Logout
                       </button>
                     </div>

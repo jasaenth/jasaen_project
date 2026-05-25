@@ -1,137 +1,32 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
+import toast from "react-hot-toast";
+import { GalleryItem } from "@/types/gallery";
+
 
 const categories = ["ALL", "HOTEL", "ROOMS", "AMENITIES", "SURROUNDINGS"];
 
-// All images with same dimensions
-const galleryImages = [
-  {
-    src: "/images/hero/hero-1.JPG",
-    category: "HOTEL",
-    title: "Hotel Exterior",
-    description: "Beautiful traditional Thai architecture"
-  },
-  {
-    src: "/images/hero/hero-2.JPG",
-    category: "HOTEL",
-    title: "Grand Lobby",
-    description: "Elegant lobby with modern amenities"
-  },
-  {
-    src: "/images/hero/hero-3.JPG",
-    category: "HOTEL",
-    title: "Swimming Pool",
-    description: "Outdoor pool with sun loungers"
-  },
-  {
-    src: "/images/hero/hero-1.JPG",
-    category: "HOTEL",
-    title: "Hotel Restaurant",
-    description: "Fine dining experience"
-  },
-  {
-    src: "/images/hero/hero-2.JPG",
-    category: "ROOMS",
-    title: "Standard Room",
-    description: "Cozy and comfortable"
-  },
-  {
-    src: "/images/hero/hero-3.JPG",
-    category: "ROOMS",
-    title: "Superior Room",
-    description: "Urban & stylish"
-  },
-  {
-    src: "/images/hero/hero-1.JPG",
-    category: "ROOMS",
-    title: "Deluxe Room",
-    description: "Spacious & relaxing"
-  },
-  {
-    src: "/images/hero/hero-2.JPG",
-    category: "ROOMS",
-    title: "Suite Bathroom",
-    description: "Premium fixtures"
-  },
-  {
-    src: "/images/hero/hero-3.JPG",
-    category: "AMENITIES",
-    title: "Spa & Wellness",
-    description: "Relaxing treatments"
-  },
-  {
-    src: "/images/hero/hero-1.JPG",
-    category: "AMENITIES",
-    title: "Fitness Center",
-    description: "Modern equipment"
-  },
-  {
-    src: "/images/hero/hero-2.JPG",
-    category: "AMENITIES",
-    title: "Coffee Corner",
-    description: "Complimentary coffee"
-  },
-  {
-    src: "/images/hero/hero-3.JPG",
-    category: "AMENITIES",
-    title: "Swimming Pool",
-    description: "Outdoor pool"
-  },
-  {
-    src: "/images/hero/hero-1.JPG",
-    category: "SURROUNDINGS",
-    title: "Nearby Temple",
-    description: "Beautiful architecture"
-  },
-  {
-    src: "/images/hero/hero-2.JPG",
-    category: "SURROUNDINGS",
-    title: "Night Market",
-    description: "Local food & souvenirs"
-  },
-  {
-    src: "/images/hero/hero-3.JPG",
-    category: "SURROUNDINGS",
-    title: "City Park",
-    description: "Peaceful walks"
-  },
-  {
-    src: "/images/hero/hero-1.JPG",
-    category: "SURROUNDINGS",
-    title: "River View",
-    description: "Sunset views"
-  },
-  {
-    src: "/images/hero/hero-2.JPG",
-    category: "HOTEL",
-    title: "Conference Room",
-    description: "Meeting facilities"
-  },
-  {
-    src: "/images/hero/hero-3.JPG",
-    category: "ROOMS",
-    title: "Family Suite",
-    description: "Perfect for families"
-  },
-];
+
 
 const GallerySection = () => {
   const [activeCategory, setActiveCategory] = useState("ALL");
-  const [selectedImage, setSelectedImage] = useState<typeof galleryImages[0] | null>(null);
+  const [selectedImage, setSelectedImage] = useState<GalleryItem | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [galleryImages, setGalleryImages] = useState<GalleryItem[]>([]);
 
   const filteredImages =
     activeCategory === "ALL"
       ? galleryImages
       : galleryImages.filter(
-          (image) => image.category === activeCategory
+          (image) => image.tag === activeCategory
         );
 
   // Handle image click for lightbox
-  const handleImageClick = useCallback((image: typeof galleryImages[0], index: number) => {
+  const handleImageClick = useCallback((image: GalleryItem, index: number) => {
     setSelectedImage(image);
     setCurrentIndex(index);
     document.body.style.overflow = "hidden";
@@ -159,6 +54,32 @@ const GallerySection = () => {
     if (e.key === "ArrowLeft") navigateImage("prev");
     if (e.key === "ArrowRight") navigateImage("next");
   }, [closeLightbox, navigateImage]);
+
+
+  useEffect(() => {
+      fetchGallery();
+    }, []);
+
+    const fetchGallery = async () => {
+    try {
+      setLoading(true);
+
+      const res = await fetch("/api/gallery");
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      setGalleryImages(data.data);
+    } catch {
+      toast.error("Failed to load gallery");
+    } finally {
+      setLoading(false);
+    }
+  };
+
 
   return (
     <section className="bg-bgmain pt-16 px-6 md:px-30">
@@ -188,7 +109,7 @@ const GallerySection = () => {
           {categories.map((category) => {
             const count = category === "ALL" 
               ? galleryImages.length 
-              : galleryImages.filter(img => img.category === category).length;
+              : galleryImages.filter(img => img.tag === category).length;
             
             return (
               <button
@@ -222,7 +143,7 @@ const GallerySection = () => {
               {/* Image Container - Fixed height for uniformity */}
               <div className="relative h-72 w-full overflow-hidden">
                 <Image
-                  src={image.src}
+                  src={image.image}
                   alt={image.title || `Gallery ${index + 1}`}
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -235,13 +156,13 @@ const GallerySection = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500">
                     <h3 className="text-white font-bold text-lg">{image.title}</h3>
-                    <p className="text-white/80 text-sm mt-1 line-clamp-2">{image.description}</p>
+                    <p className="text-white/80 text-sm mt-1 line-clamp-2">{image.subtitle}</p>
                   </div>
                 </div>
 
                 {/* Category Badge */}
                 <div className="absolute top-3 right-3 bg-secondary/90 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full z-10">
-                  {image.category}
+                  {image.tag}
                 </div>
 
                 {/* Hover Zoom Icon */}
@@ -257,7 +178,7 @@ const GallerySection = () => {
               {/* Image Info - Always visible */}
               <div className="p-4">
                 <h3 className="text-textmain font-semibold text-base truncate">{image.title}</h3>
-                <p className="text-textmuted text-sm mt-1 line-clamp-2">{image.description}</p>
+                <p className="text-textmuted text-sm mt-1 line-clamp-2">{image.subtitle}</p>
               </div>
             </div>
           ))}
@@ -312,7 +233,7 @@ const GallerySection = () => {
             >
               <div className="relative h-[80vh]">
                 <Image
-                  src={selectedImage.src}
+                  src={selectedImage.image}
                   alt={selectedImage.title || "Gallery image"}
                   fill
                   className="object-contain"
@@ -324,8 +245,8 @@ const GallerySection = () => {
               {/* Image Info */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6">
                 <h3 className="text-white text-2xl font-bold mb-2">{selectedImage.title}</h3>
-                <p className="text-white/80">{selectedImage.description}</p>
-                <p className="text-secondary text-sm mt-2">{selectedImage.category}</p>
+                <p className="text-white/80">{selectedImage.subtitle}</p>
+                <p className="text-secondary text-sm mt-2">{selectedImage.tag}</p>
               </div>
             </div>
 
