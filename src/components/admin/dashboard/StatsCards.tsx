@@ -3,6 +3,7 @@ import {
   IndianRupee,
   BedDouble,
   PieChart,
+  Banknote,
 } from "lucide-react";
 import DashboardCard from "./DashboardCard";
 
@@ -15,8 +16,8 @@ const stats = [
   },
   {
     title: "Total Revenue",
-    value: "₹ 2,45,000",
-    icon: IndianRupee,
+    value: "฿ 2,45,00",
+    icon: Banknote,
     color: "text-green-600",
   },
   {

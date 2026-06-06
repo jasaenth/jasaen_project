@@ -39,7 +39,7 @@ const UsersFilters = ({
         </div>
 
         {/* Right */}
-        <div className="flex flex-col sm:flex-row gap-4">
+        {/* <div className="flex flex-col sm:flex-row gap-4">
           <select
             value={role}
             onChange={(e) =>
@@ -65,7 +65,7 @@ const UsersFilters = ({
             <Plus size={18} />
             Add New User
           </Link>
-        </div>
+        </div> */}
       </div>
     </div>
   );

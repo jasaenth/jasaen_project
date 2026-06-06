@@ -1,13 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { Booking } from "./bookingsData";
+import { IBooking } from "@/types/Booking";
 
 interface Props {
-  booking: Booking | null;
+  booking: IBooking | null;
   onClose: () => void;
-  onSave: (updatedBooking: Booking) => void;
+  onSave: (
+    updatedBooking: IBooking
+  ) => void;
 }
 
 const BookingEditModal = ({
@@ -15,7 +17,8 @@ const BookingEditModal = ({
   onClose,
   onSave,
 }: Props) => {
-  const [formData, setFormData] = useState<Booking | null>(booking);
+  const [formData, setFormData] =
+    useState<IBooking | null>(null);
 
   useEffect(() => {
     setFormData(booking);
@@ -24,19 +27,22 @@ const BookingEditModal = ({
   if (!formData) return null;
 
   const handleChange = (
-    key: keyof Booking,
-    value: string | number
+    key:
+      | "status"
+      | "paymentStatus",
+    value: string
   ) => {
     setFormData({
       ...formData,
       [key]: value,
-    });
+    } as IBooking);
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl w-full max-w-2xl p-8 relative shadow-2xl">
-        
+      <div className="bg-white rounded-2xl w-full max-w-3xl p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+
+        {/* Close */}
         <button
           onClick={onClose}
           className="absolute right-5 top-5"
@@ -44,89 +50,188 @@ const BookingEditModal = ({
           <X size={22} />
         </button>
 
-        <h2 className="text-2xl font-bold text-primary mb-6">
-          Edit Booking
+        <h2 className="text-2xl font-bold text-primary mb-8">
+          Update Booking
         </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          
-          <Input
+        {/* Booking Details */}
+        <div className="grid md:grid-cols-2 gap-6">
+
+          <Info
+            label="Booking ID"
+            value={formData._id}
+          />
+
+          <Info
             label="Guest Name"
-            value={formData.guestName}
-            onChange={(v) => handleChange("guestName", v)}
+            value={formData.user.name}
           />
 
-          <Input
-            label="Email"
-            value={formData.email}
-            onChange={(v) => handleChange("email", v)}
+          <Info
+            label="Guest Email"
+            value={formData.user.email}
           />
 
-          <Input
-            label="Room Type"
-            value={formData.roomType}
-            onChange={(v) => handleChange("roomType", v)}
+          <Info
+            label="Guest Mobile"
+            value={formData.user.mobile}
           />
 
-          <Input
-            label="Amount"
-            value={formData.amount}
-            onChange={(v) => handleChange("amount", Number(v))}
-          />
-
-          <select
-            value={formData.status}
-            onChange={(e) =>
-              handleChange(
-                "status",
-                e.target.value as Booking["status"]
-              )
+          <Info
+            label="Room Name"
+            value={
+              formData.room.roomName
             }
-            className="border border-borderlight rounded-xl px-4 py-3"
-          >
-            <option>Confirmed</option>
-            <option>Pending</option>
-            <option>Canceled</option>
-          </select>
+          />
+
+          <Info
+            label="Room Type"
+            value={
+              formData.room.roomType
+            }
+          />
+
+          <Info
+            label="Check In"
+            value={new Date(
+              formData.checkIn
+            ).toLocaleDateString()}
+          />
+
+          <Info
+            label="Check Out"
+            value={new Date(
+              formData.checkOut
+            ).toLocaleDateString()}
+          />
+
+          <Info
+            label="Guests"
+            value={String(
+              formData.guests
+            )}
+          />
+
+          <Info
+            label="Total Amount"
+            value={`₹${formData.totalAmount}`}
+          />
         </div>
 
-        <div className="flex justify-end gap-3 mt-8">
+        {/* Editable Fields */}
+        <div className="grid md:grid-cols-2 gap-5 mt-8">
+
+          {/* Booking Status */}
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Booking Status
+            </label>
+
+            <select
+              value={formData.status}
+              onChange={(e) =>
+                handleChange(
+                  "status",
+                  e.target.value
+                )
+              }
+              className="w-full border border-borderlight rounded-xl px-4 py-3"
+            >
+              <option value="PENDING">
+                PENDING
+              </option>
+
+              <option value="CONFIRMED">
+                CONFIRMED
+              </option>
+
+              <option value="CANCELLED">
+                CANCELLED
+              </option>
+            </select>
+          </div>
+
+          {/* Payment Status */}
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Payment Status
+            </label>
+
+            <select
+              value={
+                formData.paymentStatus
+              }
+              onChange={(e) =>
+                handleChange(
+                  "paymentStatus",
+                  e.target.value
+                )
+              }
+              className="w-full border border-borderlight rounded-xl px-4 py-3"
+            >
+              <option value="PENDING">
+                PENDING
+              </option>
+
+              <option value="PAID">
+                PAID
+              </option>
+
+              <option value="FAILED">
+                FAILED
+              </option>
+
+              <option value="REFUNDED">
+                REFUNDED
+              </option>
+            </select>
+          </div>
+
+        </div>
+
+        {/* Footer */}
+        <div className="flex justify-end gap-4 mt-10">
+
           <button
             onClick={onClose}
-            className="px-6 py-3 border rounded-xl"
+            className="px-6 py-3 border border-borderlight rounded-xl"
           >
             Cancel
           </button>
 
           <button
-            onClick={() => onSave(formData)}
+            onClick={() =>
+              onSave(formData)
+            }
             className="px-6 py-3 bg-primary text-white rounded-xl"
           >
             Save Changes
           </button>
+
         </div>
       </div>
     </div>
   );
 };
 
-const Input = ({
+function Info({
   label,
   value,
-  onChange,
 }: {
   label: string;
-  value: string | number;
-  onChange: (value: string) => void;
-}) => (
-  <div>
-    <p className="text-sm text-textmuted mb-2">{label}</p>
-    <input
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full border border-borderlight rounded-xl px-4 py-3"
-    />
-  </div>
-);
+  value: string;
+}) {
+  return (
+    <div>
+      <p className="text-sm text-textmuted">
+        {label}
+      </p>
+
+      <p className="font-semibold mt-1 break-all">
+        {value}
+      </p>
+    </div>
+  );
+}
 
 export default BookingEditModal;

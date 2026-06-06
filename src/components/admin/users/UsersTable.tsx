@@ -2,22 +2,17 @@
 
 import Image from "next/image";
 import { Eye, Pencil, Trash2 } from "lucide-react";
-import { User } from "./usersData";
 import UserMobileCard from "./UserMobileCard";
+import { IUser } from "@/types/User";
 
 interface Props {
-  users: User[];
-  onView: (user: User) => void;
-  onEdit: (user: User) => void;
+  users: IUser[];
+  onView: (user: IUser) => void;
+  onEdit: (user: IUser) => void;
   onDelete: (id: string) => void;
 }
 
-const UsersTable = ({
-  users,
-  onView,
-  onEdit,
-  onDelete,
-}: Props) => {
+const UsersTable = ({ users, onView, onEdit, onDelete }: Props) => {
   return (
     <>
       {/* Desktop Table */}
@@ -31,9 +26,7 @@ const UsersTable = ({
                 <th className="px-6 py-4 font-semibold">Email</th>
                 <th className="px-6 py-4 font-semibold">Phone</th>
                 <th className="px-6 py-4 font-semibold">Role</th>
-                <th className="px-6 py-4 font-semibold">
-                  Registered On
-                </th>
+                <th className="px-6 py-4 font-semibold">Registered On</th>
                 <th className="px-6 py-4 font-semibold">Status</th>
                 <th className="px-6 py-4 font-semibold">Actions</th>
               </tr>
@@ -42,42 +35,29 @@ const UsersTable = ({
             <tbody>
               {users.map((user) => (
                 <tr
-                  key={user.id}
+                  key={user._id}
                   className="border-b border-borderlight hover:bg-bgmain/40"
                 >
                   <td className="px-6 py-5 font-semibold text-primary">
-                    {user.id}
+                    {user._id.slice(-6)}
                   </td>
 
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <div className="relative w-10 h-10 rounded-full overflow-hidden">
-                        <Image
-                          src={user.image}
-                          alt={user.name}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-
-                      <span className="font-medium">
-                        {user.name}
-                      </span>
+                      <span className="font-medium">{user.name}</span>
                     </div>
                   </td>
 
                   <td className="px-6 py-5">{user.email}</td>
 
-                  <td className="px-6 py-5">{user.phone}</td>
+                  <td className="px-6 py-5">{user.mobile}</td>
 
                   <td className="px-6 py-5">
                     <span
                       className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        user.role === "Guest"
+                        user.role === "USER"
                           ? "bg-blue-100 text-blue-700"
-                          : user.role === "Staff"
-                          ? "bg-purple-100 text-purple-700"
-                          : "bg-orange-100 text-orange-700"
+                          : "bg-green-100 text-green-700"
                       }`}
                     >
                       {user.role}
@@ -85,20 +65,10 @@ const UsersTable = ({
                   </td>
 
                   <td className="px-6 py-5">
-                    {user.registeredOn}
+                    {new Date(user.createdAt).toLocaleDateString()}
                   </td>
 
-                  <td className="px-6 py-5">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        user.status === "Active"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
-                      {user.status}
-                    </span>
-                  </td>
+                
 
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-4">
@@ -117,7 +87,7 @@ const UsersTable = ({
                       </button>
 
                       <button
-                        onClick={() => onDelete(user.id)}
+                        onClick={() => onDelete(user._id)}
                         className="text-red-600 hover:text-red-800"
                       >
                         <Trash2 size={18} />
@@ -135,7 +105,7 @@ const UsersTable = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:hidden">
         {users.map((user) => (
           <UserMobileCard
-            key={user.id}
+            key={user._id}
             user={user}
             onView={onView}
             onEdit={onEdit}

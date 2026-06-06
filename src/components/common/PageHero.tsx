@@ -26,7 +26,7 @@ const PageHero = ({
       />
 
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/65" />
+      <div className="absolute inset-0 bg-black/45" />
 
       {/* Content */}
       <div className="relative z-10 flex items-center h-full px-6 md:px-12 lg:px-20">

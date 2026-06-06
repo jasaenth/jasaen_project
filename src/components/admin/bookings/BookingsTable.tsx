@@ -1,28 +1,25 @@
 "use client";
 
 import { Eye, Pencil, Trash2 } from "lucide-react";
-import { Booking } from "./bookingsData";
 import BookingMobileCard from "./BookingMobileCard";
+import { IBooking } from "@/types/Booking";
 
 interface Props {
-  bookings: Booking[];
-  onView: (booking: Booking) => void;
-  onEdit: (booking: Booking) => void;
+  bookings: IBooking[];
+  onView: (booking: IBooking) => void;
+  onEdit: (booking: IBooking) => void;
   onDelete: (id: string) => void;
 }
 
 const statusStyles = {
-  Confirmed: "bg-green-100 text-green-700",
-  Pending: "bg-yellow-100 text-yellow-700",
-  Canceled: "bg-red-100 text-red-700",
+  CONFIRMED: "bg-green-100 text-green-700",
+
+  PENDING: "bg-yellow-100 text-yellow-700",
+
+  CANCELLED: "bg-red-100 text-red-700",
 };
 
-const BookingsTable = ({
-  bookings,
-  onView,
-  onEdit,
-  onDelete,
-}: Props) => {
+const BookingsTable = ({ bookings, onView, onEdit, onDelete }: Props) => {
   return (
     <>
       {/* Desktop Table */}
@@ -45,29 +42,33 @@ const BookingsTable = ({
             <tbody>
               {bookings.map((booking) => (
                 <tr
-                  key={booking.id}
+                  key={booking._id.slice(-8)}
                   className="border-b border-borderlight hover:bg-bgmain/50"
                 >
                   <td className="px-6 py-5 font-semibold text-primary">
-                    {booking.id}
+                    {booking._id}
                   </td>
 
                   <td className="px-6 py-5">
                     <div>
-                      <p className="font-medium">{booking.guestName}</p>
+                      <p className="font-medium">
+                        {booking.user?.name || "User Deleted"}
+                      </p>
+
                       <p className="text-sm text-textmuted">
-                        {booking.email}
+                        {booking.user?.email || "-"}
                       </p>
                     </div>
                   </td>
 
-                  <td className="px-6 py-5">{booking.roomType}</td>
+                  <td className="px-6 py-5">{booking.room.roomType}</td>
 
                   <td className="px-6 py-5">
                     <div className="text-sm">
-                      <p>{booking.checkIn}</p>
-                      <p className="text-textmuted">
-                        to {booking.checkOut}
+                      <p>{new Date(booking.checkIn).toLocaleDateString()}</p>
+
+                      <p>
+                        to {new Date(booking.checkOut).toLocaleDateString()}
                       </p>
                     </div>
                   </td>
@@ -75,14 +76,12 @@ const BookingsTable = ({
                   <td className="px-6 py-5">{booking.guests}</td>
 
                   <td className="px-6 py-5 font-semibold">
-                    ₹{booking.amount}
+                    ₹{booking.totalAmount}
                   </td>
 
                   <td className="px-6 py-5">
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium ${
-                        statusStyles[booking.status]
-                      }`}
+                      className={`px-3 py-1 rounded-full text-sm font-medium `}
                     >
                       {booking.status}
                     </span>
@@ -105,7 +104,7 @@ const BookingsTable = ({
                       </button>
 
                       <button
-                        onClick={() => onDelete(booking.id)}
+                        onClick={() => onDelete(booking._id)}
                         className="p-2 rounded-lg bg-red-100 text-red-700 hover:bg-red-200"
                       >
                         <Trash2 size={18} />
@@ -123,7 +122,7 @@ const BookingsTable = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 lg:hidden">
         {bookings.map((booking) => (
           <BookingMobileCard
-            key={booking.id}
+            key={booking._id}
             booking={booking}
             onView={onView}
             onEdit={onEdit}

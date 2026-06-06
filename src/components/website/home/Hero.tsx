@@ -9,17 +9,17 @@ const Hero = () => {
 
   const slides = [
     {
-      image: "/images/hero/hero-1.JPG",
+      image: "/images/hero/hero-1.jpeg",
       title: "TRADITION MEETS COMFORT",
       subtitle: "A unique stay in the heart of the city",
     },
     {
-      image: "/images/hero/hero-2.JPG",
+      image: "/images/hero/hero-2.jpeg",
       title: "EXPERIENCE TIMELESS LUXURY",
       subtitle: "Relax in elegance and comfort",
     },
     {
-      image: "/images/hero/hero-3.JPG",
+      image: "/images/hero/hero-3.jpeg",
       title: "CREATE UNFORGETTABLE MEMORIES",
       subtitle: "Your perfect stay begins here",
     },
@@ -46,7 +46,7 @@ const Hero = () => {
           <div key={index} className="relative w-full h-full shrink-0">
             <Image
               src={slide.image}
-              alt={slide.title}
+              alt={slide.title}  
               fill
               priority={index === 0}
               className="object-cover"
@@ -54,7 +54,7 @@ const Hero = () => {
             />
 
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/45" />
+            <div className="absolute inset-0 " />
           </div>
         ))}
       </div>

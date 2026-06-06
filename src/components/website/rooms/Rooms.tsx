@@ -1,6 +1,7 @@
 // components/RoomsPage.tsx
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -15,30 +16,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import BookingForm from "../../common/BookingForm";
-
-// Type definitions
-interface Room {
-  id: number;
-  code: string;
-  name: string;
-  slug: string;
-  category: string;
-  description: string;
-  price: number;
-  priceDisplay: string;
-  size: number;
-  beds: number;
-  bedType: string;
-  maxGuests: number;
-  bathroomType: string;
-  amenities: string[];
-  image: string;
-  color: string;
-  rating: number;
-  popularity: number;
-  units: number;
-  bookedUnits: number;
-}
+import { IRoom } from "@/models/Room";
 
 type SortOption = "popularity" | "price-low" | "price-high" | "rating";
 
@@ -46,494 +24,92 @@ const RoomsPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [sortBy, setSortBy] = useState<SortOption>("popularity");
   const [showSortDropdown, setShowSortDropdown] = useState(false);
+  const [roomsData, setRoomsData] = useState<IRoom[]>([]);
+  const [loading, setLoading] = useState(true);
+  const searchParams = useSearchParams();
 
-  // Actual rooms data with units from your table
-  const roomsData: Room[] = [
-    // Standard Rooms (category: "standard")
-    {
-      id: 1,
-      code: "SG",
-      name: "Standard Single",
-      slug: "standard-single",
-      category: "standard",
-      description:
-        "Climbing 3.5 ft. Bed / Shared Bathroom. Perfect for solo travelers seeking adventure.",
-      price: 500,
-      priceDisplay: "฿500",
-      size: 9,
-      beds: 1,
-      bedType: "3.5 ft Loft",
-      maxGuests: 1,
-      bathroomType: "Shared",
-      rating: 4.2,
-      popularity: 85,
-      units: 8,
-      bookedUnits: 3,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Shared Bathroom",
-        "Mini Fridge",
-        "Climbing Loft Design",
-      ],
-      image: "/images/rooms/standard-single.jpg",
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      id: 2,
-      code: "ST",
-      name: "Standard Twin",
-      slug: "standard-twin",
-      category: "standard",
-      description:
-        "4 ft. + 3 ft. Climbing Bed / Private Bathroom. 2-level Loft design.",
-      price: 750,
-      priceDisplay: "฿750",
-      size: 13,
-      beds: 2,
-      bedType: "4 ft & 3 ft Loft",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.4,
-      popularity: 82,
-      units: 2,
-      bookedUnits: 0,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "2-Level Loft",
-        "Climbing Design",
-      ],
-      image: "/images/rooms/standard-twin.JPG",
-      color: "from-blue-500 to-blue-600",
-    },
-    {
-      id: 3,
-      code: "SB",
-      name: "Standard Double",
-      slug: "standard-double",
-      category: "standard",
-      description:
-        "Climbing 5 ft. Bed / Private Bathroom. Loft design with balcony.",
-      price: 800,
-      priceDisplay: "฿800",
-      size: 13,
-      beds: 1,
-      bedType: "5 ft Loft",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.6,
-      popularity: 90,
-      units: 3,
-      bookedUnits: 2,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Balcony",
-        "Loft Design",
-        "Climbing Theme",
-      ],
-      image: "/images/rooms/standard-double.jpg",
-      color: "from-blue-500 to-blue-600",
-    },
+  const today = new Date();
 
-    // Deluxe Rooms (category: "deluxe")
-    {
-      id: 4,
-      code: "DS",
-      name: "Deluxe Single",
-      slug: "deluxe-single",
-      category: "deluxe",
-      description:
-        "3.5 ft. Bed / Private Bathroom. Jail Cell Theme with unique character.",
-      price: 700,
-      priceDisplay: "฿700",
-      size: 11,
-      beds: 1,
-      bedType: "3.5 ft",
-      maxGuests: 1,
-      bathroomType: "Private",
-      rating: 4.5,
-      popularity: 88,
-      units: 2,
-      bookedUnits: 1,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Unique Jail Cell Theme",
-      ],
-      image: "/images/rooms/deluxe-single.JPG",
-      color: "from-purple-500 to-purple-600",
-    },
-    {
-      id: 5,
-      code: "DA",
-      name: "Deluxe Double A (Bottle)",
-      slug: "deluxe-double-a",
-      category: "deluxe",
-      description: "5 ft. Bed / Private Bathroom. Unique bottle-themed decor.",
-      price: 900,
-      priceDisplay: "฿900",
-      size: 15,
-      beds: 1,
-      bedType: "5 ft",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.7,
-      popularity: 94,
-      units: 3,
-      bookedUnits: 1,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Bottle Theme Decor",
-      ],
-      image: "/images/rooms/deluxe-bottle.jpg",
-      color: "from-purple-500 to-purple-600",
-    },
-    {
-      id: 6,
-      code: "DB",
-      name: "Deluxe Double B (Car)",
-      slug: "deluxe-double-b",
-      category: "deluxe",
-      description: "5 ft. Bed / Private Bathroom. Car-themed design room.",
-      price: 900,
-      priceDisplay: "฿900",
-      size: 20,
-      beds: 1,
-      bedType: "5 ft",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.6,
-      popularity: 86,
-      units: 3,
-      bookedUnits: 3,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Car Theme Decor",
-        "Spacious 20 sqm",
-      ],
-      image: "/images/rooms/deluxe-car.jpg",
-      color: "from-purple-500 to-purple-600",
-    },
-    {
-      id: 7,
-      code: "DC",
-      name: "Deluxe Double C (Jackson Pollock)",
-      slug: "deluxe-double-c",
-      category: "deluxe",
-      description:
-        "5 ft. Bed / Private Bathroom / Working Desk. Art-inspired Jackson Pollock decor.",
-      price: 900,
-      priceDisplay: "฿900",
-      size: 20,
-      beds: 1,
-      bedType: "5 ft",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.9,
-      popularity: 98,
-      units: 3,
-      bookedUnits: 0,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Working Desk",
-        "Jackson Pollock Art Theme",
-      ],
-      image: "/images/rooms/deluxe-pollock.jpg",
-      color: "from-purple-500 to-purple-600",
-    },
-    {
-      id: 8,
-      code: "DD",
-      name: "Deluxe Double D (Slum)",
-      slug: "deluxe-double-d",
-      category: "deluxe",
-      description:
-        "5 ft. Bed / Private Bathroom / Working Desk. Urban industrial style.",
-      price: 900,
-      priceDisplay: "฿900",
-      size: 20,
-      beds: 1,
-      bedType: "5 ft",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.3,
-      popularity: 78,
-      units: 2,
-      bookedUnits: 2,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Working Desk",
-        "Urban Industrial Style",
-      ],
-      image: "/images/rooms/deluxe-slum.jpg",
-      color: "from-purple-500 to-purple-600",
-    },
-    {
-      id: 9,
-      code: "DE",
-      name: "Deluxe Double E (Circle)",
-      slug: "deluxe-double-e",
-      category: "deluxe",
-      description:
-        "5 ft. Circle Bed / Private Bathroom. Unique circular bed design.",
-      price: 900,
-      priceDisplay: "฿900",
-      size: 20,
-      beds: 1,
-      bedType: "5 ft Circle",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.7,
-      popularity: 89,
-      units: 2,
-      bookedUnits: 1,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Unique Circle Bed",
-      ],
-      image: "/images/rooms/deluxe-circle.jpg",
-      color: "from-purple-500 to-purple-600",
-    },
-    {
-      id: 10,
-      code: "DF",
-      name: "Deluxe Double F",
-      slug: "deluxe-double-f",
-      category: "deluxe",
-      description: "5 ft. Bed / Private Bathroom. Modern deluxe room.",
-      price: 900,
-      priceDisplay: "฿900",
-      size: 15,
-      beds: 1,
-      bedType: "5 ft",
-      maxGuests: 2,
-      bathroomType: "Private",
-      rating: 4.4,
-      popularity: 84,
-      units: 1,
-      bookedUnits: 0,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Modern Design",
-      ],
-      image: "/images/rooms/deluxe-f.jpg",
-      color: "from-purple-500 to-purple-600",
-    },
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
 
-    // Shared/Bunk Rooms (category: "shared")
-    {
-      id: 11,
-      code: "B4",
-      name: "Bunks for 4",
-      slug: "bunks-4",
-      category: "shared",
-      description:
-        "2 Bunk beds / Semi Private Bathroom. Perfect for group of 4.",
-      price: 1200,
-      priceDisplay: "฿1,200",
-      size: 27,
-      beds: 4,
-      bedType: "3.5 ft Bunk",
-      maxGuests: 4,
-      bathroomType: "Semi Private",
-      rating: 4.0,
-      popularity: 72,
-      units: 3,
-      bookedUnits: 0,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Semi Private Bathroom",
-        "Shared Basin Area",
-        "2 Bunk Beds",
-      ],
-      image: "/images/rooms/bunks-4.jpg",
-      color: "from-green-500 to-green-600",
-    },
-    {
-      id: 12,
-      code: "MD",
-      name: "Mix Dorm Room",
-      slug: "mix-dorm",
-      category: "shared",
-      description:
-        "1 in 3 Bunk beds / Shared Bathroom. Mixed men/women dormitory.",
-      price: 350,
-      priceDisplay: "฿350",
-      size: 50,
-      beds: 1,
-      bedType: "3.5 ft Bunk",
-      maxGuests: 1,
-      bathroomType: "Shared",
-      rating: 3.8,
-      popularity: 65,
-      units: 6,
-      bookedUnits: 4,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Shared Bathroom",
-        "Locker",
-        "Reading Light",
-      ],
-      image: "/images/rooms/mix-dorm.jpg",
-      color: "from-green-500 to-green-600",
-    },
-    {
-      id: 13,
-      code: "B6",
-      name: "Bunks for 6",
-      slug: "bunks-6",
-      category: "shared",
-      description:
-        "3 Bunk beds / Shared Bathroom. Spacious room for 6 travelers.",
-      price: 2100,
-      priceDisplay: "฿2,100",
-      size: 50,
-      beds: 6,
-      bedType: "3.5 ft Bunk",
-      maxGuests: 6,
-      bathroomType: "Shared",
-      rating: 3.9,
-      popularity: 68,
-      units: 1,
-      bookedUnits: 1,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Shared Bathroom",
-        "Locker",
-        "3 Bunk Beds",
-      ],
-      image: "/images/rooms/bunks-6.jpg",
-      color: "from-green-500 to-green-600",
-    },
-    {
-      id: 14,
-      code: "B2",
-      name: "Bed for 2",
-      slug: "bed-for-2",
-      category: "shared",
-      description: "5 ft. Bed / Shared Bathroom. Small luggage guests only.",
-      price: 700,
-      priceDisplay: "฿700",
-      size: 9,
-      beds: 1,
-      bedType: "5 ft",
-      maxGuests: 2,
-      bathroomType: "Shared",
-      rating: 4.1,
-      popularity: 75,
-      units: 1,
-      bookedUnits: 0,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Shared Bathroom",
-        "Mini Fridge",
-        "Small Luggage Only",
-      ],
-      image: "/images/rooms/bed-for-2.jpg",
-      color: "from-green-500 to-green-600",
-    },
+  const formatDate = (date: Date) => date.toISOString().split("T")[0];
 
-    // Suite (category: "suite")
-    {
-      id: 15,
-      code: "EX",
-      name: "Executive Suite",
-      slug: "executive-suite",
-      category: "suite",
-      description:
-        "6 ft. Bed + 5 ft. Sofa Bed / Private Bathroom. Ultimate luxury suite.",
-      price: 1500,
-      priceDisplay: "฿1,500",
-      size: 37,
-      beds: 2,
-      bedType: "6 ft & 5 ft Sofa",
-      maxGuests: 3,
-      bathroomType: "Private",
-      rating: 5.0,
-      popularity: 99,
-      units: 1,
-      bookedUnits: 1,
-      amenities: [
-        "Free Wi-Fi",
-        "Air Conditioning",
-        "Private Bathroom",
-        "Mini Fridge",
-        "Working Desk",
-        "Sofa Bed",
-        "Spacious 37 sqm",
-      ],
-      image: "/images/rooms/executive-suite.jpg",
-      color: "from-amber-500 to-amber-600",
-    },
-  ];
+  const [checkIn, setCheckIn] = useState(
+    searchParams.get("checkIn") || formatDate(today),
+  );
 
-  // Category filter options - Only 5 main categories
-  const categories = [
-    { id: "all", name: "All Rooms", count: roomsData.length },
-    {
-      id: "standard",
-      name: "Standard Room",
-      count: roomsData.filter((r) => r.category === "standard").length,
-    },
-    {
-      id: "deluxe",
-      name: "Deluxe Room",
-      count: roomsData.filter((r) => r.category === "deluxe").length,
-    },
-    {
-      id: "shared",
-      name: "Shared/Bunk Room",
-      count: roomsData.filter((r) => r.category === "shared").length,
-    },
-    {
-      id: "suite",
-      name: "Executive Suite",
-      count: roomsData.filter((r) => r.category === "suite").length,
-    },
-  ];
+  const [checkOut, setCheckOut] = useState(
+    searchParams.get("checkOut") || formatDate(tomorrow),
+  );
 
-  // Get available units for a room
-  const getAvailableUnits = (room: Room) => {
-    return room.units - room.bookedUnits;
+  const [guests, setGuests] = useState(searchParams.get("guests") || 1);
+
+  useEffect(() => {
+    fetchRooms();
+  }, []);
+
+  const fetchRooms = async () => {
+    try {
+      setLoading(true);
+
+      const res = await fetch("/api/rooms");
+      const data = await res.json();
+
+      if (res.ok) {
+        setRoomsData(data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Check if room is fully booked
-  const isFullyBooked = (room: Room) => {
-    return getAvailableUnits(room) <= 0;
+  const categories = [
+    {
+      id: "all",
+      name: "All Rooms",
+      count: roomsData.length,
+    },
+    {
+      id: "STANDARD",
+      name: "Standard",
+      count: roomsData.filter((room) => room.roomType === "STANDARD").length,
+    },
+    {
+      id: "DELUXE",
+      name: "Deluxe",
+      count: roomsData.filter((room) => room.roomType === "DELUXE").length,
+    },
+    {
+      id: "SUITE",
+      name: "Suite",
+      count: roomsData.filter((room) => room.roomType === "SUITE").length,
+    },
+    {
+      id: "EXECUTIVE",
+      name: "Executive",
+      count: roomsData.filter((room) => room.roomType === "EXECUTIVE").length,
+    },
+    {
+      id: "PRESIDENTIAL",
+      name: "Presidential",
+      count: roomsData.filter((room) => room.roomType === "PRESIDENTIAL")
+        .length,
+    },
+  ];
+
+  const getAvailableUnits = (room: IRoom) => {
+    return room.availableUnits;
+  };
+
+  const isFullyBooked = (room: IRoom) => {
+    return room.availableUnits <= 0;
   };
 
   // Get availability status text and color
-  const getAvailabilityStatus = (room: Room) => {
+  const getAvailabilityStatus = (room: IRoom) => {
     const available = getAvailableUnits(room);
     if (available <= 0) {
       return {
@@ -580,30 +156,42 @@ const RoomsPage = () => {
     let filtered =
       selectedCategory === "all"
         ? roomsData
-        : roomsData.filter((room) => room.category === selectedCategory);
+        : roomsData.filter((room) => room.roomType === selectedCategory);
 
+    // Filter by guest count
+    filtered = filtered.filter((room) => room.maxAdults >= Number(guests));
     switch (sortBy) {
-      case "popularity":
-        filtered = [...filtered].sort((a, b) => b.popularity - a.popularity);
-        break;
       case "price-low":
-        filtered = [...filtered].sort((a, b) => a.price - b.price);
+        filtered = [...filtered].sort(
+          (a, b) =>
+            (a.discountPrice || a.pricePerNight) -
+            (b.discountPrice || b.pricePerNight),
+        );
         break;
+
       case "price-high":
-        filtered = [...filtered].sort((a, b) => b.price - a.price);
+        filtered = [...filtered].sort(
+          (a, b) =>
+            (b.discountPrice || b.pricePerNight) -
+            (a.discountPrice || a.pricePerNight),
+        );
         break;
-      case "rating":
-        filtered = [...filtered].sort((a, b) => b.rating - a.rating);
+
+      default:
         break;
     }
-    return filtered;
-  }, [selectedCategory, sortBy]);
 
+    return filtered;
+  }, [roomsData, selectedCategory, sortBy, guests]);
+
+  if (loading) {
+    return <div className="py-16 text-center">Loading rooms...</div>;
+  }
   return (
-    <section className="bg-bgmain px-6 md:px-12 -mt-16 mb-12">
+    <section className="bg-bgmain px-6 md:px-12 pt-32 pb-12">
       <div className="max-w-7xl mx-auto">
         {/* Search/Booking Bar */}
-        <BookingForm className="mb-16" containerClassName="max-w-4xl mx-auto" />
+        <BookingForm className="mb-8" containerClassName="max-w-5xl mx-auto" />
 
         {/* Main Content - 2 Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -759,7 +347,7 @@ const RoomsPage = () => {
 
                 return (
                   <div
-                    key={room.id}
+                    key={room._id?.toString()}
                     className={`bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group ${
                       isSoldOut ? "opacity-75" : ""
                     }`}
@@ -768,23 +356,23 @@ const RoomsPage = () => {
                       {/* Image */}
                       <div className="relative h-64 md:h-full overflow-hidden">
                         <Image
-                          src={room.image}
-                          alt={room.name}
+                          src={room.images?.[0]?.url || "/images/no-room.jpg"}
+                          alt={room.roomName}
                           fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          className="object-cover"
                         />
-                        <div className="absolute top-3 left-3 bg-secondary text-white px-2 py-1 rounded-lg text-xs font-semibold">
+                        {/* <div className="absolute top-3 left-3 bg-secondary text-white px-2 py-1 rounded-lg text-xs font-semibold">
                           {room.code}
-                        </div>
-                        {room.rating && (
+                        </div> */}
+                        {/* {room.rating && (
                           <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm text-primary px-2 py-1 rounded-lg text-xs font-semibold flex items-center gap-1">
                             <Star className="w-3 h-3 fill-secondary text-secondary" />
                             {room.rating}
                           </div>
-                        )}
+                        )} */}
                         {/* Units Badge */}
                         <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-xs">
-                          📦 {availableUnits} / {room.units} units
+                          📦 {availableUnits} / {room.totalUnits} units
                         </div>
                       </div>
 
@@ -793,16 +381,21 @@ const RoomsPage = () => {
                         <div className="flex justify-between items-start mb-2">
                           <div>
                             <h3 className="text-2xl font-bold text-primary">
-                              {room.name}
+                              {room.roomName}
                             </h3>
                             <p className="text-secondary font-semibold text-sm mt-1">
                               {room.description}
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="text-2xl font-bold text-primary">
-                              {room.priceDisplay}
+                            <p className="text-sm text-gray-400 line-through">
+                              ₹{room.pricePerNight}
                             </p>
+
+                            <p className="text-2xl font-bold text-primary">
+                              ₹{room.discountPrice}
+                            </p>
+
                             <p className="text-textmuted text-sm">/ NIGHT</p>
                           </div>
                         </div>
@@ -819,26 +412,19 @@ const RoomsPage = () => {
                         <div className="flex flex-wrap gap-4 my-3 text-textmuted text-sm">
                           <div className="flex items-center gap-1">
                             <Users className="w-4 h-4" />
-                            <span>{room.maxGuests} Guests</span>
-                          </div>
-                          <div className="flex items-center gap-1">
-                            <Bed className="w-4 h-4" />
                             <span>
-                              {room.beds} {room.beds === 1 ? "Bed" : "Beds"} (
-                              {room.bedType})
+                              {room.maxAdults} Adults + {room.maxChildren} Child
+                              Guests
                             </span>
                           </div>
                           <div className="flex items-center gap-1">
-                            <Maximize2 className="w-4 h-4" />
-                            <span>{room.size} m²</span>
+                            <Bed className="w-4 h-4" />
+                            <span>{room.bedType}</span>
                           </div>
-                        </div>
-
-                        {/* Bathroom & Additional Info */}
-                        <div className="mb-3">
-                          <span className="text-xs bg-bgmain px-2 py-1 rounded-full text-textmuted">
-                            🚿 {room.bathroomType} Bathroom
-                          </span>
+                          <div className="flex items-center gap-1">
+                            <Maximize2 className="w-4 h-4" />
+                            <span>{room.roomSize} m²</span>
+                          </div>
                         </div>
 
                         {/* Amenities Preview */}
@@ -869,7 +455,7 @@ const RoomsPage = () => {
                           </button>
                         ) : (
                           <Link
-                            href={`/rooms/${room.slug}`}
+                            href={`/rooms/${room._id}?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`}
                             className="inline-flex items-center gap-2 bg-secondary hover:bg-primary text-white font-semibold px-4 py-2 rounded-lg transition-all duration-300 group-hover:gap-3"
                           >
                             VIEW DETAILS

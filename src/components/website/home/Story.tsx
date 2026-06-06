@@ -72,34 +72,7 @@ const Story = () => {
               </p>
             </div>
 
-            {/* Stats */}
-            <div className="flex gap-8 pt-4">
-              <div>
-                <p className="text-3xl font-bold text-secondary">50+</p>
-                <p className="text-textmuted text-sm">Luxury Rooms</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-secondary">24/7</p>
-                <p className="text-textmuted text-sm">Concierge Service</p>
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-secondary">4.8⭐</p>
-                <p className="text-textmuted text-sm">Guest Rating</p>
-              </div>
-            </div>
-
-            {/* Discover More Button */}
-            <button className="bg-secondary hover:bg-primary text-white font-semibold py-3 px-8 rounded-lg transition duration-300 shadow-md hover:shadow-lg inline-flex items-center gap-2 group">
-              DISCOVER MORE
-              <svg 
-                className="w-5 h-5 group-hover:translate-x-1 transition-transform" 
-                fill="none" 
-                stroke="currentColor" 
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+            
 
             {/* Signature or Quote */}
             <div className="pt-6 border-t border-borderlight">

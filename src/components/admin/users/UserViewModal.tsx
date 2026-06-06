@@ -2,10 +2,10 @@
 
 import Image from "next/image";
 import { X } from "lucide-react";
-import { User } from "./usersData";
+import { IUser } from "@/types/User";
 
 interface Props {
-  user: User | null;
+  user: IUser | null;
   onClose: () => void;
 }
 
@@ -27,14 +27,7 @@ const UserViewModal = ({
         </button>
 
         <div className="flex flex-col items-center text-center">
-          <div className="relative w-28 h-28 rounded-full overflow-hidden">
-            <Image
-              src={user.image}
-              alt={user.name}
-              fill
-              className="object-cover"
-            />
-          </div>
+          
 
           <h2 className="text-2xl font-bold mt-5">
             {user.name}
@@ -50,14 +43,14 @@ const UserViewModal = ({
             <p className="text-textmuted text-sm">
               User ID
             </p>
-            <p className="font-medium">{user.id}</p>
+            <p className="font-medium">{user._id}</p>
           </div>
 
           <div>
             <p className="text-textmuted text-sm">
               Phone
             </p>
-            <p className="font-medium">{user.phone}</p>
+            <p className="font-medium">{user.mobile}</p>
           </div>
 
           <div>
@@ -67,19 +60,14 @@ const UserViewModal = ({
             <p className="font-medium">{user.role}</p>
           </div>
 
-          <div>
-            <p className="text-textmuted text-sm">
-              Status
-            </p>
-            <p className="font-medium">{user.status}</p>
-          </div>
+          
 
           <div className="col-span-2">
             <p className="text-textmuted text-sm">
               Registered On
             </p>
             <p className="font-medium">
-              {user.registeredOn}
+              {new Date(user.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>

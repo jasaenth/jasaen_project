@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import { GalleryItem } from "@/types/gallery";
 
 
-const categories = ["ALL", "HOTEL", "ROOMS", "AMENITIES", "SURROUNDINGS"];
+const categories = ["ALL", "HOTEL", "ROOM", "AMENITIES", "SURROUNDINGS"];
 
 
 

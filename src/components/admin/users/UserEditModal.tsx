@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
-import { User } from "./usersData";
+import { IUser } from "@/types/User";
+
 
 interface Props {
-  user: User | null;
+  user: IUser | null;
   onClose: () => void;
-  onSave: (user: User) => void;
+  onSave: (user: IUser) => void;
 }
 
 const UserEditModal = ({
@@ -15,7 +16,7 @@ const UserEditModal = ({
   onClose,
   onSave,
 }: Props) => {
-  const [formData, setFormData] = useState<User | null>(user);
+  const [formData, setFormData] = useState<IUser | null>(user);
 
   useEffect(() => {
     setFormData(user);
@@ -24,7 +25,7 @@ const UserEditModal = ({
   if (!formData) return null;
 
   const handleChange = (
-    key: keyof User,
+    key: keyof IUser,
     value: string
   ) => {
     setFormData({
@@ -86,48 +87,15 @@ const UserEditModal = ({
 
             <input
               type="text"
-              value={formData.phone}
+              value={formData.mobile}
               onChange={(e) =>
-                handleChange("phone", e.target.value)
+                handleChange("mobile", e.target.value)
               }
               className="w-full border border-borderlight rounded-xl px-4 py-3"
             />
           </div>
 
-          <div>
-            <label className="block font-medium mb-2">
-              Role
-            </label>
 
-            <select
-              value={formData.role}
-              onChange={(e) =>
-                handleChange("role", e.target.value)
-              }
-              className="w-full border border-borderlight rounded-xl px-4 py-3"
-            >
-              <option>Guest</option>
-              <option>Staff</option>
-              <option>Admin</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block font-medium mb-2">
-              Status
-            </label>
-
-            <select
-              value={formData.status}
-              onChange={(e) =>
-                handleChange("status", e.target.value)
-              }
-              className="w-full border border-borderlight rounded-xl px-4 py-3"
-            >
-              <option>Active</option>
-              <option>Inactive</option>
-            </select>
-          </div>
         </div>
 
         <div className="flex justify-end gap-4 mt-8">

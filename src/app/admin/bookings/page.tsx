@@ -6,16 +6,15 @@ import BookingsTable from "@/components/admin/bookings/BookingsTable";
 import BookingPagination from "@/components/admin/bookings/BookingPagination";
 import BookingViewModal from "@/components/admin/bookings/BookingViewModal";
 import BookingEditModal from "@/components/admin/bookings/BookingEditModal";
-import {
-  bookingsData,
-  Booking,
-} from "@/components/admin/bookings/bookingsData";
+import { IBooking } from "@/types/Booking";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 
 const ITEMS_PER_PAGE = 5;
 
 export default function BookingsPage() {
-  const [bookings, setBookings] =
-    useState<Booking[]>(bookingsData);
+  const [bookings, setBookings] = useState<IBooking[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("All");
@@ -23,61 +22,128 @@ export default function BookingsPage() {
 
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [selectedBooking, setSelectedBooking] =
-    useState<Booking | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<IBooking | null>(null);
 
-  const [editBooking, setEditBooking] =
-    useState<Booking | null>(null);
+  const [editBooking, setEditBooking] = useState<IBooking | null>(null);
 
   const filteredBookings = bookings.filter((booking) => {
     const matchesSearch =
-      booking.id.toLowerCase().includes(search.toLowerCase()) ||
-      booking.guestName
-        .toLowerCase()
-        .includes(search.toLowerCase()) ||
-      booking.email.toLowerCase().includes(search.toLowerCase());
+      booking._id.toLowerCase().includes(search.toLowerCase()) ||
+      booking.user.name.toLowerCase().includes(search.toLowerCase()) ||
+      booking.user.email.toLowerCase().includes(search.toLowerCase());
 
-    const matchesStatus =
-      status === "All" || booking.status === status;
+    const matchesStatus = status === "All" || booking.status === status;
 
-    const matchesRoom =
-      roomType === "All" || booking.roomType === roomType;
+    const matchesRoom = roomType === "All" || booking.room.roomType === roomType;
 
     return matchesSearch && matchesStatus && matchesRoom;
   });
 
-  const totalPages = Math.ceil(
-    filteredBookings.length / ITEMS_PER_PAGE
-  );
+  const totalPages = Math.ceil(filteredBookings.length / ITEMS_PER_PAGE);
 
   const paginatedBookings = filteredBookings.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+    currentPage * ITEMS_PER_PAGE,
   );
 
-  const handleDelete = (id: string) => {
-    setBookings((prev) =>
-      prev.filter((booking) => booking.id !== id)
+ const handleDelete = async (
+  id: string
+) => {
+  const confirmed =
+    window.confirm(
+      "Delete booking?"
     );
-  };
 
-  const handleSave = (updatedBooking: Booking) => {
+  if (!confirmed) return;
+
+  try {
+    const res = await fetch(
+      `/api/admin/bookings/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+      toast.error(data.message);
+      return;
+    }
+
+    toast.success(
+      "Booking deleted"
+    );
+
+    setBookings((prev) =>
+      prev.filter(
+        (booking) =>
+          booking._id !== id
+      )
+    );
+  } catch {
+    toast.error(
+      "Delete failed"
+    );
+  }
+};
+
+const handleSave = async (
+  updatedBooking: IBooking
+) => {
+  try {
+    const res = await fetch(
+      `/api/admin/bookings/${updatedBooking._id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type":
+            "application/json",
+        },
+        body: JSON.stringify({
+          status:
+            updatedBooking.status,
+          paymentStatus:
+            updatedBooking.paymentStatus,
+        }),
+      }
+    );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+      toast.error(data.message);
+      return;
+    }
+
+    toast.success(
+      "Booking updated successfully"
+    );
+
     setBookings((prev) =>
       prev.map((booking) =>
-        booking.id === updatedBooking.id
-          ? updatedBooking
+        booking._id ===
+        updatedBooking._id
+          ? data.data
           : booking
       )
     );
 
     setEditBooking(null);
-  };
+  } catch {
+    toast.error(
+      "Failed to update booking"
+    );
+  }
+};
 
   const handleExport = () => {
     const csv = filteredBookings
       .map(
         (b) =>
-          `${b.id},${b.guestName},${b.email},${b.roomType},${b.amount},${b.status}`
+          `${b._id},${b.user.name},${b.user.email},${b.room.roomType},${b.totalAmount},${b.status}`,
       )
       .join("\n");
 
@@ -92,6 +158,36 @@ export default function BookingsPage() {
     a.download = "bookings.csv";
     a.click();
   };
+
+  useEffect(() => {
+  fetchBookings();
+}, []);
+
+const fetchBookings = async () => {
+  try {
+    setLoading(true);
+
+    const res = await fetch(
+      "/api/admin/bookings"
+    );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+      toast.error(data.message);
+      return;
+    }
+
+    setBookings(data.data);
+  } catch {
+    toast.error(
+      "Failed to load bookings"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="space-y-6">

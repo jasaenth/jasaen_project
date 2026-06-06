@@ -5,9 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 const slides = [
-  "/images/hero/hero-1.JPG",
-  "/images/hero/hero-2.JPG",
-  "/images/hero/hero-3.JPG",
+  "/images/hero/hero-1.jpeg",
+  "/images/hero/hero-2.jpeg",
+  "/images/hero/hero-3.jpeg",
 ];
 
 export default function StayBanner() {
@@ -31,7 +31,7 @@ export default function StayBanner() {
         }}
       >
         {slides.map((image, index) => (
-          <div key={index} className="relative w-full h-full shrink-0">
+          <div key={index} className="relative w-full h-full shrink-0 ">
             <Image
               src={image}
               alt={`Banner ${index + 1}`}
@@ -41,7 +41,7 @@ export default function StayBanner() {
             />
 
             {/* Overlay */}
-            <div className="absolute inset-0 bg-black/65" />
+            <div className="absolute inset-0 " />
           </div>
         ))}
       </div>
