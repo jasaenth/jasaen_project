@@ -8,42 +8,75 @@ type ShowTitle = {
 
 export default function Amenities({ showTitle = true }: ShowTitle) {
   const duplicatedAmenities = [...amenities, ...amenities];
-  
+
   return (
-    <section className="bg-[#F8F3F0] py-16 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        
+    <section className="py-28 bg-bgmain overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
         {showTitle && (
-        <div className="flex items-center justify-center gap-4 mb-12">
-          <div className="w-16 h-[2px] bg-secondary"></div>
+          <div className="text-center mb-16">
+            <span className="gold-divider justify-center mb-5">
+              Hotel Experiences
+            </span>
 
-          <h2 className="text-primary text-3xl md:text-4xl font-bold uppercase">
-            OUR AMENITIES
-          </h2>
+            <h2 className="font-display text-5xl lg:text-6xl text-maroon">
+              Amenities Crafted For Comfort
+            </h2>
+          </div>
+        )}
 
-          <div className="w-16 h-[2px] bg-secondary"></div>
-        </div>)}
-
-        {/* Slider */}
+        {/* Infinite Slider */}
         <div className="overflow-hidden relative">
-          <div className="marquee-track">
+          <div className="marquee-track py-4">
             {duplicatedAmenities.map((item, index) => (
               <div
                 key={index}
-                className="min-w-[220px] bg-white border border-gray-200 rounded-xl shadow-sm flex flex-col items-center justify-center px-6 py-8"
+                className="
+                  min-w-[260px]
+                  bg-white
+                  rounded-[2rem]
+                  border
+                  border-borderlight
+                  shadow-soft
+                  p-8
+                  flex
+                  flex-col
+                  items-center
+                  justify-center
+                  text-center
+                  transition-all
+                  duration-300
+                  hover:-translate-y-2
+                  hover:shadow-luxe
+                "
               >
-                <div className="text-primary text-4xl mb-4">
-                  <item.icon />
+                {/* Icon */}
+                <div
+                  className="
+                    w-16
+                    h-16
+                    rounded-full
+                    bg-gold/10
+                    flex
+                    items-center
+                    justify-center
+                    text-maroon
+                    mb-5
+                  "
+                >
+                  <item.icon size={28} />
                 </div>
 
-                <p className="text-textmain text-sm font-semibold uppercase text-center">
+                {/* Title */}
+                <h3 className="font-display text-2xl text-maroon">
                   {item.name}
-                </p>
+                </h3>
+
+                {/* Small decorative line */}
+                <div className="w-12 h-px bg-gold mt-4 mb-4" />
               </div>
             ))}
           </div>
         </div>
-
       </div>
     </section>
   );

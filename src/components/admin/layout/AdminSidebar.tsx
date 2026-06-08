@@ -15,7 +15,6 @@ import {
   Users,
   Cloud,
   ChevronRight,
-
 } from "lucide-react";
 
 const menuItems = [
@@ -51,37 +50,29 @@ const AdminSidebar = ({ isMobileOpen, onMobileClose }: AdminSidebarProps) => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleLogout = () => {
-    router.push("/admin/login");
-  };
-
   const toggleCollapse = () => {
     setIsCollapsed(!isCollapsed);
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-gradient-to-b from-[#2B0000] to-[#1a0000]">
+    <div className="flex flex-col h-full bg-[#0F1117] text-white">
       {/* Logo Section */}
-      <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} p-6 border-b border-white/10`}>
-        {!isCollapsed && (
-          <Link href="/admin/dashboard" className="flex items-center gap-2">
+      <div className="px-8 py-8 border-b border-white/10 ">
+        <Link href="/admin/dashboard" className="flex flex-col items-center">
+          <div className="bg-white rounded-[2rem] p-5">
             <Image
-              src="/logowhite.png"
+              src="/logo.png"
               alt="Jasaen Hotel"
               width={120}
-              height={60}
+              height={70}
               className="object-contain"
             />
-          </Link>
-        )}
-        {isCollapsed && (
-          <Link href="/admin/dashboard">
-            <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center">
-              <span className="text-white font-bold text-lg">JH</span>
-            </div>
-          </Link>
-        )}
-        
+          </div>
+
+          <span className="mt-6 text-gold text-xs tracking-[0.45em] uppercase">
+            Admin
+          </span>
+        </Link>
       </div>
 
       {/* Navigation Menu */}
@@ -96,27 +87,27 @@ const AdminSidebar = ({ isMobileOpen, onMobileClose }: AdminSidebarProps) => {
                 key={item.name}
                 href={item.href}
                 onClick={() => onMobileClose?.()}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 group relative ${
-                  isActive
-                    ? "bg-secondary text-white shadow-lg"
-                    : "text-white/70 hover:bg-white/10 hover:text-white"
-                }`}
-                title={isCollapsed ? item.name : undefined}
+                className={`
+    flex
+    items-center
+    gap-4
+    mx-5
+    px-6
+    py-4
+    rounded-full
+    transition-all
+    duration-300
+
+    ${
+      isActive
+        ? "bg-gold text-charcoal shadow-lg"
+        : "text-white/70 hover:text-white hover:bg-white/5"
+    }
+  `}
               >
-                <Icon size={20} className="flex-shrink-0" />
-                {!isCollapsed && (
-                  <>
-                    <span className="flex-1 text-sm font-medium">{item.name}</span>
-                    {item.badge && (
-                      <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full">
-                        {item.badge}
-                      </span>
-                    )}
-                  </>
-                )}
-                {isCollapsed && item.badge && (
-                  <div className="absolute right-2 top-2 w-2 h-2 bg-red-500 rounded-full"></div>
-                )}
+                <Icon size={22} strokeWidth={1.8} />
+
+                <span className="font-medium text-lg">{item.name}</span>
               </Link>
             );
           })}
@@ -132,7 +123,7 @@ const AdminSidebar = ({ isMobileOpen, onMobileClose }: AdminSidebarProps) => {
       }`}
     >
       <SidebarContent />
-      
+
       {isCollapsed && (
         <button
           onClick={toggleCollapse}

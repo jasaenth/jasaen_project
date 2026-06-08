@@ -4,18 +4,17 @@ import { useState, useMemo, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+
 import {
   ChevronDown,
   Users,
   Bed,
   Maximize2,
-  Star,
   CheckCircle,
   XCircle,
   Calendar,
   AlertCircle,
 } from "lucide-react";
-import BookingForm from "../../common/BookingForm";
 import { IRoom } from "@/models/Room";
 
 type SortOption = "popularity" | "price-low" | "price-high" | "rating";
@@ -26,7 +25,6 @@ const RoomsPage = () => {
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [roomsData, setRoomsData] = useState<IRoom[]>([]);
   const [loading, setLoading] = useState(true);
-  const searchParams = useSearchParams();
 
   const today = new Date();
 
@@ -35,15 +33,10 @@ const RoomsPage = () => {
 
   const formatDate = (date: Date) => date.toISOString().split("T")[0];
 
-  const [checkIn, setCheckIn] = useState(
-    searchParams.get("checkIn") || formatDate(today),
-  );
-
-  const [checkOut, setCheckOut] = useState(
-    searchParams.get("checkOut") || formatDate(tomorrow),
-  );
-
-  const [guests, setGuests] = useState(searchParams.get("guests") || 1);
+  const searchParams = useSearchParams();
+  const checkIn = searchParams.get("checkIn");
+  const checkOut = searchParams.get("checkOut");
+  const guests = searchParams.get("guests");
 
   useEffect(() => {
     fetchRooms();
@@ -53,7 +46,9 @@ const RoomsPage = () => {
     try {
       setLoading(true);
 
-      const res = await fetch("/api/rooms");
+      const res = await fetch(
+        `/api/rooms?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`,
+      );
       const data = await res.json();
 
       if (res.ok) {
@@ -188,11 +183,8 @@ const RoomsPage = () => {
     return <div className="py-16 text-center">Loading rooms...</div>;
   }
   return (
-    <section className="bg-bgmain px-6 md:px-12 pt-32 pb-12">
+    <section className="bg-bgmain px-6 md:px-12 pt-16 pb-12">
       <div className="max-w-7xl mx-auto">
-        {/* Search/Booking Bar */}
-        <BookingForm className="mb-8" containerClassName="max-w-5xl mx-auto" />
-
         {/* Main Content - 2 Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar - Filters */}
@@ -209,7 +201,7 @@ const RoomsPage = () => {
                     <button
                       key={cat.id}
                       onClick={() => setSelectedCategory(cat.id)}
-                      className={`w-full text-left px-3 py-2 rounded-lg transition flex justify-between items-center ${
+                      className={`w-full text-left px-3 py-2 rounded-lg transition flex justify-between items-center text-sm ${
                         selectedCategory === cat.id
                           ? "bg-secondary text-white"
                           : "hover:bg-secondary/10 text-textmain"

@@ -1,6 +1,6 @@
-import Navbar from "@/components/website/layout/Navbar";
 import Footer from "@/components/website/layout/Footer";
 import { Toaster } from "react-hot-toast";
+import Navbar from "@/components/website/layout/Navbar";
 
 export default function WebsiteLayout({
   children,
@@ -9,7 +9,7 @@ export default function WebsiteLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
+      <Navbar/>
 
       <main className="grow">
         {children}

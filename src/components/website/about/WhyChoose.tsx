@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import {
   FaBuilding,
@@ -9,100 +11,135 @@ import {
 
 const features = [
   {
-    title: "BOUTIQUE EXPERIENCE",
-    description: "A cozy and personalized stay with attention to every detail.",
+    title: "Boutique Experience",
+    description:
+      "A cozy and personalized stay with attention to every detail.",
     icon: FaBuilding,
   },
   {
-    title: "PRIME LOCATION",
+    title: "Prime Location",
     description:
-      "Located in the heart of the city, close to major attractions.",
+      "Located in the heart of Bangkok, close to major attractions and transport links.",
     icon: FaMapMarkerAlt,
   },
   {
-    title: "WARM HOSPITALITY",
-    description: "Our friendly team is always here to make you feel at home.",
+    title: "Warm Hospitality",
+    description:
+      "Our friendly team is always here to make every guest feel at home.",
     icon: FaConciergeBell,
   },
   {
-    title: "MODERN COMFORT",
-    description: "Enjoy well-designed rooms and amenities for a relaxing stay.",
+    title: "Modern Comfort",
+    description:
+      "Enjoy thoughtfully designed rooms and amenities for a relaxing stay.",
     icon: FaCouch,
   },
   {
-    title: "LOCAL CHARM",
+    title: "Local Charm",
     description:
-      "Experience the beauty of local culture and authentic hospitality.",
+      "Experience authentic Bangkok culture blended with contemporary comfort.",
     icon: FaLeaf,
   },
 ];
 
 const galleryImages = [
-  "/images/hero/hero-1.JPG",
-  "/images/hero/hero-2.JPG",
-  "/images/hero/hero-3.JPG",
-  "/images/hero/hero-2.JPG",
+  "/images/whyChoose/whyChoose1.JPG",
+  "/images/whyChoose/whyChoose2.JPG",
+  "/images/whyChoose/whyChoose3.JPG",
+  "/images/whyChoose/whyChoose4.JPG",
+  "/images/whyChoose/whyChoose5.JPG",
+  "/images/whyChoose/whyChoose6.JPG",
 ];
 
 const WhyChoose = () => {
   return (
-    <section className="bg-bgmain py-8">
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+    <section className="pb-24 bg-bgmain overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
         {/* Heading */}
-        <div className="flex items-center justify-center gap-4 mb-12">
-          <div className="w-20 h-[2px] bg-secondary"></div>
+        <div className="text-center mb-16">
+          
 
-          <h2 className="heading-font text-3xl md:text-4xl font-bold text-primary uppercase">
-            WHY CHOOSE JASAEN HOTEL
+          <h2 className="font-display text-5xl lg:text-6xl text-maroon leading-tight">
+            Why Choose Jasaen
+            
           </h2>
-
-          <div className="w-20 h-[2px] bg-secondary"></div>
         </div>
 
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5  mb-10">
+        {/* Feature Cards */}
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5 mb-20">
           {features.map((feature, index) => {
             const Icon = feature.icon;
 
             return (
               <div
                 key={index}
-                className={`text-center px-6 py-10 ${
-                  index !== features.length - 1
-                    ? "border-r border-borderlight"
-                    : ""
-                }`}
+                className="
+                  bg-white
+                  rounded-3xl
+                  p-8
+                  border
+                  border-borderlight
+                  shadow-soft
+                  hover:shadow-luxe
+                  transition-all
+                  duration-500
+                  hover:-translate-y-2
+                  text-center
+                  group
+                "
               >
-                <div className="flex justify-center mb-6">
-                  <Icon className="text-primary text-5xl" />
+                <div className="w-16 h-16 rounded-full bg-gold/10 flex items-center justify-center mx-auto mb-6 group-hover:bg-gold/20 transition">
+                  <Icon className="text-maroon text-3xl" />
                 </div>
 
-                <h3 className="text-textmain font-semibold text-lg uppercase mb-2 inline-block">
+                <h3 className="font-display text-xl text-maroon mb-3">
                   {feature.title}
                 </h3>
 
-                <p className="text-textmuted text-sm ">{feature.description}</p>
+                <p className="text-sm text-textmuted leading-7">
+                  {feature.description}
+                </p>
               </div>
             );
           })}
         </div>
 
-        {/* Bottom Images */}
-        <div className="overflow-hidden w-full">
-          <div className="image-scroll-track">
-            {[...galleryImages, ...galleryImages].map((image, index) => (
-              <div
-                key={index}
-                className="relative min-w-[320px] h-[260px] shrink-0"
-              >
-                <Image
-                  src={image}
-                  alt={`Hotel Image ${index + 1}`}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            ))}
+        {/* Gallery */}
+        <div>
+          
+
+          <div className="overflow-hidden rounded-[2rem]">
+            <div className="image-scroll-track">
+              {[...galleryImages, ...galleryImages].map((image, index) => (
+                <div
+                  key={index}
+                  className="
+                    relative
+                    min-w-[380px]
+                    h-[300px]
+                    rounded-[1.5rem]
+                    overflow-hidden
+                    mx-2
+                    shrink-0
+                    group
+                  "
+                >
+                  <Image
+                    src={image}
+                    alt={`Hotel Image ${index + 1}`}
+                    fill
+                    className="
+                      object-cover
+                      transition-transform
+                      duration-700
+                      group-hover:scale-110
+                    "
+                  />
+
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

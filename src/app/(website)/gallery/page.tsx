@@ -7,9 +7,9 @@ const page = () => {
   return (
     <>
       <PageHero
-        title="GALLERY"
-        subtitle="Explore our beautiful space and memorable moments."
-        image="/images/hero/hero-1.JPG"
+        eyebrow="Gallery"
+        title="Moments at Jasaen"
+        image="/images/gallery.JPG"
         breadcrumb="Gallery"
       />
       <GallerySection />

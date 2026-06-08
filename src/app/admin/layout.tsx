@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+
 import AdminSidebar from "@/components/admin/layout/AdminSidebar";
 import AdminNavbar from "@/components/admin/layout/AdminNavbar";
 
@@ -24,14 +25,15 @@ export default function AdminLayout({
   const [isMobile, setIsMobile] =
     useState(false);
 
-  const publicRoutes = [
-    "/admin/login",
-    "/admin/register",
-  ];
+  const [checkingAuth, setCheckingAuth] =
+    useState(true);
+
+  const publicRoutes = ["/admin/login"];
 
   const isPublicPage =
     publicRoutes.includes(pathname);
 
+  // Detect Mobile
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -51,8 +53,12 @@ export default function AdminLayout({
       );
   }, []);
 
+  // Auth Check
   useEffect(() => {
-    if (isPublicPage) return;
+    if (isPublicPage) {
+      setCheckingAuth(false);
+      return;
+    }
 
     const fetchMe = async () => {
       try {
@@ -66,16 +72,27 @@ export default function AdminLayout({
 
         if (!res.ok) {
           dispatch(clearUser());
-          router.replace("/admin/login");
+
+          router.replace(
+            "/admin/login"
+          );
+
           return;
         }
 
         const data = await res.json();
 
-        dispatch(setUser(data.user));
+        dispatch(
+          setUser(data.user)
+        );
       } catch {
         dispatch(clearUser());
-        router.replace("/admin/login");
+
+        router.replace(
+          "/admin/login"
+        );
+      } finally {
+        setCheckingAuth(false);
       }
     };
 
@@ -87,28 +104,84 @@ export default function AdminLayout({
     isPublicPage,
   ]);
 
+  // Close mobile menu on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
+  // Login page
   if (isPublicPage) {
     return <>{children}</>;
   }
 
+  // Loading screen
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen bg-bgmain flex items-center justify-center">
+        <div className="text-center">
+          <div
+            className="
+              h-12
+              w-12
+              mx-auto
+              rounded-full
+              border-2
+              border-secondary
+              border-t-transparent
+              animate-spin
+            "
+          />
+
+          <h3 className="mt-6 text-xl font-semibold text-primary">
+            Loading Dashboard
+          </h3>
+
+          <p className="mt-2 text-textmuted">
+            Please wait...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white min-h-screen">
-      <Toaster position="top-right" />
+    <div className="bg-bgmain min-h-screen">
+      {/* Toast */}
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: "#ffffff",
+            color: "#1a1a1a",
+            borderRadius: "18px",
+            border:
+              "1px solid #e5e7eb",
+            padding: "14px 16px",
+          },
+        }}
+      />
+
+      {/* Sidebar */}
       <AdminSidebar
-        isMobileOpen={isMobileMenuOpen}
+        isMobileOpen={
+          isMobileMenuOpen
+        }
         onMobileClose={() =>
           setIsMobileMenuOpen(false)
         }
       />
 
+      {/* Content */}
       <div
-        className={`transition-all duration-300 ${
-          !isMobile ? "lg:ml-72" : "ml-0"
-        }`}
+        className={`
+          transition-all
+          duration-300
+          ${
+            !isMobile
+              ? "lg:ml-72"
+              : "ml-0"
+          }
+        `}
       >
         <AdminNavbar
           onMenuClick={() =>
@@ -121,8 +194,8 @@ export default function AdminLayout({
           }
         />
 
-        <main className="p-4 sm:p-6 lg:p-8">
-          <div className="max-w-7xl mx-auto">
+        <main className="px-6 py-8 lg:px-10 lg:py-10">
+          <div className="max-w-[1600px] mx-auto">
             {children}
           </div>
         </main>

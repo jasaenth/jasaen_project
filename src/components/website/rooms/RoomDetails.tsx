@@ -5,7 +5,8 @@ import Image from "next/image";
 import { Users, BedDouble, Maximize } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { getUser } from "@/lib/getUser";
+import PageHero from "@/components/common/PageHero";
+import RelatedRooms from "./RelatedRooms";
 
 interface Props {
   id: string;
@@ -15,9 +16,23 @@ export default function RoomDetails({ id }: Props) {
   const [room, setRoom] = useState<any>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const searchParams = useSearchParams();
-  const checkIn = searchParams.get("checkIn");
-  const checkOut = searchParams.get("checkOut");
-  const guests = searchParams.get("guests");
+  const today = new Date();
+  const [showBookingModal, setShowBookingModal] =
+  useState(false);
+
+const tomorrow = new Date();
+tomorrow.setDate(today.getDate() + 1);
+
+const checkIn =
+  searchParams.get("checkIn") ||
+  today.toISOString().split("T")[0];
+
+const checkOut =
+  searchParams.get("checkOut") ||
+  tomorrow.toISOString().split("T")[0];
+
+const guests =
+  searchParams.get("guests") || "1";
   const router = useRouter();
 
   const totalNights =
@@ -105,217 +120,419 @@ export default function RoomDetails({ id }: Props) {
   };
 
   return (
-    <div className="container mx-auto px-4 lg:px-8 py-10">
-      {/* Breadcrumb */}
-      <div className="text-sm text-gray-500 mb-8">
-        Home / Rooms / {room.roomName}
-      </div>
-
-      {/* Top Section */}
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Left */}
-        <div className="lg:col-span-2">
-          {/* Main Image */}
-          <div className="relative h-[500px] rounded-2xl overflow-hidden">
-            <Image
-              src={room.images?.[selectedImage]?.url}
-              alt={room.roomName}
-              fill
-              priority
-              className="object-cover transition-all duration-300"
-            />
-          </div>
-
-          {/* Thumbnails */}
-          <div className="grid grid-cols-4 gap-3 mt-4">
-            {room.images.map((image: any, index: number) => (
-              <button
-                key={image._id}
-                onClick={() => setSelectedImage(index)}
-                className={`relative h-24 rounded-xl overflow-hidden border-2 transition ${
-                  selectedImage === index
-                    ? "border-primary"
-                    : "border-transparent"
-                }`}
-              >
-                <Image
-                  src={image.url}
-                  alt={`${room.roomName}-${index}`}
-                  fill
-                  className="object-cover"
-                />
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Right */}
-        <div className="border rounded-2xl p-8 bg-white">
-          <p className="uppercase text-primary font-semibold tracking-wider">
-            {room.roomType}
-          </p>
-
-          <h1 className="text-4xl font-bold mt-3">{room.roomName}</h1>
-
-          <p className="text-gray-600 mt-5 leading-7">
-            {room.shortDescription}
-          </p>
-
-          <div className="flex flex-wrap gap-6 mt-8">
-            <div className="flex items-center gap-2">
-              <Users size={18} />
-              {room.maxAdults} Adults
-            </div>
-
-            <div className="flex items-center gap-2">
-              <BedDouble size={18} />
-              {room.bedType}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Maximize size={18} />
-              {room.roomSize} m²
-            </div>
-          </div>
-
-          <div className="mt-8">
-            <p className="text-lg text-gray-400 line-through">
-              ₹{room.pricePerNight}
-            </p>
-
-            <h2 className="text-4xl font-bold text-primary">
-              ₹{room.discountPrice}
-            </h2>
-
-            <span className="text-gray-500">/ NIGHT</span>
-
-            <div className="mt-5 border-t pt-5">
-              <div className="flex justify-between text-sm">
-                <span>
-                  ₹{room.discountPrice} × {totalNights} night
-                  {totalNights > 1 ? "s" : ""}
-                </span>
-
-                <span>₹{totalAmount.toLocaleString()}</span>
-              </div>
-
-              <div className="flex justify-between mt-3 text-xl font-bold text-primary">
-                <span>Total</span>
-
-                <span>₹{totalAmount.toLocaleString()}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-6">
-            <p className="text-green-600 font-semibold">
-              {room.availableUnits} Rooms Available
-            </p>
-            <div className="mt-6 p-4 bg-gray-50 rounded-xl">
-              <p>Check In: {checkIn}</p>
-
-              <p>Check Out: {checkOut}</p>
-
-              <p>Guests: {guests}</p>
-
-              <p>Nights: {totalNights}</p>
-
-              <hr className="my-3" />
-
-              <p>
-                ₹{room.discountPrice} × {totalNights} night
-                {totalNights > 1 ? "s" : ""}
-              </p>
-
-              <p className="text-xl font-bold text-primary mt-2">
-                Total: ₹{totalAmount}
-              </p>
-            </div>
-          </div>
-
-          <button
-            onClick={handleBooking}
-            className="w-full mt-8 bg-primary text-white py-4 rounded-xl font-semibold"
-          >
-            BOOK NOW
-          </button>
-        </div>
-      </div>
-
-      {/* About Room */}
-      <div className="grid lg:grid-cols-2 gap-10 mt-16">
-        <div>
-          <h2 className="text-3xl font-bold mb-6">About This Room</h2>
-
-          <p className="text-gray-600 leading-8">{room.shortDescription}</p>
-
-          <div className="grid grid-cols-2 gap-4 mt-8">
-            {room.amenities.map((amenity: string, index: number) => (
-              <div key={index} className="flex items-center gap-2">
-                ✓ {amenity}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+    <>
+    <PageHero
+        title={room.roomName}
+        image={room.images?.[selectedImage]?.url}
+        breadcrumb="About Us"
+      />
+  <div className="bg-bgmain pb-24">
+    {/* Hero Section */}
+    <section className="max-w-7xl mx-auto px-6 lg:px-10 pt-10">
+      
 
       {/* Gallery */}
-      <div className="mt-20">
-        <h2 className="text-3xl font-bold mb-8">Room Gallery</h2>
+      <div className="grid lg:grid-cols-4 gap-4">
+        <div className="lg:col-span-3 relative h-[550px] rounded-[2rem] overflow-hidden shadow-luxe">
+          <Image
+            src={room.images?.[selectedImage]?.url}
+            alt={room.roomName}
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
 
-        <div className="grid md:grid-cols-4 gap-4">
-          {room.images.map((image: any, index: number) => (
-            <div
+        <div className="space-y-4">
+          {room.images?.map((image: any, index: number) => (
+            <button
               key={image._id}
               onClick={() => setSelectedImage(index)}
-              className={`relative h-52 rounded-xl overflow-hidden cursor-pointer border-2 ${
-                selectedImage === index
-                  ? "border-primary"
-                  : "border-transparent"
-              }`}
+              className={`
+                relative
+                h-30
+                w-full
+                overflow-hidden
+                rounded-2xl
+                border-2
+                transition
+                ${
+                  selectedImage === index
+                    ? "border-gold"
+                    : "border-transparent"
+                }
+              `}
             >
               <Image
                 src={image.url}
-                alt={`${room.roomName}-${index}`}
+                alt=""
                 fill
                 className="object-cover"
               />
-            </div>
+            </button>
           ))}
         </div>
       </div>
+    </section>
 
-      {/* Room Info */}
-      <div className="mt-20 border rounded-2xl p-8 bg-white">
-        <h2 className="text-3xl font-bold mb-8">Room Information</h2>
+    {/* Main Content */}
+    <section className="max-w-7xl mx-auto px-6 lg:px-10 mt-20">
+      <div className="grid lg:grid-cols-3 gap-14">
+        {/* Left */}
+        <div className="lg:col-span-2">
+          <span className="gold-divider">
+            Room Overview
+          </span>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          <Info label="Room Type" value={room.roomType} />
+          <h2 className="font-display text-5xl text-maroon mt-4">
+            Designed For Comfort
+          </h2>
 
-          <Info label="Bed Type" value={room.bedType} />
+          <p className="text-textmuted leading-8 mt-6 text-lg">
+            {room.shortDescription}
+          </p>
 
-          <Info label="Room Size" value={`${room.roomSize} m²`} />
+          {/* Stats */}
+          <div className="grid md:grid-cols-3 gap-6 mt-10">
+            <div className="bg-white rounded-3xl p-6 shadow-soft">
+              <Users className="text-gold mb-4" size={28} />
+              <h4 className="font-semibold">
+                {room.maxAdults} Adults
+              </h4>
+            </div>
 
-          <Info label="Adults" value={room.maxAdults} />
+            <div className="bg-white rounded-3xl p-6 shadow-soft">
+              <BedDouble className="text-gold mb-4" size={28} />
+              <h4 className="font-semibold">
+                {room.bedType}
+              </h4>
+            </div>
 
-          <Info label="Children" value={room.maxChildren} />
+            <div className="bg-white rounded-3xl p-6 shadow-soft">
+              <Maximize className="text-gold mb-4" size={28} />
+              <h4 className="font-semibold">
+                {room.roomSize} m²
+              </h4>
+            </div>
+          </div>
 
-          <Info
-            label="Available Units"
-            value={`${room.availableUnits}/${room.totalUnits}`}
-          />
+          {/* Amenities */}
+          <div className="mt-20">
+            <span className="gold-divider">
+              Amenities
+            </span>
+
+            <h2 className="font-display text-5xl text-maroon mt-4">
+              Included With Your Stay
+            </h2>
+
+            <div className="grid md:grid-cols-2 gap-5 mt-10">
+              {room.amenities?.map(
+                (amenity: string, index: number) => (
+                  <div
+                    key={index}
+                    className="
+                      bg-white
+                      rounded-2xl
+                      p-5
+                      shadow-soft
+                      flex
+                      items-center
+                      gap-3
+                    "
+                  >
+                    <div className="w-2 h-2 rounded-full bg-gold" />
+
+                    <span>{amenity}</span>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+
+          {/* Room Information */}
+          <div className="mt-20">
+            <span className="gold-divider">
+              Details
+            </span>
+
+            <h2 className="font-display text-5xl text-maroon mt-4">
+              Room Information
+            </h2>
+
+            <div className="grid md:grid-cols-3 gap-6 mt-10">
+              <Info
+                label="Room Type"
+                value={room.roomType}
+              />
+
+              <Info
+                label="Bed Type"
+                value={room.bedType}
+              />
+
+              <Info
+                label="Room Size"
+                value={`${room.roomSize} m²`}
+              />
+
+              <Info
+                label="Adults"
+                value={room.maxAdults}
+              />
+
+              <Info
+                label="Children"
+                value={room.maxChildren}
+              />
+
+              <Info
+                label="Available Units"
+                value={`${room.availableUnits}/${room.totalUnits}`}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Booking Card */}
+        <div>
+          <div className="sticky top-28">
+            <div
+              className="
+                bg-white
+                rounded-[2rem]
+                p-8
+                shadow-luxe
+                border
+                border-borderlight
+              "
+            >
+              <div className="text-center">
+                <p className="text-textmuted line-through">
+                  ₹{room.pricePerNight}
+                </p>
+
+                <h3 className="font-display text-5xl text-maroon">
+                  ₹{room.discountPrice}
+                </h3>
+
+                <span className="text-textmuted">
+                  per night
+                </span>
+              </div>
+
+              <div className="border-t mt-8 pt-6 space-y-4">
+                <div className="flex justify-between">
+                  <span>Check In</span>
+                  <span>{checkIn}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Check Out</span>
+                  <span>{checkOut}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Guests</span>
+                  <span>{guests}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Nights</span>
+                  <span>{totalNights}</span>
+                </div>
+
+                <div className="border-t pt-4 flex justify-between">
+                  <span className="font-semibold">
+                    Total
+                  </span>
+
+                  <span className="font-display text-2xl text-maroon">
+                    ₹{totalAmount.toLocaleString()}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 rounded-2xl bg-gold/10 text-center">
+                <p className="text-green-700 font-medium">
+                  {room.availableUnits} Rooms Available
+                </p>
+              </div>
+
+              <button
+                onClick={() => setShowBookingModal(true)}
+                className="
+                  w-full
+                  mt-8
+                  rounded-full
+                  bg-gold
+                  hover:bg-gold-soft
+                  text-charcoal
+                  py-4
+                  font-semibold
+                  transition
+                "
+              >
+                Reserve Now
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+    </section>
+  </div>
+  <RelatedRooms
+    currentRoomId={room._id}
+  />
+  {showBookingModal && (
+  <div
+    className="
+      fixed
+      inset-0
+      z-[999]
+      bg-black/60
+      flex
+      items-center
+      justify-center
+      p-4
+    "
+  >
+    <div
+      className="
+        bg-white
+        rounded-[2rem]
+        w-full
+        max-w-lg
+        p-8
+        shadow-2xl
+      "
+    >
+      <h2 className="font-display text-4xl text-maroon mb-6">
+        Booking Summary
+      </h2>
+
+      <div className="space-y-4">
+        <SummaryRow
+          label="Room"
+          value={room.roomName}
+        />
+
+        <SummaryRow
+          label="Room Type"
+          value={room.roomType}
+        />
+
+        <SummaryRow
+          label="Check In"
+          value={checkIn}
+        />
+
+        <SummaryRow
+          label="Check Out"
+          value={checkOut}
+        />
+
+        <SummaryRow
+          label="Guests"
+          value={guests}
+        />
+
+        <SummaryRow
+          label="Nights"
+          value={String(totalNights)}
+        />
+
+        <SummaryRow
+          label="Price Per Night"
+          value={`₹${room.discountPrice}`}
+        />
+      </div>
+
+      <div className="border-t mt-6 pt-6">
+        <div className="flex justify-between items-center">
+          <span className="font-semibold text-lg">
+            Total Amount
+          </span>
+
+          <span className="font-display text-3xl text-maroon">
+            ₹{totalAmount.toLocaleString()}
+          </span>
+        </div>
+      </div>
+
+      <div className="flex gap-4 mt-8">
+        <button
+          onClick={() =>
+            setShowBookingModal(false)
+          }
+          className="
+            flex-1
+            border
+            rounded-full
+            py-3
+            font-medium
+          "
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={handleBooking}
+          className="
+            flex-1
+            bg-gold
+            rounded-full
+            py-3
+            font-medium
+            text-charcoal
+          "
+        >
+          Proceed Payment
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+  </>
+);
+}
+
+function Info({
+  label,
+  value,
+}: {
+  label: string;
+  value: string | number;
+}) {
+  return (
+    <div className="bg-white rounded-3xl p-6 shadow-soft">
+      <p className="text-textmuted text-sm">
+        {label}
+      </p>
+
+      <p className="mt-2 font-semibold text-lg text-maroon">
+        {value}
+      </p>
     </div>
   );
 }
 
-function Info({ label, value }: { label: string; value: string | number }) {
+function SummaryRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
   return (
-    <div>
-      <p className="text-gray-500 text-sm">{label}</p>
+    <div className="flex justify-between">
+      <span className="text-textmuted">
+        {label}
+      </span>
 
-      <p className="font-semibold text-lg mt-1">{value}</p>
+      <span className="font-medium text-right">
+        {value}
+      </span>
     </div>
   );
 }

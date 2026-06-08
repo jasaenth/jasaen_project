@@ -7,86 +7,108 @@ import {
 
 const contactItems = [
   {
-    title: "PHONE",
+    title: "Phone",
     icon: FaPhoneAlt,
     details: "+66 123 456 789",
-    subtext: "We reply within 24 hours",
+    subtext: "Available for reservations & inquiries",
   },
   {
-    title: "EMAIL",
+    title: "Email",
     icon: FaEnvelope,
     details: "info@jasaenhotel.com",
-    subtext: "We reply within 24 hours",
+    subtext: "We typically reply within 24 hours",
   },
   {
-    title: "ADDRESS",
+    title: "Address",
     icon: FaMapMarkerAlt,
     details: "168 Thanon Prachathipat, Bangkhlo 10200, Thailand",
-    subtext: "24 Hours",
+    subtext: "Located in the heart of Bangkok",
   },
   {
-    title: "WORKING HOURS",
+    title: "Reception",
     icon: FaClock,
-    details: "Monday - Sunday",
-    subtext: "08:00 AM - 10:00 PM",
+    details: "24 Hours Daily",
+    subtext: "Guest support around the clock",
   },
 ];
 
 const ContactInfo = () => {
   return (
-    <section className="bg-bgmain pt-20 pb-10 px-6 md:px-12 lg:px-30">
-      <div className="max-w-7xl mx-auto">
-        {/* Heading */}
-        <div className="text-center mb-14">
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="w-16 h-[2px] bg-secondary"></div>
+    <section className="py-24 bg-bgmain">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        {/* Header */}
+        <div className="text-center mb-16">
+          <span className="gold-divider justify-center mb-5">
+            Get In Touch
+          </span>
 
-            <h2 className="heading-font text-2xl md:text-4xl font-bold text-primary uppercase">
-              CONTACT INFORMATION
-            </h2>
+          <h2 className="font-display text-5xl lg:text-6xl text-maroon leading-tight">
+            Contact Information
+          </h2>
 
-            <div className="w-16 h-[2px] bg-secondary"></div>
-          </div>
-
-          <p className="text-textmuted text-md leading-6 max-w-2xl mx-auto">
-            We&apos;re always happy to assist you.
-            <br />
-            Reach out to us through any of the following channels.
+          <p className="max-w-2xl mx-auto mt-6 text-lg text-textmuted leading-relaxed">
+            Whether you're planning your next stay, have a question about our
+            rooms, or simply need assistance, our team is always happy to help.
           </p>
         </div>
 
         {/* Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {contactItems.map((item, index) => {
             const Icon = item.icon;
 
             return (
               <div
                 key={index}
-                className=" border border-borderlight rounded-xl p-8 text-center shadow-sm hover:shadow-md transition duration-300"
+                className="
+                  bg-white
+                  rounded-3xl
+                  p-8
+                  border
+                  border-borderlight
+                  shadow-soft
+                  hover:shadow-luxe
+                  hover:-translate-y-2
+                  transition-all
+                  duration-500
+                  text-center
+                  group
+                "
               >
-                {/* Icon Circle */}
-                <div className="w-16 h-16 mx-auto rounded-full bg-primary flex items-center justify-center mb-3">
-                  <Icon className="text-white text-3xl" />
+                {/* Icon */}
+                <div className="
+                  w-18
+                  h-18
+                  mx-auto
+                  rounded-full
+                  bg-gold/10
+                  flex
+                  items-center
+                  justify-center
+                  mb-6
+                  group-hover:bg-gold/20
+                  transition
+                ">
+                  <Icon className="text-maroon text-3xl" />
                 </div>
 
                 {/* Title */}
-                <h3 className="text-textmain text-lg font-semibold uppercase mb-2">
+                <h3 className="font-display text-2xl text-maroon mb-3">
                   {item.title}
                 </h3>
 
                 {/* Divider */}
-                <div className="w-14 h-[2px] bg-secondary mx-auto mb-4"></div>
+                <div className="w-12 h-px bg-gold mx-auto mb-5" />
 
-                {/* Content */}
-                <div className="space-y-2">
-                  <p className="text-primary font-semibold">
-                    {item.details}
-                  </p>
-                  <p className="text-textmuted text-sm leading-4">
-                    {item.subtext}
-                  </p>
-                </div>
+                {/* Main Content */}
+                <p className="font-medium text-charcoal leading-relaxed mb-3">
+                  {item.details}
+                </p>
+
+                {/* Subtext */}
+                <p className="text-sm text-textmuted leading-6">
+                  {item.subtext}
+                </p>
               </div>
             );
           })}

@@ -1,70 +1,50 @@
 import Image from "next/image";
 import Link from "next/link";
+import BookingForm from "@/components/common/BookingForm";
 
 type PageHeroProps = {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   image: string;
+  eyebrow?: string;
   breadcrumb?: string;
+  showBookingForm?: boolean;
 };
 
 const PageHero = ({
   title,
   subtitle,
   image,
-  breadcrumb,
+  eyebrow,
+  showBookingForm = false,
 }: PageHeroProps) => {
   return (
-    <section className="relative h-[500px] w-full overflow-hidden pt-20">
-      {/* Background Image */}
-      <Image
-        src={image}
-        alt={title}
-        fill
-        priority
-        className="object-cover"
-      />
+    <section className="relative">
+      {/* Hero */}
+      <div className="relative h-[60vh] min-h-[480px] overflow-hidden hero-clip">
+        <Image src={image} alt={title} fill priority className="object-cover" />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/50" />
 
-      {/* Content */}
-      <div className="relative z-10 flex items-center h-full px-6 md:px-12 lg:px-20">
-        <div className="max-w-3xl">
-          {/* Title */}
-          <h1 className="heading-font text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight">
+        <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 text-white">
+          <span className="gold-divider mb-6">{eyebrow}</span>
+
+          <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold ">
             {title}
           </h1>
 
-          {/* Divider */}
-          <div className="flex items-center gap-3 mt-4 mb-4">
-            <div className="w-16 h-[2px] bg-secondary"></div>
-            <div className="w-3 h-3 rounded-full border-2 border-secondary"></div>
-            <div className="w-16 h-[2px] bg-secondary"></div>
-          </div>
-
-          {/* Subtitle */}
-          <p className="text-white/90 text-md sm:text-lg md:text-xl leading-relaxed max-w-2xl mb-8">
-            {subtitle}
-          </p>
-
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-4 text-lg">
-            <Link
-              href="/"
-              className="text-white hover:text-secondary transition"
-            >
-              Home
-            </Link>
-
-            <span className="text-white/70">›</span>
-
-            <span className="text-secondary font-medium">
-              {breadcrumb || title}
-            </span>
-          </div>
+          {subtitle && (
+            <p className="mt-6 max-w-2xl text-lg text-white/80">{subtitle}</p>
+          )}
         </div>
       </div>
+
+      {/* Floating Booking Form */}
+      {showBookingForm && (
+        <div className="relative z-30 -mt-18 px-6">
+          <BookingForm containerClassName="max-w-6xl mx-auto" />
+        </div>
+      )}
     </section>
   );
 };

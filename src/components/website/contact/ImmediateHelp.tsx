@@ -3,51 +3,74 @@ import { FaPhoneAlt } from "react-icons/fa";
 
 const ImmediateHelp = () => {
   return (
-    <section className="pt-12 bg-bgmain">
-      <div
-        className="relative overflow-hidden"
-        style={{
-          backgroundImage: "url('/images/hero/hero-1.JPG')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-        }}
-      >
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-black/70" />
+    <section className="py-12 bg-bgmain">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div
+          className="relative overflow-hidden rounded-[28px] shadow-luxe"
+          style={{
+            backgroundImage: "url('/images/hero/hero-1.JPG')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        >
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-charcoal/80" />
 
-        {/* Content */}
-        <div className="relative z-10 px-8 md:px-50 py-10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-8">
-            
-            {/* Left */}
-            <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+          <div className="relative z-10 px-8 md:px-12 py-10">
+            <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
               
-              {/* Icon */}
-              <div className="w-20 h-20 rounded-full border-2 border-secondary flex items-center justify-center shrink-0">
-                <FaPhoneAlt className="text-secondary text-3xl" />
+              {/* Left */}
+              <div className="flex items-center gap-5">
+                <div className="w-16 h-16 rounded-full bg-gold/15 border border-gold/30 flex items-center justify-center shrink-0">
+                  <FaPhoneAlt className="text-gold text-xl" />
+                </div>
+
+                <div>
+                  <span className="text-gold text-xs uppercase tracking-[0.3em]">
+                    Guest Assistance
+                  </span>
+
+                  <h2 className="font-display text-3xl md:text-4xl text-ivory mt-2">
+                    Need Immediate Assistance?
+                  </h2>
+
+                  <p className="text-ivory/75 mt-2 text-sm md:text-base">
+                    Our team is available to assist with reservations,
+                    transportation, and any questions regarding your stay.
+                  </p>
+                </div>
               </div>
 
-              {/* Text */}
-              <div>
-                <h2 className="heading-font text-xl md:text-2xl font-bold text-secondary uppercase mb-2">
-                  NEED IMMEDIATE ASSISTANCE?
-                </h2>
+              {/* Right */}
+              <div className="flex flex-col sm:flex-row items-center gap-4">
+                <div className="text-center sm:text-right">
+                  
+                </div>
 
-                <p className="text-white text-md md:text-lg  max-w-2xl">
-                  Call us directly and our team will be happy to <br />
-                  assist you right away.
-                </p>
+                <Link
+                  href="tel:+66123456789"
+                  className="
+                    inline-flex
+                    items-center
+                    gap-2
+                    rounded-full
+                    bg-gold
+                    hover:bg-gold-soft
+                    px-7
+                    py-3.5
+                    text-charcoal
+                    font-medium
+                    transition-all
+                    duration-300
+                    shadow-soft
+                  "
+                >
+                  <FaPhoneAlt />
+                  Call Now
+                </Link>
               </div>
+
             </div>
-
-            {/* Button */}
-            <Link
-              href="tel:+66123456789"
-              className="inline-flex items-center gap-4 border-2 border-secondary text-white hover:bg-secondary hover:text-primary px-7 py-3 rounded-xl font-semibold uppercase text-md transition duration-300 shrink-0"
-            >
-              <FaPhoneAlt />
-              CALL NOW
-            </Link>
           </div>
         </div>
       </div>

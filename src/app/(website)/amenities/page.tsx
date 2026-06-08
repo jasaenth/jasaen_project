@@ -7,9 +7,10 @@ const page = () => {
   return (
     <>
       <PageHero
+      eyebrow="Indulgences"
         title="OUR AMENITIES"
-        subtitle="Thoughtful amenities for comfortable and memorable stays."
-        image="/images/hero/hero-1.JPG"
+        subtitle="Considered rituals for body, palate and pause."
+        image="/images/aminities.JPG"
         breadcrumb="amenities"
       />
       <AmenitiesGrid />

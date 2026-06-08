@@ -1,3 +1,4 @@
+import PageHero from "@/components/common/PageHero";
 import RoomDetails from "@/components/website/rooms/RoomDetails";
 
 export default async function Page({
@@ -8,4 +9,6 @@ export default async function Page({
   const { id } = await params;
 
   return <RoomDetails id={id} />;
+  
+  
 }

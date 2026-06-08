@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-import { Playfair_Display, Inter } from "next/font/google";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import ReduxProvider from "@/store/provider";
 
-const playfair = Playfair_Display({
+const cormorant = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-playfair",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-serif",
 });
 
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sans",
 });
 
 export const metadata: Metadata = {
@@ -29,12 +29,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${playfair.variable} ${inter.variable} min-h-screen`}
+        className={`${cormorant.variable} ${inter.variable} min-h-screen`}
       >
         <ReduxProvider>
           {children}
         </ReduxProvider>
-        
       </body>
     </html>
   );

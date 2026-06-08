@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import { FaPaperPlane, FaCar, FaTrain } from "react-icons/fa";
+import {
+  FaPaperPlane,
+  FaCar,
+  FaTrain,
+} from "react-icons/fa";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -25,7 +28,7 @@ const ContactForm = () => {
   const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const phoneNumber = "7007458210"; // your whatsapp number
+    const phoneNumber = "7007458210";
 
     const message = `
 Hello Jasaen Hotel,
@@ -37,38 +40,41 @@ Subject: ${formData.subject}
 
 Message:
 ${formData.message}
-    `;
+`;
 
-    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message,
-    )}`;
-
-    window.open(whatsappUrl, "_blank");
+    window.open(
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
   };
 
   return (
-    <section className="bg-bgmain px-6 md:px-12 lg:px-30">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          {/* Left Form */}
-          <div className=" border border-borderlight rounded-xl p-8 shadow-sm">
-            <h2 className="heading-font text-2xl font-bold text-primary uppercase mb-4">
-              SEND US A MESSAGE
+    <section className="py-24 bg-bgmain">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid lg:grid-cols-2 gap-10">
+          {/* Contact Form */}
+          <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-borderlight shadow-soft">
+            <span className="gold-divider mb-5">
+              Contact Us
+            </span>
+
+            <h2 className="font-display text-5xl text-maroon leading-tight">
+              Send Us
+              <br />
+              A Message
             </h2>
 
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-[2px] bg-secondary"></div>
-              <div className="w-2 h-2 rounded-full border border-secondary"></div>
-              <div className="w-10 h-[2px] bg-secondary"></div>
-            </div>
-
-            <p className="text-textmuted text-md leading-6 mb-6">
-              Fill out the form below and our team will get back to you as soon
-              as possible.
+            <p className="mt-5 text-textmuted leading-relaxed">
+              We'd love to hear from you. Whether you have a question about
+              reservations, amenities, or your upcoming stay, our team is here
+              to assist.
             </p>
 
-            <form onSubmit={handleWhatsAppSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form
+              onSubmit={handleWhatsAppSubmit}
+              className="space-y-5 mt-8"
+            >
+              <div className="grid md:grid-cols-2 gap-4">
                 <input
                   type="text"
                   name="fullName"
@@ -76,7 +82,18 @@ ${formData.message}
                   required
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="w-full px-4 py-4 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                  className="
+                    w-full
+                    px-5
+                    py-4
+                    rounded-xl
+                    border
+                    border-borderlight
+                    bg-bgmain
+                    focus:outline-none
+                    focus:border-gold
+                    transition
+                  "
                 />
 
                 <input
@@ -86,18 +103,38 @@ ${formData.message}
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-4 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                  className="
+                    w-full
+                    px-5
+                    py-4
+                    rounded-xl
+                    border
+                    border-borderlight
+                    bg-bgmain
+                    focus:outline-none
+                    focus:border-gold
+                  "
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid md:grid-cols-2 gap-4">
                 <input
                   type="text"
                   name="phone"
                   placeholder="Phone Number"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-4 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                  className="
+                    w-full
+                    px-5
+                    py-4
+                    rounded-xl
+                    border
+                    border-borderlight
+                    bg-bgmain
+                    focus:outline-none
+                    focus:border-gold
+                  "
                 />
 
                 <input
@@ -106,74 +143,136 @@ ${formData.message}
                   placeholder="Subject"
                   value={formData.subject}
                   onChange={handleChange}
-                  className="w-full px-4 py-4 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary"
+                  className="
+                    w-full
+                    px-5
+                    py-4
+                    rounded-xl
+                    border
+                    border-borderlight
+                    bg-bgmain
+                    focus:outline-none
+                    focus:border-gold
+                  "
                 />
               </div>
 
               <textarea
+                rows={6}
                 name="message"
-                rows={4}
                 placeholder="Your Message *"
                 required
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full px-4 py-4 border border-borderlight rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary resize-none"
+                className="
+                  w-full
+                  px-5
+                  py-4
+                  rounded-xl
+                  border
+                  border-borderlight
+                  bg-bgmain
+                  resize-none
+                  focus:outline-none
+                  focus:border-gold
+                "
               />
 
               <button
                 type="submit"
-                className="bg-primary hover:bg-primary-dark text-white font-semibold px-8 py-4 rounded-lg flex items-center gap-2 transition"
+                className="
+                  inline-flex
+                  items-center
+                  gap-3
+                  rounded-full
+                  bg-maroon
+                  hover:bg-maroon-deep
+                  px-8
+                  py-4
+                  text-ivory
+                  font-medium
+                  transition
+                  shadow-soft
+                "
               >
-                SEND MESSAGE
+                Send Message
                 <FaPaperPlane />
               </button>
             </form>
           </div>
 
-          {/* Right Side */}
-          <div className=" border border-borderlight rounded-xl overflow-hidden shadow-sm">
-            <div className="h-[350px] w-full">
+          {/* Location Card */}
+          <div className="bg-white rounded-[2rem] overflow-hidden border border-borderlight shadow-soft">
+            {/* Map */}
+            <div className="h-[380px]">
               <iframe
                 src="https://www.google.com/maps?q=Jasaen+Hotel+Bangkok&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
-                allowFullScreen
                 loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
                 title="Jasaen Hotel Location"
-                className="w-full h-full"
               />
             </div>
 
-            <div className="pt-4 px-6 pb-8">
-              <h3 className="heading-font text-2xl font-bold text-primary uppercase mb-4">
-                HOW TO FIND US
+            {/* Content */}
+            <div className="p-8">
+              <span className="gold-divider mb-4">
+                Location
+              </span>
+
+              <h3 className="font-display text-4xl text-maroon">
+                How To Find Us
               </h3>
 
-              <div className="w-14 h-[2px] bg-secondary mb-4"></div>
-
-              <p className="text-textmuted text-md leading-6 mb-4">
-                We are located in the heart of the city, close to major
-                attractions and public transport.
+              <p className="mt-5 text-textmuted leading-relaxed">
+                Located in Bangkok's historic Sathorn district, Jasaen Boutique
+                Hotel offers convenient access to BTS, ferry services, local
+                markets, and the city's most iconic attractions.
               </p>
 
-              <div className="space-y-2">
-                <div className="flex items-center gap-3 text-textmain">
-                  <FaCar className="text-primary " />
-                  <span className="text-sm">
-                    <span className="font-semibold">By Car:</span> Parking
-                    available at the hotel
-                  </span>
+              <div className="mt-8 space-y-5">
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
+                    <FaCar className="text-maroon" />
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-charcoal">
+                      By Car
+                    </h4>
+
+                    <p className="text-sm text-textmuted mt-1">
+                      Parking facilities available for hotel guests.
+                    </p>
+                  </div>
                 </div>
 
-                <div className="flex items-center gap-3 text-textmain">
-                  <FaTrain className="text-primary" />
-                  <span className="text-sm">
-                    <span className="font-semibold">By BTS/MRT:</span> Near Bang
-                    Pho MRT Station (Exit 2)
-                  </span>
+                <div className="flex gap-4">
+                  <div className="w-12 h-12 rounded-full bg-gold/10 flex items-center justify-center shrink-0">
+                    <FaTrain className="text-maroon" />
+                  </div>
+
+                  <div>
+                    <h4 className="font-medium text-charcoal">
+                      By BTS & Ferry
+                    </h4>
+
+                    <p className="text-sm text-textmuted mt-1">
+                      Only minutes from Saphan Taksin BTS Station and Sathorn
+                      Pier.
+                    </p>
+                  </div>
                 </div>
+              </div>
+
+              {/* Quote */}
+              <div className="mt-8 bg-bgmain rounded-2xl p-5 border-l-4 border-gold">
+                <p className="italic text-textmuted">
+                  "Perfectly positioned for exploring Bangkok while enjoying
+                  the comfort of a quiet boutique retreat."
+                </p>
               </div>
             </div>
           </div>

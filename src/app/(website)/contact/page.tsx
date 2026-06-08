@@ -8,9 +8,10 @@ const page = () => {
   return (
     <>
       <PageHero
+       eyebrow="Contact us"
         title="CONTACT US"
         subtitle="We are always here to assist you with your stay."
-        image="/images/hero/hero-1.JPG"
+        image="/images/contact.JPG"
         breadcrumb="Contact Us"
       />
       <ContactInfo />

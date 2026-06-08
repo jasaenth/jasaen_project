@@ -1,65 +1,152 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 const AboutStory = () => {
   return (
-    <section className="bg-bgmain py-20 px-6 md:px-12 lg:px-30">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-center">
-          
-          {/* Left Content */}
-          <div>
-            {/* Small Label */}
-            <p className="text-secondary uppercase font-semibold tracking-wide text-sm mb-4">
-              OUR STORY
-            </p>
+    <section className="py-24 bg-bgmain">
+      <div className="max-w-6xl mx-auto px-6 lg:px-10">
+        <div className="grid gap-14 lg:grid-cols-2 items-center">
 
-            {/* Heading */}
-            <h2 className="heading-font text-4xl md:text-5xl font-bold text-primary leading-tight mb-6">
-              ROOTED IN TRADITION,
-              <br />
-              FOCUSED ON YOU
-            </h2>
+          {/* Image */}
+          <div className="relative">
+            {/* Background Accent */}
+            <div className="absolute -inset-4 bg-gold/10 rounded-[2rem] rotate-[-2deg]" />
 
-            {/* Decorative Divider */}
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-14 h-[2px] bg-secondary"></div>
-              <div className="w-2 h-2 rounded-full border border-secondary"></div>
-              <div className="w-14 h-[2px] bg-secondary"></div>
+            <div className="relative overflow-hidden rounded-[2rem] shadow-luxe">
+              <Image
+                src="/images/about.JPG"
+                alt="Jasaen Hotel Story"
+                width={900}
+                height={700}
+                className="w-full h-[550px] object-cover"
+              />
             </div>
-
-            {/* Description */}
-            <p className="text-textmuted text-lg leading-8 mb-6 max-w-xl">
-              Jasaen Hotel is a boutique hotel that blends local charm with
-              modern comfort in the heart of the city.
-            </p>
-
-            <p className="text-textmuted text-lg leading-8 mb-10 max-w-xl">
-              Inspired by the rich heritage of Bangkok, our hotel is designed
-              to offer a warm and inviting atmosphere where every guest feels at
-              home. Whether you are here for business or leisure, we are
-              dedicated to making your stay memorable.
-            </p>
-
-            {/* Button */}
-            <Link
-              href="/rooms"
-              className="inline-flex items-center gap-3 border border-primary text-primary hover:bg-primary hover:text-white px-8 py-4 rounded-lg font-semibold uppercase transition duration-300"
-            >
-              DISCOVER OUR ROOMS
-              <span>→</span>
-            </Link>
           </div>
 
-          {/* Right Image */}
-          <div className="relative h-[400px] md:h-[500px] w-full rounded-2xl overflow-hidden shadow-lg">
-            <Image
-              src="/images/hero/hero-2.JPG"
-              alt="Jasaen Hotel Story"
-              fill
-              className="object-cover"
-            />
-          </div>
+          {/* Content */}
+          <div>
+  <span className="gold-divider mb-5">
+    About Us
+  </span>
+
+  <h2 className="font-display text-5xl lg:text-6xl text-maroon leading-tight">
+    A Boutique Stay
+    <br />
+    Unlike Any Other
+  </h2>
+
+  <p className="mt-6 text-textmuted text-lg leading-relaxed">
+    Located in Bangkok's vibrant Sathorn district, Jasaen Boutique Hotel
+    is a charming 3-star boutique property offering a perfect blend of
+    unique design, modern comfort, and exceptional value.
+  </p>
+
+  <p className="mt-5 text-textmuted text-lg leading-relaxed">
+    Nestled within Bangkok's historic Sathorn and Bangrak neighborhood,
+    Jasaen is far from a conventional city hotel. We believe accommodation
+    should be more than just a place to sleep—it should become an
+    unforgettable part of your travel story.
+  </p>
+
+  <p className="mt-5 text-textmuted text-lg leading-relaxed">
+    Step through our doors on Charoen Krung 57 and discover an eclectic,
+    visually captivating world where industrial-inspired architecture
+    blends seamlessly with vintage charm. From our signature manual
+    vintage-style elevator to our thoughtfully curated communal spaces,
+    every corner of Jasaen is designed to inspire curiosity and create
+    memorable experiences.
+  </p>
+
+  {/* Stats */}
+  <div className="grid grid-cols-3 gap-6 mt-10">
+    <div>
+      <div className="font-display text-4xl text-maroon">
+        32
+      </div>
+
+      <div className="text-xs uppercase tracking-[0.2em] text-textmuted mt-2">
+        Unique Rooms
+      </div>
+    </div>
+
+    <div>
+      <div className="font-display text-4xl text-maroon">
+        BTS
+      </div>
+
+      <div className="text-xs uppercase tracking-[0.2em] text-textmuted mt-2">
+        Nearby Access
+      </div>
+    </div>
+
+    <div>
+      <div className="font-display text-4xl text-maroon">
+        24/7
+      </div>
+
+      <div className="text-xs uppercase tracking-[0.2em] text-textmuted mt-2">
+        Guest Support
+      </div>
+    </div>
+  </div>
+
+  {/* Highlights */}
+  <div className="mt-10 border-t border-borderlight pt-6 space-y-4">
+    <div className="flex items-start gap-3">
+      <div className="w-2 h-2 rounded-full bg-gold mt-2" />
+      <p className="text-textmain">
+        Spacious café, communal lounge, and co-working friendly spaces.
+      </p>
+    </div>
+
+    <div className="flex items-start gap-3">
+      <div className="w-2 h-2 rounded-full bg-gold mt-2" />
+      <p className="text-textmain">
+        Conveniently located near local markets, street food, BTS, and river transport.
+      </p>
+    </div>
+
+    <div className="flex items-start gap-3">
+      <div className="w-2 h-2 rounded-full bg-gold mt-2" />
+      <p className="text-textmain">
+        Safe, clean, and memorable accommodation for leisure, business, and creative travelers.
+      </p>
+    </div>
+  </div>
+
+  {/* Quote */}
+  <div className="mt-8">
+    <p className="italic text-textmuted text-lg leading-relaxed">
+      "Come for the design, stay for the warmth, and experience Bangkok
+      from a completely unique perspective."
+    </p>
+
+    <p className="text-maroon font-medium mt-3">
+      — Jasaen Boutique Hotel
+    </p>
+  </div>
+
+  <Link
+    href="/rooms"
+    className="
+      mt-10
+      inline-flex
+      items-center
+      gap-2
+      text-maroon
+      font-medium
+      hover:text-gold
+      transition
+    "
+  >
+    Discover Our Rooms
+    <ArrowRight size={16} />
+  </Link>
+</div>
+
         </div>
       </div>
     </section>

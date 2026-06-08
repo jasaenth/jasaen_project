@@ -6,10 +6,11 @@ const page = () => {
   return (
     <>
       <PageHero
-        title="OUR ROOMS"
-        subtitle="Find Best Room For Stay"
-        image="/images/hero/hero-1.JPG"
-        breadcrumb="Rooms"
+        title="Rooms & Suites"
+        eyebrow="Stays"
+        subtitle="A collection of 42 spaces — every one a love letter to slow, considered luxury."
+        image="/images/room/roomHeader.JPG"
+        showBookingForm
       />
       <RoomsPage />
     </>
