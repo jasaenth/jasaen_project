@@ -9,7 +9,7 @@ const rooms = [
     name: "Standard Room",
     description: "Cozy & Comfortable",
     price: "1200",
-    image: "/images/room/room-1.jpg",
+    image: "/images/rooms/room-1.jpg",
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const rooms = [
     name: "Superior Room",
     description: "Urban & Stylish",
     price: "1600",
-    image: "/images/room/room-2.JPG",
+    image: "/images/rooms/room-2.JPG",
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ const rooms = [
     name: "Deluxe Room",
     description: "Spacious & Relaxing",
     price: "2200",
-    image: "/images/room/room-3.JPG",
+    image: "/images/rooms/room-3.JPG",
   },
 ];
 
