@@ -12,8 +12,8 @@ export default function Page() {
         showBookingForm
         slides={[
           "/images/room/roomHeader.JPG",
-          "/images/room/room-2.JPG",
-          "/images/room/room-3.JPG",
+          "/images/rooms/room-2.JPG",
+          "/images/rooms/room-3.JPG",
         ]}
       />
 

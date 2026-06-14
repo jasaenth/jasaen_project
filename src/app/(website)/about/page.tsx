@@ -10,7 +10,7 @@ const page = () => {
         eyebrow="Our House"
         title="About Jasaen"
         subtitle="A boutique sanctuary born of craft, care and quiet ambition."
-        image="/images/hero/hero1.JPG"
+        image="/images/hero/hero1.jpg"
         breadcrumb="About Us"
       />
       <AboutStory />
