@@ -66,8 +66,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
     if (exists) {
       handleChange(
         "amenities",
-        formData.amenities.filter((a) => a !== amenityId),
-      );
+        (formData?.amenities || []).filter((a) => a !== amenityId),);
     } else {
       handleChange("amenities", [...(formData?.amenities || []), amenityId]);
     }
