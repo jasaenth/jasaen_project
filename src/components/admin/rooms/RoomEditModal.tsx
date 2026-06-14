@@ -23,7 +23,7 @@ interface Props {
 const MAX_IMAGES = 5;
 const MAX_SIZE = 2 * 1024 * 1024;
 
-const ROOM_TYPES = ["STANDARD", "DELUXE", "SUITE", "EXECUTIVE", "PRESIDENTIAL"];
+const ROOM_TYPES = ["STANDARD", "DELUXE", "DORMITORY", "SUITE"];
 
 const RoomEditModal = ({ room, onClose, onSave }: Props) => {
   const [formData, setFormData] = useState<RoomData | null>(null);
@@ -32,14 +32,19 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
   const [newImages, setNewImages] = useState<File[]>([]);
 
   useEffect(() => {
-    if (!room) return;
+    if (!room) {
+      setFormData(null);
+      setExistingImages([]);
+      setNewImages([]);
+      return;
+    }
 
     setFormData(room);
     setExistingImages(room.images || []);
     setNewImages([]);
   }, [room]);
 
-  if (!formData) return null;
+  if (!room) return null;
 
   const handleChange = (
     key: keyof RoomData,
@@ -56,7 +61,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
   };
 
   const toggleAmenity = (amenityId: string) => {
-    const exists = formData.amenities.includes(amenityId);
+    const exists = formData?.amenities?.includes(amenityId);
 
     if (exists) {
       handleChange(
@@ -64,7 +69,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
         formData.amenities.filter((a) => a !== amenityId),
       );
     } else {
-      handleChange("amenities", [...formData.amenities, amenityId]);
+      handleChange("amenities", [...(formData?.amenities || []), amenityId]);
     }
   };
 
@@ -152,14 +157,14 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
             {/* LEFT SIDE */}
             <div className="space-y-5">
               <input
-                value={formData.roomName}
+                value={formData?.roomName}
                 onChange={(e) => handleChange("roomName", e.target.value)}
                 placeholder="Room Name"
                 className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
 
               <select
-                value={formData.roomType}
+                value={formData?.roomType}
                 onChange={(e) => handleChange("roomType", e.target.value)}
                 className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               >
@@ -172,7 +177,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
 
               <textarea
                 rows={3}
-                value={formData.shortDescription}
+                value={formData?.shortDescription}
                 onChange={(e) =>
                   handleChange("shortDescription", e.target.value)
                 }
@@ -182,7 +187,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
 
               <textarea
                 rows={6}
-                value={formData.description}
+                value={formData?.description}
                 onChange={(e) => handleChange("description", e.target.value)}
                 placeholder="Description"
                 className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
@@ -191,7 +196,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
               <div className="grid grid-cols-2 gap-4">
                 <input
                   type="number"
-                  value={formData.pricePerNight}
+                  value={formData?.pricePerNight}
                   onChange={(e) =>
                     handleChange("pricePerNight", Number(e.target.value))
                   }
@@ -201,7 +206,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
 
                 <input
                   type="number"
-                  value={formData.discountPrice || 0}
+                  value={formData?.discountPrice || 0}
                   onChange={(e) =>
                     handleChange("discountPrice", Number(e.target.value))
                   }
@@ -211,7 +216,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
 
                 <input
                   type="number"
-                  value={formData.maxAdults}
+                  value={formData?.maxAdults}
                   onChange={(e) =>
                     handleChange("maxAdults", Number(e.target.value))
                   }
@@ -221,7 +226,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
 
                 <input
                   type="number"
-                  value={formData.maxChildren}
+                  value={formData?.maxChildren}
                   onChange={(e) =>
                     handleChange("maxChildren", Number(e.target.value))
                   }
@@ -230,25 +235,23 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
                 />
 
                 <input
-                  value={formData.bedType}
+                  value={formData?.bedType}
                   onChange={(e) => handleChange("bedType", e.target.value)}
                   placeholder="Bed Type"
                   className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
 
                 <input
-                  type="number"
-                  value={formData.roomSize}
-                  onChange={(e) =>
-                    handleChange("roomSize", Number(e.target.value))
-                  }
-                  placeholder="Room Size (sq ft)"
+                  type="text"
+                  value={formData?.roomSize}
+                  onChange={(e) => handleChange("roomSize", e.target.value)}
+                  placeholder="Room Size (e.g. 250 sq ft)"
                   className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
 
                 <input
                   type="number"
-                  value={formData.totalUnits}
+                  value={formData?.totalUnits}
                   onChange={(e) =>
                     handleChange("totalUnits", Number(e.target.value))
                   }
@@ -260,7 +263,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={formData.isFeatured}
+                  checked={formData?.isFeatured}
                   onChange={(e) => handleChange("isFeatured", e.target.checked)}
                   className="w-4 h-4 text-primary focus:ring-primary/20"
                 />
@@ -274,7 +277,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
 
               <div className="grid grid-cols-2 gap-3 mb-8">
                 {amenitiesList.map((amenity) => {
-                  const selected = formData.amenities.includes(amenity.id);
+                  const selected = formData?.amenities?.includes(amenity.id);
 
                   return (
                     <button

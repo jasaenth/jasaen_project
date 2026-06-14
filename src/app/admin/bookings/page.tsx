@@ -184,12 +184,8 @@ export default function BookingsPage() {
 
       {/* Main Table Card */}
       <div className="bg-white rounded-[2rem] border overflow-hidden">
-        <BookingFilters
-  search={search}
-  status={status}
-  setSearch={setSearch}
-  setStatus={setStatus}
-/>
+        
+
 
         <BookingsTable
           bookings={paginatedBookings}

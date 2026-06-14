@@ -19,7 +19,8 @@ import {
   HelpCircle,
   Hash,
   DoorOpen,
-  AlertCircle
+  AlertCircle,
+  Banknote
 } from "lucide-react";
 
 const ROOM_CATEGORIES = ["Standard", "Deluxe", "Dormitory", "Suite"];
@@ -359,7 +360,7 @@ const AddRoomForm = () => {
                   value={pricePerNight}
                   onChange={setPricePerNight}
                   placeholder="e.g., 2999"
-                  icon={DollarSign}
+                  icon={Banknote}
                   unit="THB"
                   min={0}
                   step={100}
