@@ -31,7 +31,7 @@ export default function RecentBookingsTable() {
   ];
 
   return (
-    <div className="bg-white rounded-[2rem] border border-borderlight p-10">
+    <div className="bg-white rounded-4xl border border-borderlight p-10">
       <div className="flex justify-between items-center mb-8">
         <h2 className="font-display text-4xl text-maroon">
           Recent bookings

@@ -108,16 +108,16 @@ const WhyChoose = () => {
         <div>
           
 
-          <div className="overflow-hidden rounded-[2rem]">
+          <div className="overflow-hidden rounded-4xl">
             <div className="image-scroll-track">
               {[...galleryImages, ...galleryImages].map((image, index) => (
                 <div
                   key={index}
                   className="
                     relative
-                    min-w-[380px]
-                    h-[300px]
-                    rounded-[1.5rem]
+                    min-w-95
+                    h-75
+                    rounded-3xl
                     overflow-hidden
                     mx-2
                     shrink-0
@@ -136,7 +136,7 @@ const WhyChoose = () => {
                     "
                   />
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
                 </div>
               ))}
             </div>

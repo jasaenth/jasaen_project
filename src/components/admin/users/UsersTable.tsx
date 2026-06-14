@@ -18,7 +18,7 @@ const UsersTable = ({ users, onView, onEdit, onDelete }: Props) => {
       {/* Desktop Table */}
       <div className="hidden lg:block bg-white rounded-2xl border border-borderlight shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[1100px]">
+          <table className="w-full min-w-275">
             <thead className="bg-bgmain border-b border-borderlight">
               <tr className="text-left">
                 <th className="px-6 py-4 font-semibold">User ID</th>

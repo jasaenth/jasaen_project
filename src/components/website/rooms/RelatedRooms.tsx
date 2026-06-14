@@ -67,7 +67,7 @@ const guests = searchParams.get("guests");
               href={`/rooms/${room._id}?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`}
               className="group"
             >
-              <div className="overflow-hidden rounded-[2rem] bg-white shadow-soft hover:shadow-luxe transition-all duration-500">
+              <div className="overflow-hidden rounded-4xl bg-white shadow-soft hover:shadow-luxe transition-all duration-500">
                 {/* Image */}
                 <div className="relative h-72 overflow-hidden">
                   <Image

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import PageSliderHero from "@/components/common/PageSliderHero";
 import RoomsPage from "@/components/website/rooms/Rooms";
 
@@ -16,7 +17,9 @@ export default function Page() {
         ]}
       />
 
-      <RoomsPage />
+      <Suspense fallback={null}>
+        <RoomsPage />
+      </Suspense>
     </>
   );
 }

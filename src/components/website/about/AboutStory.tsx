@@ -13,15 +13,15 @@ const AboutStory = () => {
           {/* Image */}
           <div className="relative">
             {/* Background Accent */}
-            <div className="absolute -inset-4 bg-gold/10 rounded-[2rem] rotate-[-2deg]" />
+            <div className="absolute -inset-4 bg-gold/10 rounded-4xl -rotate-2" />
 
-            <div className="relative overflow-hidden rounded-[2rem] shadow-luxe">
+            <div className="relative overflow-hidden rounded-4xl shadow-luxe">
               <Image
                 src="/images/about.JPG"
                 alt="Jasaen Hotel Story"
                 width={900}
                 height={700}
-                className="w-full h-[550px] object-cover"
+                className="w-full h-137.5 object-cover"
               />
             </div>
           </div>

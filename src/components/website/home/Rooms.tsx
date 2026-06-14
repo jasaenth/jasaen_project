@@ -55,7 +55,7 @@ const Rooms = () => {
               <div
                 className="
                   overflow-hidden
-                  rounded-[2rem]
+                  rounded-4xl
                   bg-white
                   shadow-soft
                   hover:shadow-luxe

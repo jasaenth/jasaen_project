@@ -183,7 +183,7 @@ export default function BookingsPage() {
       </div>
 
       {/* Main Table Card */}
-      <div className="bg-white rounded-[2rem] border overflow-hidden">
+      <div className="bg-white rounded-4xl border overflow-hidden">
         
 
 

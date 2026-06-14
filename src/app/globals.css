@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+/* stylelint-disable at-rule-no-unknown */
 
 /* ======================================================
 JASAEN HOTEL DESIGN SYSTEM
@@ -45,6 +46,7 @@ JASAEN HOTEL DESIGN SYSTEM
 
   --shadow-soft: 0 10px 30px -10px rgb(26 26 26 / 0.15);
 }
+/* stylelint-enable at-rule-no-unknown */
 
 :root {
   --text-main: var(--color-foreground);

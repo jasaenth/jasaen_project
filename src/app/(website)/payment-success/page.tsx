@@ -1,11 +1,12 @@
 "use client";
 
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CheckCircle } from "lucide-react";
 import toast from "react-hot-toast";
 
-export default function PaymentSuccess() {
+function PaymentSuccessContent() {
   const params = useSearchParams();
   const router = useRouter();
 
@@ -96,5 +97,13 @@ export default function PaymentSuccess() {
         </p>
       </div>
     </div>
+  );
+}
+
+export default function PaymentSuccess() {
+  return (
+    <Suspense fallback={null}>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }

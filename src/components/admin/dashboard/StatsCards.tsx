@@ -38,7 +38,7 @@ export default function StatsCards() {
             key={item.title}
             className="
               bg-white
-              rounded-[2rem]
+              rounded-4xl
               border
               border-borderlight
               p-6

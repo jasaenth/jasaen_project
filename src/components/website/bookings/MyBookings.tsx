@@ -59,7 +59,7 @@ export default function MyBookings() {
 
         {/* Empty State */}
         {bookings.length === 0 ? (
-          <div className="bg-ivory rounded-[2rem] border border-borderlight shadow-soft p-14 text-center">
+          <div className="bg-ivory rounded-4xl border border-borderlight shadow-soft p-14 text-center">
             <h3 className="font-display text-4xl text-maroon">
               No Reservations Yet
             </h3>
@@ -104,7 +104,7 @@ export default function MyBookings() {
                   key={booking._id}
                   className="
                     bg-ivory
-                    rounded-[2rem]
+                    rounded-4xl
                     overflow-hidden
                     border
                     border-borderlight
@@ -116,7 +116,7 @@ export default function MyBookings() {
                 >
                   <div className="grid lg:grid-cols-4">
                     {/* Image */}
-                    <div className="relative h-[320px] lg:h-full">
+                    <div className="relative h-80 lg:h-full">
                       <Image
                         src={booking.room?.images?.[0]?.url}
                         alt={booking.room?.roomName}
@@ -124,7 +124,7 @@ export default function MyBookings() {
                         className="object-cover"
                       />
 
-                      <div className="absolute inset-0 bg-gradient-to-t from-charcoal/60 to-transparent" />
+                      <div className="absolute inset-0 bg-linear-to-t from-charcoal/60 to-transparent" />
                     </div>
 
                     {/* Content */}

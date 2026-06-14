@@ -68,7 +68,7 @@ const Commitment = () => {
 
         {/* Quote Card */}
         <div className="mt-16 max-w-4xl mx-auto">
-          <div className="bg-white rounded-[2rem] border border-borderlight shadow-soft p-8 md:p-10 text-center">
+          <div className="bg-white rounded-4xl border border-borderlight shadow-soft p-8 md:p-10 text-center">
             <p className="italic text-lg md:text-xl text-textmuted leading-relaxed">
               "We believe hospitality is not simply about providing a room —
               it is about creating meaningful experiences, genuine connections,

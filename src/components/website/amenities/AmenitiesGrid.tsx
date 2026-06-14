@@ -24,7 +24,7 @@ const AmenitiesGrid = () => {
                 className="
                   group
                   bg-white
-                  rounded-[2rem]
+                  rounded-4xl
                   p-8
                   border
                   border-borderlight
@@ -72,7 +72,7 @@ const AmenitiesGrid = () => {
                   text-textmuted
                   leading-relaxed
                   text-sm
-                  min-h-[110px]
+                  min-h-27.5
                 "
                 >
                   {item.description}

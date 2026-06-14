@@ -14,8 +14,8 @@ export default function Footer() {
           <div className="mb-8">
             <div
               className="
-      w-[105px]
-      h-[72px]
+      w-26.25
+      h-18
       bg-ivory
       rounded-2xl
       flex

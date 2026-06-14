@@ -143,7 +143,7 @@ const guests =
 
       {/* Gallery */}
       <div className="grid lg:grid-cols-4 gap-4">
-        <div className="lg:col-span-3 relative h-[550px] rounded-[2rem] overflow-hidden shadow-luxe">
+        <div className="lg:col-span-3 relative h-137.5 rounded-4xl overflow-hidden shadow-luxe">
           <Image
             src={room.images?.[selectedImage]?.url}
             alt={room.roomName}
@@ -310,7 +310,7 @@ const guests =
             <div
               className="
                 bg-white
-                rounded-[2rem]
+                rounded-4xl
                 p-8
                 shadow-luxe
                 border
@@ -401,7 +401,7 @@ const guests =
     className="
       fixed
       inset-0
-      z-[999]
+      z-999
       bg-black/60
       flex
       items-center
@@ -412,7 +412,7 @@ const guests =
     <div
       className="
         bg-white
-        rounded-[2rem]
+        rounded-4xl
         w-full
         max-w-lg
         p-8

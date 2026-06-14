@@ -26,7 +26,7 @@ const GalleryViewModal = ({
           <X size={22} />
         </button>
 
-        <div className="relative h-[300px] md:h-[500px] rounded-xl overflow-hidden">
+        <div className="relative h-75 md:h-125 rounded-xl overflow-hidden">
           <Image
             src={item.image}
             alt={item.title}

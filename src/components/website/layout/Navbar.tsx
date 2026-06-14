@@ -158,7 +158,7 @@ const solid =
                   {user.name?.slice(0, 1).toUpperCase()}
                 </span>
 
-                <span className="max-w-[100px] truncate">
+                <span className="max-w-25 truncate">
                   {user.name?.split(" ")[0]}
                 </span>
               </button>

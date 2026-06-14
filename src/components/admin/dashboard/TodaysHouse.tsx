@@ -1,6 +1,6 @@
 export default function TodaysHouse() {
   return (
-    <div className="bg-white rounded-[2rem] border border-borderlight p-10">
+    <div className="bg-white rounded-4xl border border-borderlight p-10">
       <h2 className="font-display text-4xl text-maroon mb-10">
         Today's house
       </h2>

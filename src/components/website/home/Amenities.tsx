@@ -31,9 +31,9 @@ export default function Amenities({ showTitle = true }: ShowTitle) {
               <div
                 key={index}
                 className="
-                  min-w-[260px]
+                  min-w-65
                   bg-white
-                  rounded-[2rem]
+                  rounded-4xl
                   border
                   border-borderlight
                   shadow-soft

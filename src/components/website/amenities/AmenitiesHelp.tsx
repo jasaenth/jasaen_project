@@ -29,7 +29,7 @@ const AmenitiesHelp = () => {
           <div className="absolute inset-0 bg-charcoal/85" />
 
           {/* Gold Accent Glow */}
-          <div className="absolute inset-0 bg-gradient-to-r from-maroon/30 via-transparent to-gold/10" />
+          <div className="absolute inset-0 bg-linear-to-r from-maroon/30 via-transparent to-gold/10" />
 
           {/* Content */}
           <div className="relative z-10 px-8 md:px-16 py-16 md:py-20">

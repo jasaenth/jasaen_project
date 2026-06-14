@@ -50,7 +50,7 @@ export default function GuestVoices() {
               key={item.name}
               className="
                 bg-white
-                rounded-[2rem]
+                rounded-4xl
                 p-8
                 shadow-soft
                 border

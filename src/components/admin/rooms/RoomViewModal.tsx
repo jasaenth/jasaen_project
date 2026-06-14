@@ -22,8 +22,8 @@ export default function RoomViewModal({
   if (!room) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl h-[90vh] overflow-hidden rounded-[28px] bg-[#f7f3eb] shadow-2xl relative">
+    <div className="fixed inset-0 z-100 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-5xl h-[90vh] overflow-hidden rounded-4xl bg-[#f7f3eb] shadow-2xl relative">
 
         {/* Close */}
         <button
@@ -49,7 +49,7 @@ export default function RoomViewModal({
         <div className="h-full overflow-y-auto">
 
           {/* Hero Image */}
-          <div className="relative h-[280px]">
+          <div className="relative h-70">
             <Image
               src={
                 room.images?.[0]?.url ||
@@ -60,7 +60,7 @@ export default function RoomViewModal({
               className="object-cover"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/20 to-transparent" />
 
             <div className="absolute bottom-6 left-6 text-white">
               <span className="bg-white/90 text-charcoal text-xs px-3 py-1 rounded-full">

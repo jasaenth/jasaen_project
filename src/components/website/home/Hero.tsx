@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,7 +25,7 @@ const Hero = () => {
 
   return (
     <>
-      <section className="relative h-screen min-h-[750px] overflow-visible hero-clip">
+      <section className="relative h-screen min-h-187.5 overflow-visible hero-clip">
         {/* Background Slider */}
         <div
           className="flex h-full transition-transform duration-1000 ease-in-out"
@@ -50,7 +51,7 @@ const Hero = () => {
         </div>
 
         {/* Luxury Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/35 to-charcoal/65" />
+        <div className="absolute inset-0 bg-linear-to-b from-charcoal/40 via-charcoal/35 to-charcoal/65" />
 
         {/* Hero Content */}
         <div className="absolute inset-0 z-20 flex items-center justify-center text-center px-6">
@@ -119,10 +120,10 @@ const Hero = () => {
 
         {/* Floating Booking Form */}
         <div className="absolute bottom-0 left-1/2 z-30 w-full max-w-7xl -translate-x-1/2 translate-y-1/2 px-6">
-  <BookingForm
-    containerClassName="mx-auto max-w-6xl"
-  />
-</div>
+          <Suspense fallback={null}>
+            <BookingForm containerClassName="mx-auto max-w-6xl" />
+          </Suspense>
+        </div>
       </section>
 
       {/* Spacer because booking form floats outside hero */}

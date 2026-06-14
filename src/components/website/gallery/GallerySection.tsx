@@ -117,10 +117,10 @@ const GallerySection = () => {
               group
               relative
               overflow-hidden
-              rounded-[1.75rem]
+              rounded-4xl
               ${
                 index % 5 === 0
-                  ? "md:row-span-2 md:h-[420px]"
+                  ? "md:row-span-2 md:h-105"
                   : "h-52 md:h-64"
               }
             `}
@@ -177,7 +177,7 @@ const GallerySection = () => {
                 group-hover:translate-y-0
                 transition
                 duration-500
-                bg-gradient-to-t
+                bg-linear-to-t
                 from-black/70
                 to-transparent
               "
@@ -314,7 +314,7 @@ const GallerySection = () => {
               fill
               className="
                 object-contain
-                rounded-[2rem]
+                rounded-4xl
               "
               priority
             />
@@ -326,7 +326,7 @@ const GallerySection = () => {
                 left-0
                 right-0
                 p-8
-                bg-gradient-to-t
+                bg-linear-to-t
                 from-black/80
                 to-transparent
               "

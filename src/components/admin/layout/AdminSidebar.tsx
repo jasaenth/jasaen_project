@@ -110,7 +110,7 @@ ${
   // Desktop Sidebar
   const DesktopSidebar = () => (
     <div
-      className={`hidden lg:block fixed left-0 top-0 h-full bg-gradient-to-b from-[#2B0000] to-[#1a0000] shadow-2xl transition-all duration-300 z-30 ${
+      className={`hidden lg:block fixed left-0 top-0 h-full bg-linear-to-b from-[#2B0000] to-[#1a0000] shadow-2xl transition-all duration-300 z-30 ${
         isCollapsed ? "w-20" : "w-72"
       }`}
     >

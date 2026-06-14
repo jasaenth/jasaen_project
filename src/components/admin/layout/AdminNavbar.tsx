@@ -222,7 +222,7 @@ justify-center
                 </button>
 
                 {isNotificationsOpen && (
-                  <div className="absolute right-0 mt-2 w-[380px] bg-white rounded-[28px] shadow-xl border border-gray-200  overflow-hidden z-50">
+                  <div className="absolute right-0 mt-2 w-95 bg-white rounded-4xl shadow-xl border border-gray-200  overflow-hidden z-50">
                     <div className="p-4 border-b border-gray-200 ">
                       <div className="flex justify-between items-center">
                         <h3 className="font-semibold text-gray-800 ">
@@ -302,7 +302,7 @@ justify-center
 </button>
 
                 {isProfileOpen && (
-                  <div className="absolute right-0 mt-2 w-72 bg-white  rounded-[28px] shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+                  <div className="absolute right-0 mt-2 w-72 bg-white  rounded-4xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
                     <div className="p-4 border-b border-gray-200 ">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-primary rounded-full flex items-center justify-center">

@@ -53,7 +53,7 @@ ${formData.message}
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div className="grid lg:grid-cols-2 gap-10">
           {/* Contact Form */}
-          <div className="bg-white rounded-[2rem] p-8 md:p-10 border border-borderlight shadow-soft">
+          <div className="bg-white rounded-4xl p-8 md:p-10 border border-borderlight shadow-soft">
             <span className="gold-divider mb-5">
               Contact Us
             </span>
@@ -202,9 +202,9 @@ ${formData.message}
           </div>
 
           {/* Location Card */}
-          <div className="bg-white rounded-[2rem] overflow-hidden border border-borderlight shadow-soft">
+          <div className="bg-white rounded-4xl overflow-hidden border border-borderlight shadow-soft">
             {/* Map */}
-            <div className="h-[380px]">
+            <div className="h-95">
               <iframe
                 src="https://www.google.com/maps?q=Jasaen+Hotel+Bangkok&output=embed"
                 width="100%"

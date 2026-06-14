@@ -26,10 +26,10 @@ export default function RoomCard({
   onDelete,
 }: Props) {
   return (
-    <div className="bg-white rounded-[32px] overflow-hidden border border-[#e8dfd4] shadow-sm hover:shadow-lg transition-all">
+    <div className="bg-white rounded-4xl overflow-hidden border border-[#e8dfd4] shadow-sm hover:shadow-lg transition-all">
       
       {/* IMAGE */}
-      <div className="relative h-[260px]">
+      <div className="relative h-65">
         <Image
           src={room.images?.[0]?.url}
           alt={room.roomName}

@@ -21,10 +21,10 @@ const PageHero = ({
   return (
     <section className="relative">
       {/* Hero */}
-      <div className="relative h-[60vh] min-h-[480px] overflow-hidden hero-clip">
+      <div className="relative h-[60vh] min-h-120 overflow-hidden hero-clip">
         <Image src={image} alt={title} fill priority className="object-cover" />
 
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/50" />
+        <div className="absolute inset-0 bg-linear-to-b from-charcoal/40 via-charcoal/20 to-charcoal/50" />
 
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 text-white">
           <span className="white-divider mb-6">{eyebrow}</span>

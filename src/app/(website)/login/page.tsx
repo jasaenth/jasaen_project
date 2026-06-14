@@ -166,7 +166,7 @@ const page = () => {
         />
 
         {/* Luxury Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-maroon/90 via-maroon/80 to-black/60" />
+        <div className="absolute inset-0 bg-linear-to-br from-maroon/90 via-maroon/80 to-black/60" />
 
         <div className="relative z-10 h-full flex flex-col justify-center px-16 text-white">
           <span className="gold-divider text-gold mb-8">

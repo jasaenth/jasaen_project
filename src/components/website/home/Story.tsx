@@ -15,9 +15,9 @@ const Story = () => {
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Image Side */}
           <div className="relative">
-            <div className="absolute -inset-5 bg-gold/15 rounded-[2rem] rotate-[-3deg]" />
+            <div className="absolute -inset-5 bg-gold/15 rounded-4xl -rotate-3" />
 
-            <div className="relative overflow-hidden rounded-[2rem] shadow-luxe group">
+            <div className="relative overflow-hidden rounded-4xl shadow-luxe group">
               <Image
                 src="/images/ourstory.JPG"
                 alt="Jasaen Boutique Hotel"
@@ -25,7 +25,7 @@ const Story = () => {
                 height={1000}
                 className="
                   w-full
-                  h-[650px]
+                  h-162.5
                   object-cover
                   transition
                   duration-700
@@ -34,7 +34,7 @@ const Story = () => {
               />
 
               {/* Luxury Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-linear-to-t from-charcoal/40 via-transparent to-transparent" />
             </div>
           </div>
 

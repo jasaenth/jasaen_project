@@ -6,7 +6,7 @@ const ImmediateHelp = () => {
     <section className="py-12 bg-bgmain">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         <div
-          className="relative overflow-hidden rounded-[28px] shadow-luxe"
+          className="relative overflow-hidden rounded-4xl shadow-luxe"
           style={{
             backgroundImage: "url('/images/hero/hero2.JPG')",
             backgroundSize: "cover",

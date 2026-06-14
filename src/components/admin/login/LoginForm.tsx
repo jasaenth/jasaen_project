@@ -65,7 +65,7 @@ setTimeout(() => {
         className="object-cover"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-charcoal/80 via-charcoal/60 to-transparent" />
+      <div className="absolute inset-0 bg-linear-to-r from-charcoal/80 via-charcoal/60 to-transparent" />
 
       <div className="absolute inset-0 flex items-center px-16">
         <div className="text-ivory max-w-xl">
@@ -94,7 +94,7 @@ setTimeout(() => {
           w-full
           max-w-md
           bg-ivory
-          rounded-[2rem]
+          rounded-4xl
           shadow-luxe
           border
           border-borderlight

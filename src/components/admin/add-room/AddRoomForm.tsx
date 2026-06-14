@@ -312,7 +312,7 @@ const AddRoomForm = () => {
         <div className="xl:col-span-2 space-y-8">
           {/* Room Details Card */}
           <div className="bg-white rounded-2xl border border-border/50 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-            <div className="bg-gradient-to-r from-maroon to-maroon/90 px-6 py-4">
+            <div className="bg-linear-to-r from-maroon to-maroon/90 px-6 py-4">
               <h2 className="text-xl font-display text-ivory flex items-center gap-2">
                 <Sparkles size={20} className="text-gold" />
                 Room Details
@@ -542,7 +542,7 @@ const AddRoomForm = () => {
 
       {/* Price Summary Card */}
       {(pricePerNight || discountPrice) && (
-        <div className="mt-6 bg-gradient-to-r from-gold/5 to-maroon/5 rounded-xl p-4 border border-gold/20">
+        <div className="mt-6 bg-linear-to-r from-gold/5 to-maroon/5 rounded-xl p-4 border border-gold/20">
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
               <DollarSign size={20} className="text-gold" />
@@ -596,7 +596,7 @@ const AddRoomForm = () => {
           type="button"
           disabled={loading}
           onClick={handlePublish}
-          className="group px-8 py-3 bg-gradient-to-r from-maroon to-maroon/90 text-ivory rounded-xl hover:shadow-lg hover:shadow-maroon/20 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="group px-8 py-3 bg-linear-to-r from-maroon to-maroon/90 text-ivory rounded-xl hover:shadow-lg hover:shadow-maroon/20 transition-all duration-300 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>

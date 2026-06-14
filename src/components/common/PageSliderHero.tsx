@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import BookingForm from "@/components/common/BookingForm";
@@ -32,7 +33,7 @@ export default function PageSliderHero({
   return (
     <section className="relative">
       {/* Hero Slider */}
-      <div className="relative h-[60vh] min-h-[500px] overflow-hidden hero-clip">
+      <div className="relative h-[60vh] min-h-125 overflow-hidden hero-clip">
         <div
           className="flex h-full transition-transform duration-1000 ease-in-out"
           style={{
@@ -56,7 +57,7 @@ export default function PageSliderHero({
         </div>
 
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/50 via-charcoal/30 to-charcoal/70" />
+        <div className="absolute inset-0 bg-linear-to-b from-charcoal/50 via-charcoal/30 to-charcoal/70" />
 
         {/* Content */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-6 text-white">
@@ -81,7 +82,9 @@ export default function PageSliderHero({
       {/* Floating Booking Form */}
       {showBookingForm && (
         <div className="relative z-30 -mt-18 px-6">
-          <BookingForm containerClassName="max-w-6xl mx-auto" />
+          <Suspense fallback={null}>
+            <BookingForm containerClassName="max-w-6xl mx-auto" />
+          </Suspense>
         </div>
       )}
     </section>

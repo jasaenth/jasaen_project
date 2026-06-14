@@ -47,13 +47,12 @@ export default function BookingForm({
       <div
         className={`
           bg-ivory
-          rounded-[2rem]
+          rounded-4xl
           shadow-luxe
           border
           border-border
           p-8
           md:p-6
-          shadow-luxe
           ${containerClassName}
         `}
       >
@@ -122,7 +121,7 @@ export default function BookingForm({
           <button
             onClick={handleSearch}
             className="
-              h-[72px]
+              h-18
               rounded-2xl
               bg-maroon
               hover:bg-maroon-deep
