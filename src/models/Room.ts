@@ -10,18 +10,9 @@ export interface IRoom extends Document {
   roomName: string;
   slug: string;
 
-  roomType: {
-  enum: [
-    "STANDARD",
-    "DELUXE",
-    "DORMITORY",
-    "SUITE",
-  ],
-}
+  roomType: "STANDARD" | "DELUXE" | "DORMITORY" | "SUITE";
 
-roomSize: {
-  type: String,
-}
+  roomSize: string;
 
   description: string;
   shortDescription: string;
@@ -33,7 +24,6 @@ roomSize: {
   maxChildren: number;
 
   bedType: string;
-  
 
   amenities: string[];
 
@@ -69,15 +59,10 @@ const RoomSchema = new Schema(
     },
 
     roomType: {
-  type: String,
-  enum: [
-    "STANDARD",
-    "DELUXE",
-    "DORMITORY",
-    "SUITE",
-  ],
-  required: true,
-},
+      type: String,
+      enum: ["STANDARD", "DELUXE", "DORMITORY", "SUITE"],
+      required: true,
+    },
 
     description: {
       type: String,

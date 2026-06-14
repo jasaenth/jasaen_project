@@ -8,8 +8,8 @@ if (!JWT_SECRET) {
 
 export const generateToken = (
   userId: string,
-  role: "ADMIN" | "STAFF"
-) => {
+  role: "ADMIN" | "STAFF",
+): string => {
   return jwt.sign(
     {
       userId,
@@ -17,9 +17,8 @@ export const generateToken = (
     },
     JWT_SECRET,
     {
-      expiresIn:
-        process.env.JWT_EXPIRES_IN || "7d",
-    }
+      expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+    } as jwt.SignOptions,
   );
 };
 

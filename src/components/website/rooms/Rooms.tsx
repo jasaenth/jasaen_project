@@ -20,7 +20,10 @@ import { IRoom } from "@/models/Room";
 type SortOption = "popularity" | "price-low" | "price-high" | "rating";
 
 const RoomsPage = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<
+    "all" | "STANDARD" | "DELUXE" | "DORMITORY" | "SUITE"
+  >("all");
+
   const [sortBy, setSortBy] = useState<SortOption>("popularity");
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [roomsData, setRoomsData] = useState<IRoom[]>([]);
@@ -28,74 +31,63 @@ const RoomsPage = () => {
 
   const today = new Date();
 
-const tomorrow = new Date();
-tomorrow.setDate(today.getDate() + 1);
+  const tomorrow = new Date();
+  tomorrow.setDate(today.getDate() + 1);
 
-const formatDate = (date: Date) => {
-  const offset = date.getTimezoneOffset();
+  const formatDate = (date: Date) => {
+    const offset = date.getTimezoneOffset();
 
-  return new Date(
-    date.getTime() - offset * 60 * 1000
-  )
-    .toISOString()
-    .split("T")[0];
-};
+    return new Date(date.getTime() - offset * 60 * 1000)
+      .toISOString()
+      .split("T")[0];
+  };
 
-const searchParams = useSearchParams();
+  const searchParams = useSearchParams();
 
-const checkIn =
-  searchParams.get("checkIn") ||
-  formatDate(today);
+  const checkIn = searchParams.get("checkIn") || formatDate(today);
 
-const checkOut =
-  searchParams.get("checkOut") ||
-  formatDate(tomorrow);
+  const checkOut = searchParams.get("checkOut") || formatDate(tomorrow);
 
-const guests =
-  searchParams.get("guests") || "1";
+  const guests = searchParams.get("guests") || "1";
   useEffect(() => {
     fetchRooms();
   }, []);
 
   const fetchRooms = async () => {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const res = await fetch(
-      `/api/rooms?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`
-    );
+      const res = await fetch(
+        `/api/rooms?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`,
+      );
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (res.ok) {
-      setRoomsData(data.data);
+      if (res.ok) {
+        setRoomsData(data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const categories = [
-  {
-    id: "all",
-    name: "All Rooms",
-    count: roomsData.length,
-  },
+    {
+      id: "all",
+      name: "All Rooms",
+      count: roomsData.length,
+    },
 
-  ...Array.from(
-    new Set(
-      roomsData.map((room) => room.roomType)
-    )
-  ).map((type) => ({
-    id: type,
-    name: type,
-    count: roomsData.filter(
-      (room) => room.roomType === type
-    ).length,
-  })),
-];
+    ...Array.from(new Set(roomsData.map((room) => room.roomType))).map(
+      (type) => ({
+        id: type,
+        name: type,
+        count: roomsData.filter((room) => room.roomType === type).length,
+      }),
+    ),
+  ];
 
   const getAvailableUnits = (room: IRoom) => {
     return room.availableUnits;
@@ -202,7 +194,7 @@ const guests =
                   {categories.map((cat) => (
                     <button
                       key={cat.id}
-                      onClick={() => setSelectedCategory(cat.id)}
+                      onClick={() => setSelectedCategory(cat.id as "all" | "STANDARD" | "DELUXE" | "DORMITORY" | "SUITE")}
                       className={`w-full text-left px-3 py-2 rounded-lg transition flex justify-between items-center text-sm ${
                         selectedCategory === cat.id
                           ? "bg-secondary text-white"
