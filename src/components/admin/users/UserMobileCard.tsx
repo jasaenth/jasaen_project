@@ -1,18 +1,16 @@
 "use client";
-
-import Image from "next/image";
 import {
   Eye,
   Pencil,
   Trash2,
 } from "lucide-react";
+import { IUser } from "@/types/User";
 
-import { User } from "./usersData";
 
 interface Props {
-  user: User;
-  onView: (user: User) => void;
-  onEdit: (user: User) => void;
+  user: IUser;
+  onView: (user: IUser) => void;
+  onEdit: (user: IUser) => void;
   onDelete: (id: string) => void;
 }
 
@@ -27,12 +25,7 @@ const UserMobileCard = ({
       
       <div className="flex items-center gap-4">
         <div className="relative w-14 h-14 rounded-full overflow-hidden">
-          <Image
-            src={user.image}
-            alt={user.name}
-            fill
-            className="object-cover"
-          />
+          
         </div>
 
         <div>
@@ -49,7 +42,7 @@ const UserMobileCard = ({
       <div className="grid grid-cols-2 gap-4 mt-5 text-sm">
         <div>
           <p className="text-textmuted">Phone</p>
-          <p className="font-medium">{user.phone}</p>
+          <p className="font-medium">{user.mobile}</p>
         </div>
 
         <div>
@@ -57,19 +50,6 @@ const UserMobileCard = ({
           <p className="font-medium">{user.role}</p>
         </div>
 
-        <div>
-          <p className="text-textmuted">Status</p>
-
-          <span
-            className={`inline-flex px-3 py-1 rounded-full text-xs font-medium mt-1 ${
-              user.status === "Active"
-                ? "bg-green-100 text-green-700"
-                : "bg-red-100 text-red-700"
-            }`}
-          >
-            {user.status}
-          </span>
-        </div>
 
         <div>
           <p className="text-textmuted">
@@ -77,7 +57,7 @@ const UserMobileCard = ({
           </p>
 
           <p className="font-medium">
-            {user.registeredOn}
+            {user.createdAt}
           </p>
         </div>
       </div>
@@ -98,7 +78,7 @@ const UserMobileCard = ({
         </button>
 
         <button
-          onClick={() => onDelete(user.id)}
+          onClick={() => onDelete(user._id)}
           className="flex-1 bg-red-100 text-red-700 py-2 rounded-lg"
         >
           <Trash2 size={18} className="mx-auto" />
