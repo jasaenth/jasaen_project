@@ -19,7 +19,7 @@ const AmenitiesHelp = () => {
           <div
             className="absolute inset-0"
             style={{
-              backgroundImage: "url('/images/hero/hero-1.JPG')",
+              backgroundImage: "url('/images/hero/hero2.JPG')",
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
@@ -61,10 +61,6 @@ const AmenitiesHelp = () => {
 
                 {/* Text */}
                 <div>
-                  <span className="gold-divider mb-4">
-                    Concierge Service
-                  </span>
-
                   <h2
                     className="
                       font-display

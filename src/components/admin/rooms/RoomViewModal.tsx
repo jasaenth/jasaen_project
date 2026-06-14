@@ -1,8 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { X } from "lucide-react";
-import { IRoom } from "@/models/Room";
+import {
+  X,
+  BedDouble,
+  Users,
+  Expand,
+  IndianRupee,
+} from "lucide-react";
 import { RoomData } from "@/types/room";
 
 interface Props {
@@ -10,183 +15,251 @@ interface Props {
   onClose: () => void;
 }
 
-const RoomViewModal = ({
+export default function RoomViewModal({
   room,
   onClose,
-}: Props) => {
+}: Props) {
   if (!room) return null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
-      <div className="bg-white rounded-2xl w-full max-w-6xl h-[90vh] relative shadow-2xl flex flex-col overflow-hidden">
-        
+    <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="w-full max-w-5xl h-[90vh] overflow-hidden rounded-[28px] bg-[#f7f3eb] shadow-2xl relative">
+
+        {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 z-20 bg-white rounded-full p-2 shadow"
+          className="
+            absolute
+            top-4
+            right-4
+            z-20
+            w-10
+            h-10
+            rounded-full
+            bg-white
+            shadow
+            flex
+            items-center
+            justify-center
+          "
         >
-          <X size={22} />
+          <X size={18} />
         </button>
 
-        {/* SCROLLABLE CONTENT */}
-        <div className="overflow-y-auto h-full p-8">
-          <h2 className="text-3xl font-bold text-primary mb-8">
-            Room Details
-          </h2>
+        <div className="h-full overflow-y-auto">
 
-          <div className="grid lg:grid-cols-2 gap-10">
-            {/* IMAGES */}
-            <div>
-              <div className="relative h-80 rounded-2xl overflow-hidden border">
-                <Image
-                  src={
-  room.images?.[0]?.url ||
-  "https://via.placeholder.com/800x500?text=No+Image"
-}
-                  alt={room.roomName}
-                  fill
-                  className="object-cover"
-                />
+          {/* Hero Image */}
+          <div className="relative h-[280px]">
+            <Image
+              src={
+                room.images?.[0]?.url ||
+                "https://via.placeholder.com/1200x700"
+              }
+              alt={room.roomName}
+              fill
+              className="object-cover"
+            />
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+
+            <div className="absolute bottom-6 left-6 text-white">
+              <span className="bg-white/90 text-charcoal text-xs px-3 py-1 rounded-full">
+                {room.roomType}
+              </span>
+
+              <h2 className="font-display text-4xl mt-3">
+                {room.roomName}
+              </h2>
+
+              <p className="mt-2 text-sm text-white/80 max-w-xl">
+                {room.shortDescription}
+              </p>
+            </div>
+          </div>
+
+          <div className="p-6">
+
+            {/* Price + Availability */}
+            <div className="bg-white rounded-2xl border border-[#e6ddd0] p-5">
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="uppercase tracking-[0.2em] text-[11px] text-gray-500">
+                    Price Per Night
+                  </p>
+
+                  <div className="flex items-center gap-2 mt-2">
+                    <IndianRupee size={22} />
+                    <h3 className="text-4xl font-semibold">
+                      {room.pricePerNight}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="text-right">
+                  <p className="uppercase tracking-[0.2em] text-[11px] text-gray-500">
+                    Available Units
+                  </p>
+
+                  <h4 className="text-2xl font-semibold mt-2">
+                    {room.availableUnits}/{room.totalUnits}
+                  </h4>
+                </div>
               </div>
+            </div>
 
-              {room.images.length > 1 && (
-                <div className="grid grid-cols-4 gap-3 mt-4">
+            {/* Info Cards */}
+            <div className="grid md:grid-cols-4 gap-4 mt-6">
+
+              <InfoCard
+                icon={<BedDouble size={18} />}
+                label="Bed Type"
+                value={room.bedType}
+              />
+
+              <InfoCard
+                icon={<Users size={18} />}
+                label="Adults"
+                value={String(room.maxAdults)}
+              />
+
+              <InfoCard
+                icon={<Users size={18} />}
+                label="Children"
+                value={String(room.maxChildren)}
+              />
+
+              <InfoCard
+                icon={<Expand size={18} />}
+                label="Room Size"
+                value={`${room.roomSize} sq ft`}
+              />
+            </div>
+
+            {/* Gallery */}
+            {room.images?.length > 1 && (
+              <div className="mt-8">
+                <h3 className="font-display text-2xl text-maroon mb-4">
+                  Gallery
+                </h3>
+
+                <div className="grid grid-cols-4 gap-3">
                   {room.images.map((img) => (
                     <div
                       key={img.publicId}
-                      className="relative h-24 rounded-xl overflow-hidden border"
+                      className="relative h-24 rounded-xl overflow-hidden"
                     >
                       <Image
                         src={img.url}
-                        alt="Room"
+                        alt=""
                         fill
                         className="object-cover"
                       />
                     </div>
                   ))}
                 </div>
-              )}
-            </div>
-
-            {/* DETAILS */}
-            <div className="space-y-6">
-              <div>
-                <h3 className="text-3xl font-bold">
-                  {room.roomName}
-                </h3>
-
-                <p className="text-gray-500 mt-2">
-                  {room.shortDescription}
-                </p>
               </div>
+            )}
 
-              <div className="grid grid-cols-2 gap-4">
-                <Info label="Room Type" value={room.roomType} />
-                <Info label="Slug" value={room.slug} />
-                <Info
-                  label="Price"
-                  value={`₹${room.pricePerNight}`}
-                />
-                <Info
-                  label="Discount"
-                  value={`₹${room.discountPrice || 0}`}
-                />
-                <Info
-                  label="Adults"
-                  value={String(room.maxAdults)}
-                />
-                <Info
-                  label="Children"
-                  value={String(room.maxChildren)}
-                />
-                <Info
-                  label="Bed Type"
-                  value={room.bedType}
-                />
-                <Info
-                  label="Room Size"
-                  value={`${room.roomSize} sq ft`}
-                />
-                <Info
-                  label="Total Units"
-                  value={String(room.totalUnits)}
-                />
-                <Info
-                  label="Available"
-                  value={String(room.availableUnits)}
-                />
-                <Info
-                  label="Featured"
-                  value={room.isFeatured ? "Yes" : "No"}
-                />
+            {/* Description */}
+            <div className="mt-8">
+              <h3 className="font-display text-2xl text-maroon mb-4">
+                Description
+              </h3>
+
+              <div className="bg-white rounded-2xl border border-[#e6ddd0] p-5 text-sm leading-relaxed text-gray-700">
+                {room.description}
               </div>
             </div>
-          </div>
 
-          {/* DESCRIPTION */}
-          <div className="mt-10">
-            <h3 className="text-xl font-bold mb-3">
-              Description
-            </h3>
+            {/* Amenities */}
+            <div className="mt-8">
+              <h3 className="font-display text-2xl text-maroon mb-4">
+                Amenities
+              </h3>
 
-            <div className="bg-gray-50 border rounded-xl p-5">
-              {room.description}
+              <div className="flex flex-wrap gap-2">
+                {room.amenities.map((item, index) => (
+                  <span
+                    key={index}
+                    className="
+                      px-3
+                      py-1.5
+                      text-sm
+                      bg-white
+                      border
+                      border-[#e6ddd0]
+                      rounded-full
+                    "
+                  >
+                    {item}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
 
-          {/* AMENITIES */}
-          <div className="mt-10">
-            <h3 className="text-xl font-bold mb-4">
-              Amenities
-            </h3>
+            {/* Inventory */}
+            <div className="mt-8">
+              <h3 className="font-display text-2xl text-maroon mb-4">
+                Room Inventory
+              </h3>
 
-            <div className="flex flex-wrap gap-3">
-              {room.amenities.map((amenity, index) => (
-                <span
-                  key={index}
-                  className="px-4 py-2 bg-primary text-white rounded-full text-sm"
-                >
-                  {amenity}
-                </span>
-              ))}
+              <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3">
+                {Array.from(
+                  { length: room.totalUnits },
+                  (_, i) => (
+                    <div
+                      key={i}
+                      className="
+                        bg-white
+                        border
+                        border-[#e6ddd0]
+                        rounded-xl
+                        p-3
+                        text-center
+                      "
+                    >
+                      <p className="text-xs text-gray-500">
+                        Unit
+                      </p>
+
+                      <h4 className="text-lg font-semibold mt-1">
+                        {i + 1}
+                      </h4>
+                    </div>
+                  )
+                )}
+              </div>
             </div>
-          </div>
 
-          {/* UNITS */}
-          <div className="mt-10">
-            <h3 className="text-xl font-bold mb-4">
-              Room Units
-            </h3>
-
-            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {Array.from({ length: room.totalUnits }, (_, i) => (
-                <div
-                  key={i + 1}
-                  className="border rounded-xl p-4"
-                >
-                  <p className="font-semibold">
-                    Unit {i + 1}
-                  </p>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
-const Info = ({
+function InfoCard({
+  icon,
   label,
   value,
 }: {
+  icon: React.ReactNode;
   label: string;
   value: string;
-}) => (
-  <div className="border rounded-xl p-4 bg-gray-50">
-    <p className="text-sm text-gray-500">{label}</p>
-    <p className="font-semibold mt-1">{value}</p>
-  </div>
-);
+}) {
+  return (
+    <div className="bg-white rounded-xl border border-[#e6ddd0] p-4">
+      <div className="text-maroon mb-3">
+        {icon}
+      </div>
 
-export default RoomViewModal;
+      <p className="uppercase tracking-[0.15em] text-[10px] text-gray-500">
+        {label}
+      </p>
+
+      <h4 className="text-base font-semibold mt-1">
+        {value}
+      </h4>
+    </div>
+  );
+}

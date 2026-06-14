@@ -22,7 +22,7 @@ const BookingMobileCard = ({
         <p className="font-bold text-primary">{booking._id}</p>
         <p>{booking.user?.name || "User Deleted"}</p>
         <p className="text-textmuted">{booking.user?.email || "-"}</p>
-        <p>{booking.room.roomType}</p>
+        <p>{booking.room?.roomType}</p>
         <p>₹{booking.totalAmount}</p>
       </div>
 

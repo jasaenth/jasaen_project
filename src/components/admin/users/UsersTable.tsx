@@ -44,7 +44,31 @@ const UsersTable = ({ users, onView, onEdit, onDelete }: Props) => {
 
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-3">
-                      <span className="font-medium">{user.name}</span>
+                      <div className="flex items-center gap-3">
+                        <div
+                          className="
+    h-10
+    w-10
+    rounded-full
+    bg-[#7A1C1C]
+    text-white
+    flex
+    items-center
+    justify-center
+    font-semibold
+  "
+                        >
+                          {user.name.charAt(0)}
+                        </div>
+
+                        <div>
+                          <p className="font-medium">{user.name}</p>
+
+                          <p className="text-xs text-slate-500">
+                            #{user._id.slice(-6)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </td>
 
@@ -67,8 +91,6 @@ const UsersTable = ({ users, onView, onEdit, onDelete }: Props) => {
                   <td className="px-6 py-5">
                     {new Date(user.createdAt).toLocaleDateString()}
                   </td>
-
-                
 
                   <td className="px-6 py-5">
                     <div className="flex items-center gap-4">

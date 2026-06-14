@@ -8,7 +8,7 @@ const ImmediateHelp = () => {
         <div
           className="relative overflow-hidden rounded-[28px] shadow-luxe"
           style={{
-            backgroundImage: "url('/images/hero/hero-1.JPG')",
+            backgroundImage: "url('/images/hero/hero2.JPG')",
             backgroundSize: "cover",
             backgroundPosition: "center",
           }}

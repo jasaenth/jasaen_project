@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 /* ======================================================
 JASAEN HOTEL DESIGN SYSTEM
 ====================================================== */
@@ -137,6 +138,12 @@ h6 {
 UTILITIES
 ====================================================== */
 
+
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+
 .font-display {
   font-family: var(--font-serif);
 }
@@ -159,7 +166,7 @@ UTILITIES
 }
 
 /* ======================================================
-GOLD DIVIDER
+BLACK DIVIDER
 ====================================================== */
 
 .gold-divider {
@@ -167,7 +174,7 @@ GOLD DIVIDER
   align-items: center;
   gap: 0.75rem;
 
-  color: var(--color-gold);
+  color: var(--color-black);
 
   font-family: var(--font-sans);
   font-size: 0.75rem;
@@ -184,7 +191,36 @@ GOLD DIVIDER
   width: 2.5rem;
   height: 1px;
 
-  background: var(--color-gold);
+  background: var(--color-black);
+}
+
+/* ======================================================
+White DIVIDER
+====================================================== */
+
+.white-divider {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+
+  color: var(--color-white);
+
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+}
+
+.white-divider::before,
+.white-divider::after {
+  content: "";
+
+  width: 2.5rem;
+  height: 1px;
+
+  background: var(--color-white);
 }
 
 /* ======================================================

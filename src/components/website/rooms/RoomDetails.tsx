@@ -16,24 +16,34 @@ export default function RoomDetails({ id }: Props) {
   const [room, setRoom] = useState<any>(null);
   const [selectedImage, setSelectedImage] = useState(0);
   const searchParams = useSearchParams();
-  const today = new Date();
+  
   const [showBookingModal, setShowBookingModal] =
   useState(false);
+
+  const router = useRouter();
+
+const getLocalDate = (date: Date) => {
+  const offset = date.getTimezoneOffset();
+  const localDate = new Date(date.getTime() - offset * 60 * 1000);
+
+  return localDate.toISOString().split("T")[0];
+};
+
+const today = new Date();
 
 const tomorrow = new Date();
 tomorrow.setDate(today.getDate() + 1);
 
 const checkIn =
   searchParams.get("checkIn") ||
-  today.toISOString().split("T")[0];
+  getLocalDate(today);
 
 const checkOut =
   searchParams.get("checkOut") ||
-  tomorrow.toISOString().split("T")[0];
+  getLocalDate(tomorrow);
 
 const guests =
   searchParams.get("guests") || "1";
-  const router = useRouter();
 
   const totalNights =
     checkIn && checkOut
@@ -105,7 +115,7 @@ const guests =
           checkIn,
           checkOut,
           guests,
-          currency: "inr",
+          currency: "thb",
         }),
       });
 
@@ -308,17 +318,19 @@ const guests =
               "
             >
               <div className="text-center">
-                <p className="text-textmuted line-through">
-                  ₹{room.pricePerNight}
+                <p className="text-textmuted line-through text-fairplay">
+                  ฿{room.pricePerNight}
                 </p>
 
-                <h3 className="font-display text-5xl text-maroon">
-                  ₹{room.discountPrice}
+                <div className="flex items-center justify-center gap-2">
+                  <h3 className="font-fairplay text-4xl text-maroon">
+                  ฿{room.discountPrice}
                 </h3>
 
-                <span className="text-textmuted">
-                  per night
+                <span className="text-textmuted ">
+                  / per night
                 </span>
+                </div>
               </div>
 
               <div className="border-t mt-8 pt-6 space-y-4">
@@ -347,8 +359,8 @@ const guests =
                     Total
                   </span>
 
-                  <span className="font-display text-2xl text-maroon">
-                    ₹{totalAmount.toLocaleString()}
+                  <span className="font-fairplay text-2xl text-maroon">
+                    ฿{totalAmount.toLocaleString()}
                   </span>
                 </div>
               </div>
@@ -373,7 +385,7 @@ const guests =
                   transition
                 "
               >
-                Reserve Now
+                Book Now
               </button>
             </div>
           </div>
@@ -444,7 +456,7 @@ const guests =
 
         <SummaryRow
           label="Price Per Night"
-          value={`₹${room.discountPrice}`}
+          value={`฿${room.discountPrice}`}
         />
       </div>
 
@@ -454,8 +466,8 @@ const guests =
             Total Amount
           </span>
 
-          <span className="font-display text-3xl text-maroon">
-            ₹{totalAmount.toLocaleString()}
+          <span className="font-fairplay text-2xl text-maroon">
+            ฿{totalAmount.toLocaleString()}
           </span>
         </div>
       </div>
@@ -530,7 +542,7 @@ function SummaryRow({
         {label}
       </span>
 
-      <span className="font-medium text-right">
+      <span className="font-playfair text-right">
         {value}
       </span>
     </div>

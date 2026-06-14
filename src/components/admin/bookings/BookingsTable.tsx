@@ -26,16 +26,16 @@ const BookingsTable = ({ bookings, onView, onEdit, onDelete }: Props) => {
       <div className="hidden lg:block bg-white rounded-2xl border border-borderlight shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-bgmain border-b border-borderlight">
+            <thead className="bg-[#faf7f1]">
               <tr className="text-left">
-                <th className="px-6 py-4">Booking ID</th>
-                <th className="px-6 py-4">Guest</th>
-                <th className="px-6 py-4">Room</th>
-                <th className="px-6 py-4">Dates</th>
-                <th className="px-6 py-4">Guests</th>
-                <th className="px-6 py-4">Amount</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Actions</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">BOOKING</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">GUEST</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">ROOM</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">DATES</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">SOURCE</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">TOTAL</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">STATUS</th>
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">ACTIONS</th>
               </tr>
             </thead>
 
@@ -45,26 +45,26 @@ const BookingsTable = ({ bookings, onView, onEdit, onDelete }: Props) => {
                   key={booking._id.slice(-8)}
                   className="border-b border-borderlight hover:bg-bgmain/50"
                 >
-                  <td className="px-6 py-5 font-semibold text-primary">
+                  <td className="px-6 py-5  text-primary text-xs">
                     {booking._id}
                   </td>
 
                   <td className="px-6 py-5">
                     <div>
-                      <p className="font-medium">
+                      <p className="font-medium text-sm">
                         {booking.user?.name || "User Deleted"}
                       </p>
 
-                      <p className="text-sm text-textmuted">
+                      <p className="text-xs text-textmuted">
                         {booking.user?.email || "-"}
                       </p>
                     </div>
                   </td>
 
-                  <td className="px-6 py-5">{booking.room.roomType}</td>
+                  <td className="px-6 py-5 text-xs">{booking.room?.roomType}</td>
 
                   <td className="px-6 py-5">
-                    <div className="text-sm">
+                    <div className="text-xs">
                       <p>{new Date(booking.checkIn).toLocaleDateString()}</p>
 
                       <p>
@@ -75,13 +75,23 @@ const BookingsTable = ({ bookings, onView, onEdit, onDelete }: Props) => {
 
                   <td className="px-6 py-5">{booking.guests}</td>
 
-                  <td className="px-6 py-5 font-semibold">
+                  <td className="px-6 py-5 font-semibold text-xs">
                     ₹{booking.totalAmount}
                   </td>
 
                   <td className="px-6 py-5">
                     <span
-                      className={`px-3 py-1 rounded-full text-sm font-medium `}
+                      className={`
+    px-4 py-2 rounded-full text-xs
+
+    ${
+      booking.status === "CONFIRMED"
+        ? "bg-green-100 text-green-700"
+        : booking.status === "PENDING"
+          ? "bg-yellow-100 text-yellow-700"
+          : "bg-red-100 text-red-700"
+    }
+  `}
                     >
                       {booking.status}
                     </span>

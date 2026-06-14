@@ -40,124 +40,115 @@ const Story = () => {
 
           {/* Content Side */}
           <div>
-  <span className="gold-divider mb-6">
-    Our Story
-  </span>
+            <span className="gold-divider mb-6">Our Story</span>
 
-  <h2 className="font-display text-5xl lg:text-7xl leading-[0.95] tracking-tight text-maroon">
-    Where
-    <span className="text-gold"> Character</span>,
-    <br />
-    Comfort &
-    <br />
-    Bangkok Culture Meet
-  </h2>
+            <h2 className="font-display text-5xl lg:text-7xl leading-[0.95] tracking-tight text-maroon">
+              Where
+              <span className="text-gold"> Character</span>,
+              <br />
+              Comfort &
+              <br />
+              Bangkok Culture Meet
+            </h2>
 
-  {/* Intro */}
-  <p className="mt-8 text-lg text-textmain leading-relaxed max-w-xl">
-    Jasaen Boutique Hotel stands apart with its distinctive
-    industrial-vintage design, thoughtfully themed accommodations,
-    and warm hospitality in the heart of Bangkok.
-  </p>
+            {/* Intro */}
+            <p className="mt-8 text-lg text-textmain leading-relaxed max-w-xl">
+              Jasaen Boutique Hotel stands apart with its distinctive
+              industrial-vintage design, thoughtfully themed accommodations, and
+              warm hospitality in the heart of Bangkok.
+            </p>
 
-  {/* Highlights Grid */}
-  <div className="mt-10 grid md:grid-cols-2 gap-6">
-    <div>
-      <h4 className="font-display text-2xl text-maroon mb-2">
-        Distinctive Design
-      </h4>
+            {/* Highlights Grid */}
+            <div className="mt-10 grid md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-display text-2xl text-maroon mb-2">
+                  Distinctive Design
+                </h4>
 
-      <p className="text-textmuted leading-relaxed">
-        From our iconic vintage manual elevator to character-filled
-        interiors, every corner of the hotel tells a story.
-      </p>
-    </div>
+                <p className="text-textmuted leading-relaxed">
+                  From our iconic vintage manual elevator to character-filled
+                  interiors, every corner of the hotel tells a story.
+                </p>
+              </div>
 
-    <div>
-      <h4 className="font-display text-2xl text-maroon mb-2">
-        Unique Rooms
-      </h4>
+              <div>
+                <h4 className="font-display text-2xl text-maroon mb-2">
+                  Unique Rooms
+                </h4>
 
-      <p className="text-textmuted leading-relaxed">
-        32 individually designed rooms cater to solo travelers,
-        couples, and families seeking comfort with personality.
-      </p>
-    </div>
+                <p className="text-textmuted leading-relaxed">
+                  32 individually designed rooms cater to solo travelers,
+                  couples, and families seeking comfort with personality.
+                </p>
+              </div>
 
-    <div>
-      <h4 className="font-display text-2xl text-maroon mb-2">
-        Café & Lounge
-      </h4>
+              <div>
+                <h4 className="font-display text-2xl text-maroon mb-2">
+                  Café & Lounge
+                </h4>
 
-      <p className="text-textmuted leading-relaxed">
-        Relax, work remotely, or meet fellow travelers in our
-        welcoming café and co-working spaces.
-      </p>
-    </div>
+                <p className="text-textmuted leading-relaxed">
+                  Relax, work remotely, or meet fellow travelers in our
+                  welcoming café and co-working spaces.
+                </p>
+              </div>
 
-    <div>
-      <h4 className="font-display text-2xl text-maroon mb-2">
-        Prime Location
-      </h4>
+              <div>
+                <h4 className="font-display text-2xl text-maroon mb-2">
+                  Prime Location
+                </h4>
 
-      <p className="text-textmuted leading-relaxed">
-        Minutes from BTS Saphan Taksin and Sathorn Pier with easy
-        access to Bangkok's riverside attractions.
-      </p>
-    </div>
-  </div>
+                <p className="text-textmuted leading-relaxed">
+                  Minutes from BTS Saphan Taksin and Sathorn Pier with easy
+                  access to Bangkok's riverside attractions.
+                </p>
+              </div>
+            </div>
 
-  {/* Stats */}
-  <div className="flex flex-wrap gap-10 mt-12 py-8 border-y border-borderlight">
-    <div>
-      <h3 className="font-display text-5xl text-maroon">
-        32
-      </h3>
+            {/* Stats */}
+            <div className="flex flex-wrap gap-10 mt-12 py-8 border-y border-borderlight">
+              <div>
+                <h3 className="font-playfair text-4xl text-maroon">32</h3>
 
-      <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
-        Unique Rooms
-      </p>
-    </div>
+                <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
+                  Unique Rooms
+                </p>
+              </div>
 
-    <div>
-      <h3 className="font-display text-5xl text-maroon">
-        7–10
-      </h3>
+              <div>
+                <h3 className="font-playfair text-4xl text-maroon">7–10</h3>
 
-      <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
-        Minutes To BTS
-      </p>
-    </div>
+                <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
+                  Minutes To BTS
+                </p>
+              </div>
 
-    <div>
-      <h3 className="font-display text-5xl text-maroon">
-        4.8
-      </h3>
+              <div>
+                <h3 className="font-playfair text-4xl text-maroon">4.8</h3>
 
-      <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
-        Guest Rating
-      </p>
-    </div>
-  </div>
+                <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
+                  Guest Rating
+                </p>
+              </div>
+            </div>
 
-  {/* Quote */}
-  <blockquote className="mt-10 pl-6 border-l-2 border-gold">
-    <p className="italic text-lg text-textmuted leading-relaxed">
-      "At Jasaen Boutique Hotel, we combine character,
-      convenience, and comfort to create a stay that feels
-      authentically local while providing everything today's
-      traveler needs."
-    </p>
+            {/* Quote */}
+            <blockquote className="mt-10 pl-6 border-l-2 border-gold">
+              <p className="italic text-lg text-textmuted leading-relaxed">
+                "At Jasaen Boutique Hotel, we combine character, convenience,
+                and comfort to create a stay that feels authentically local
+                while providing everything today's traveler needs."
+              </p>
 
-    <footer className="mt-3 text-maroon font-medium">
-      — Jasaen Boutique Hotel
-    </footer>
-  </blockquote>
+              <footer className="mt-3 text-maroon font-medium">
+                — Jasaen Boutique Hotel
+              </footer>
+            </blockquote>
 
-  {/* CTA */}
-  <Link
-    href="/about"
-    className="
+            {/* CTA */}
+            <Link
+              href="/about"
+              className="
       mt-10
       inline-flex
       items-center
@@ -167,11 +158,11 @@ const Story = () => {
       hover:text-gold
       transition
     "
-  >
-    Discover Our Story
-    <ArrowRight size={18} />
-  </Link>
-</div>
+            >
+              Discover Our Story
+              <ArrowRight size={18} />
+            </Link>
+          </div>
         </div>
       </div>
     </section>

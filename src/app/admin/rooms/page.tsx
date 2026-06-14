@@ -166,7 +166,10 @@ export default function RoomsPage() {
     }
   };
 
+
   return (
+
+    
     <div className="space-y-6">
       <RoomsFilters
         search={search}

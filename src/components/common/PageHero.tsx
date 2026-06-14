@@ -27,7 +27,7 @@ const PageHero = ({
         <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 via-charcoal/20 to-charcoal/50" />
 
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 text-white">
-          <span className="gold-divider mb-6">{eyebrow}</span>
+          <span className="white-divider mb-6">{eyebrow}</span>
 
           <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold ">
             {title}

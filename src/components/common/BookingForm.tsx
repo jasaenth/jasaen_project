@@ -57,7 +57,7 @@ export default function BookingForm({
           ${containerClassName}
         `}
       >
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           {/* Check In */}
           <Field icon={<Calendar size={16} />} label="Check In">
             <input
@@ -105,42 +105,18 @@ export default function BookingForm({
                 text-sm
               "
             >
-              <option value="1">1 Guest</option>
-
+              <option value="1">1 Guest</option>            
               <option value="2">2 Guests</option>
-
               <option value="3">3 Guests</option>
-
               <option value="4">4 Guests</option>
-
               <option value="5">5 Guests</option>
-
-              <option value="6">6 Guests</option>
+              <option value="1">1 Guest + 1 Child</option>
+              <option value="2">2 Guests + 1 Child</option>
+              <option value="3">3 Guests + 1 Child</option>
+              <option value="3">3 Guests + 2 Child</option>
             </select>
           </Field>
 
-          {/* Room */}
-          <Field icon={<BedDouble size={16} />} label="Room">
-            <select
-              value={room}
-              onChange={(e) => setRoom(e.target.value)}
-              className="
-                w-full
-                bg-transparent
-                outline-none
-                text-charcoal
-                text-sm
-              "
-            >
-              <option>Heritage Deluxe Room</option>
-
-              <option>Executive Suite</option>
-
-              <option>Presidential Suite</option>
-
-              <option>Family Residence</option>
-            </select>
-          </Field>
 
           {/* Search Button */}
           <button

@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document, model, models } from "mongoose";
+import { ST } from "next/dist/shared/lib/utils";
 
 export interface IRoomUnit {
   unitNumber: string;
@@ -9,7 +10,18 @@ export interface IRoom extends Document {
   roomName: string;
   slug: string;
 
-  roomType: "STANDARD" | "DELUXE" | "SUITE" | "EXECUTIVE" | "PRESIDENTIAL";
+  roomType: {
+  enum: [
+    "STANDARD",
+    "DELUXE",
+    "DORMITORY",
+    "SUITE",
+  ],
+}
+
+roomSize: {
+  type: String,
+}
 
   description: string;
   shortDescription: string;
@@ -21,7 +33,7 @@ export interface IRoom extends Document {
   maxChildren: number;
 
   bedType: string;
-  roomSize: number;
+  
 
   amenities: string[];
 
@@ -57,10 +69,15 @@ const RoomSchema = new Schema(
     },
 
     roomType: {
-      type: String,
-      enum: ["STANDARD", "DELUXE", "SUITE", "EXECUTIVE", "PRESIDENTIAL"],
-      required: true,
-    },
+  type: String,
+  enum: [
+    "STANDARD",
+    "DELUXE",
+    "DORMITORY",
+    "SUITE",
+  ],
+  required: true,
+},
 
     description: {
       type: String,
@@ -101,7 +118,7 @@ const RoomSchema = new Schema(
     },
 
     roomSize: {
-      type: Number,
+      type: String,
       required: true,
     },
 

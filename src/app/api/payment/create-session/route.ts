@@ -26,7 +26,7 @@ export async function POST(req: Request) {
         line_items: [
           {
             price_data: {
-              currency: currency || "inr",
+              currency: currency || "thb",
 
               product_data: {
                 name: roomName,

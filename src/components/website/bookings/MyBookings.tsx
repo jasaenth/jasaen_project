@@ -118,8 +118,8 @@ export default function MyBookings() {
                     {/* Image */}
                     <div className="relative h-[320px] lg:h-full">
                       <Image
-                        src={booking.room.images?.[0]?.url}
-                        alt={booking.room.roomName}
+                        src={booking.room?.images?.[0]?.url}
+                        alt={booking.room?.roomName}
                         fill
                         className="object-cover"
                       />
@@ -157,11 +157,11 @@ export default function MyBookings() {
 
                       {/* Room Name */}
                       <h2 className="font-display text-4xl text-maroon">
-                        {booking.room.roomName}
+                        {booking.room?.roomName}
                       </h2>
 
                       <p className="text-textmuted mt-2">
-                        {booking.room.roomType}
+                        {booking.room?.roomType}
                       </p>
 
                       {/* Booking Details */}

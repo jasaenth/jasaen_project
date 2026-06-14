@@ -55,10 +55,7 @@ const Hero = () => {
         {/* Hero Content */}
         <div className="absolute inset-0 z-20 flex items-center justify-center text-center px-6">
           <div className="max-w-5xl text-ivory">
-            {/* Divider */}
-            <div className="gold-divider mb-8 justify-center">
-              Est. 1928 · Boutique Stays
-            </div>
+            
 
             {/* Title */}
             <h1 className="font-display text-5xl md:text-7xl lg:text-8xl xl:text-[7rem] leading-[0.95] font-light text-balance">

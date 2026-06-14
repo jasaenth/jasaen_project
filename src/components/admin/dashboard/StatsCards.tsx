@@ -1,62 +1,68 @@
-import {
-  CalendarDays,
-  IndianRupee,
-  BedDouble,
-  PieChart,
-  Banknote,
-} from "lucide-react";
-import DashboardCard from "./DashboardCard";
+import { CalendarDays, DollarSign, BedDouble, Users } from "lucide-react";
 
 const stats = [
   {
-    title: "Total Bookings",
-    value: "125",
+    title: "ACTIVE BOOKINGS",
+    value: "6",
+    subtitle: "+2 pending",
     icon: CalendarDays,
-    color: "text-purple-600",
   },
   {
-    title: "Total Revenue",
-    value: "฿ 2,45,00",
-    icon: Banknote,
-    color: "text-green-600",
+    title: "REVENUE",
+    value: "$12,860",
+    subtitle: "All time",
+    icon: DollarSign,
   },
   {
-    title: "Total Rooms",
-    value: "40",
+    title: "OCCUPANCY",
+    value: "10%",
+    subtitle: "3 room types",
     icon: BedDouble,
-    color: "text-blue-600",
   },
   {
-    title: "Occupancy Rate",
-    value: "68%",
-    icon: PieChart,
-    color: "text-orange-600",
+    title: "TEAM",
+    value: "5",
+    subtitle: "6 amenities live",
+    icon: Users,
   },
 ];
 
-const StatsCards = () => {
+export default function StatsCards() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
-      {stats.map((stat) => {
-        const Icon = stat.icon;
+    <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
+      {stats.map((item) => {
+        const Icon = item.icon;
 
         return (
-          <DashboardCard key={stat.title}>
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-bgmain flex items-center justify-center">
-                <Icon className={stat.color} size={28} />
+          <div
+            key={item.title}
+            className="
+              bg-white
+              rounded-[2rem]
+              border
+              border-borderlight
+              p-6
+              shadow-sm
+            "
+          >
+            <div className="flex justify-between items-start">
+              <div className="w-10 h-10 rounded-full bg-[#f5ecef] flex items-center justify-center">
+                <Icon size={22} className="text-maroon" />
               </div>
 
-              <div>
-                <p className="text-sm text-textmuted">{stat.title}</p>
-                <h3 className="text-2xl font-bold">{stat.value}</h3>
-              </div>
+              <span className="text-green-600 text-sm font-medium">
+                {item.subtitle}
+              </span>
             </div>
-          </DashboardCard>
+
+            <h3 className="text-2xl font-playfair mt-4">{item.value}</h3>
+
+            <p className="mt-2 text-xs  text-muted-foreground">
+              {item.title}
+            </p>
+          </div>
         );
       })}
     </div>
   );
-};
-
-export default StatsCards;
+}

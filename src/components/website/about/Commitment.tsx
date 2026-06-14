@@ -53,7 +53,7 @@ const Commitment = () => {
                 duration-500
               "
             >
-              <div className="font-display text-5xl text-maroon mb-3">
+              <div className="font-playfair text-4xl text-maroon mb-3">
                 {stat.number}
               </div>
 

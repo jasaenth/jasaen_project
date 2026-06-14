@@ -10,7 +10,7 @@ import { IBooking } from "@/types/Booking";
 import { useEffect } from "react";
 import toast from "react-hot-toast";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<IBooking[]>([]);
@@ -34,7 +34,8 @@ export default function BookingsPage() {
 
     const matchesStatus = status === "All" || booking.status === status;
 
-    const matchesRoom = roomType === "All" || booking.room.roomType === roomType;
+    const matchesRoom =
+      roomType === "All" || booking.room.roomType === roomType;
 
     return matchesSearch && matchesStatus && matchesRoom;
   });
@@ -46,98 +47,64 @@ export default function BookingsPage() {
     currentPage * ITEMS_PER_PAGE,
   );
 
- const handleDelete = async (
-  id: string
-) => {
-  const confirmed =
-    window.confirm(
-      "Delete booking?"
-    );
+  const handleDelete = async (id: string) => {
+    const confirmed = window.confirm("Delete booking?");
 
-  if (!confirmed) return;
+    if (!confirmed) return;
 
-  try {
-    const res = await fetch(
-      `/api/admin/bookings/${id}`,
-      {
+    try {
+      const res = await fetch(`/api/admin/bookings/${id}`, {
         method: "DELETE",
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
       }
-    );
 
-    const data =
-      await res.json();
+      toast.success("Booking deleted");
 
-    if (!res.ok) {
-      toast.error(data.message);
-      return;
+      setBookings((prev) => prev.filter((booking) => booking._id !== id));
+    } catch {
+      toast.error("Delete failed");
     }
+  };
 
-    toast.success(
-      "Booking deleted"
-    );
-
-    setBookings((prev) =>
-      prev.filter(
-        (booking) =>
-          booking._id !== id
-      )
-    );
-  } catch {
-    toast.error(
-      "Delete failed"
-    );
-  }
-};
-
-const handleSave = async (
-  updatedBooking: IBooking
-) => {
-  try {
-    const res = await fetch(
-      `/api/admin/bookings/${updatedBooking._id}`,
-      {
+  const handleSave = async (updatedBooking: IBooking) => {
+    try {
+      const res = await fetch(`/api/admin/bookings/${updatedBooking._id}`, {
         method: "PATCH",
         headers: {
-          "Content-Type":
-            "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          status:
-            updatedBooking.status,
-          paymentStatus:
-            updatedBooking.paymentStatus,
+          status: updatedBooking.status,
+          paymentStatus: updatedBooking.paymentStatus,
         }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
       }
-    );
 
-    const data =
-      await res.json();
+      toast.success("Booking updated successfully");
 
-    if (!res.ok) {
-      toast.error(data.message);
-      return;
+      setBookings((prev) =>
+        prev.map((booking) =>
+          booking._id === updatedBooking._id ? data.data : booking,
+        ),
+      );
+
+      setEditBooking(null);
+    } catch {
+      toast.error("Failed to update booking");
     }
-
-    toast.success(
-      "Booking updated successfully"
-    );
-
-    setBookings((prev) =>
-      prev.map((booking) =>
-        booking._id ===
-        updatedBooking._id
-          ? data.data
-          : booking
-      )
-    );
-
-    setEditBooking(null);
-  } catch {
-    toast.error(
-      "Failed to update booking"
-    );
-  }
-};
+  };
 
   const handleExport = () => {
     const csv = filteredBookings
@@ -160,53 +127,77 @@ const handleSave = async (
   };
 
   useEffect(() => {
-  fetchBookings();
-}, []);
+    fetchBookings();
+  }, []);
 
-const fetchBookings = async () => {
-  try {
-    setLoading(true);
+  const fetchBookings = async () => {
+    try {
+      setLoading(true);
 
-    const res = await fetch(
-      "/api/admin/bookings"
-    );
+      const res = await fetch("/api/admin/bookings");
 
-    const data =
-      await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      toast.error(data.message);
-      return;
+      if (!res.ok) {
+        toast.error(data.message);
+        return;
+      }
+
+      setBookings(data.data);
+    } catch {
+      toast.error("Failed to load bookings");
+    } finally {
+      setLoading(false);
     }
-
-    setBookings(data.data);
-  } catch {
-    toast.error(
-      "Failed to load bookings"
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   return (
-    <div className="space-y-6">
-      <BookingFilters
-        search={search}
-        status={status}
-        roomType={roomType}
-        setSearch={setSearch}
-        setStatus={setStatus}
-        setRoomType={setRoomType}
-        onExport={handleExport}
-      />
+    <div className="space-y-4">
+      {/* Header */}
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="font-display text-2xl text-maroon">Bookings</h1>
+        </div>
+      </div>
 
-      <BookingsTable
-        bookings={paginatedBookings}
-        onView={setSelectedBooking}
-        onEdit={setEditBooking}
-        onDelete={handleDelete}
-      />
+      {/* Stats */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        <StatCard
+          title="TOTAL BOOKINGS"
+          value={bookings.length}
+          subtitle="All time"
+        />
+
+        <StatCard
+          title="CONFIRMED"
+          value={bookings.filter((b) => b.status === "CONFIRMED").length}
+          subtitle="Ready to host"
+        />
+
+        <StatCard
+          title="PENDING"
+          value={bookings.filter((b) => b.status === "PENDING").length}
+          subtitle="Need review"
+        />
+
+      </div>
+
+      {/* Main Table Card */}
+      <div className="bg-white rounded-[2rem] border overflow-hidden">
+        <BookingFilters
+  search={search}
+  status={status}
+  setSearch={setSearch}
+  setStatus={setStatus}
+/>
+
+        <BookingsTable
+          bookings={paginatedBookings}
+          onView={setSelectedBooking}
+          onEdit={setEditBooking}
+          onDelete={handleDelete}
+        />
+      </div>
 
       <BookingPagination
         currentPage={currentPage}
@@ -224,6 +215,26 @@ const fetchBookings = async () => {
         onClose={() => setEditBooking(null)}
         onSave={handleSave}
       />
+    </div>
+  );
+}
+
+function StatCard({
+  title,
+  value,
+  subtitle,
+}: {
+  title: string;
+  value: string | number;
+  subtitle: string;
+}) {
+  return (
+    <div className="bg-white rounded-2xl p-4 border">
+      <p className="tracking-[0.25em] text-xs text-muted-foreground">{title}</p>
+
+      <h3 className="text-2xl font-playfair mt-2">{value}</h3>
+
+      <p className="mt-1 text-muted-foreground">{subtitle}</p>
     </div>
   );
 }

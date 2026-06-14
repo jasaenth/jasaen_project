@@ -28,72 +28,74 @@ const RoomsPage = () => {
 
   const today = new Date();
 
-  const tomorrow = new Date();
-  tomorrow.setDate(today.getDate() + 1);
+const tomorrow = new Date();
+tomorrow.setDate(today.getDate() + 1);
 
-  const formatDate = (date: Date) => date.toISOString().split("T")[0];
+const formatDate = (date: Date) => {
+  const offset = date.getTimezoneOffset();
 
-  const searchParams = useSearchParams();
-  const checkIn = searchParams.get("checkIn");
-  const checkOut = searchParams.get("checkOut");
-  const guests = searchParams.get("guests");
+  return new Date(
+    date.getTime() - offset * 60 * 1000
+  )
+    .toISOString()
+    .split("T")[0];
+};
 
+const searchParams = useSearchParams();
+
+const checkIn =
+  searchParams.get("checkIn") ||
+  formatDate(today);
+
+const checkOut =
+  searchParams.get("checkOut") ||
+  formatDate(tomorrow);
+
+const guests =
+  searchParams.get("guests") || "1";
   useEffect(() => {
     fetchRooms();
   }, []);
 
   const fetchRooms = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      const res = await fetch(
-        `/api/rooms?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`,
-      );
-      const data = await res.json();
+    const res = await fetch(
+      `/api/rooms?checkIn=${checkIn}&checkOut=${checkOut}&guests=${guests}`
+    );
 
-      if (res.ok) {
-        setRoomsData(data.data);
-      }
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+    const data = await res.json();
+
+    if (res.ok) {
+      setRoomsData(data.data);
     }
-  };
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const categories = [
-    {
-      id: "all",
-      name: "All Rooms",
-      count: roomsData.length,
-    },
-    {
-      id: "STANDARD",
-      name: "Standard",
-      count: roomsData.filter((room) => room.roomType === "STANDARD").length,
-    },
-    {
-      id: "DELUXE",
-      name: "Deluxe",
-      count: roomsData.filter((room) => room.roomType === "DELUXE").length,
-    },
-    {
-      id: "SUITE",
-      name: "Suite",
-      count: roomsData.filter((room) => room.roomType === "SUITE").length,
-    },
-    {
-      id: "EXECUTIVE",
-      name: "Executive",
-      count: roomsData.filter((room) => room.roomType === "EXECUTIVE").length,
-    },
-    {
-      id: "PRESIDENTIAL",
-      name: "Presidential",
-      count: roomsData.filter((room) => room.roomType === "PRESIDENTIAL")
-        .length,
-    },
-  ];
+  {
+    id: "all",
+    name: "All Rooms",
+    count: roomsData.length,
+  },
+
+  ...Array.from(
+    new Set(
+      roomsData.map((room) => room.roomType)
+    )
+  ).map((type) => ({
+    id: type,
+    name: type,
+    count: roomsData.filter(
+      (room) => room.roomType === type
+    ).length,
+  })),
+];
 
   const getAvailableUnits = (room: IRoom) => {
     return room.availableUnits;
@@ -381,11 +383,11 @@ const RoomsPage = () => {
                           </div>
                           <div className="text-right">
                             <p className="text-sm text-gray-400 line-through">
-                              ₹{room.pricePerNight}
+                              ฿{room.pricePerNight}
                             </p>
 
                             <p className="text-2xl font-bold text-primary">
-                              ₹{room.discountPrice}
+                              ฿{room.discountPrice}
                             </p>
 
                             <p className="text-textmuted text-sm">/ NIGHT</p>

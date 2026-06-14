@@ -3,11 +3,10 @@ export type RoomData = {
   roomName: string;
   slug: string;
   roomType:
-    | "STANDARD"
-    | "DELUXE"
-    | "SUITE"
-    | "EXECUTIVE"
-    | "PRESIDENTIAL";
+  | "STANDARD"
+  | "DELUXE"
+  | "DORMITORY"
+  | "SUITE";
   description: string;
   shortDescription: string;
   pricePerNight: number;
@@ -15,7 +14,7 @@ export type RoomData = {
   maxAdults: number;
   maxChildren: number;
   bedType: string;
-  roomSize: number;
+  roomSize: string;
   amenities: string[];
   images: {
     url: string;

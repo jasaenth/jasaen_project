@@ -59,19 +59,11 @@ const AdminSidebar = ({ isMobileOpen, onMobileClose }: AdminSidebarProps) => {
       {/* Logo Section */}
       <div className="px-8 py-8 border-b border-white/10 ">
         <Link href="/admin/dashboard" className="flex flex-col items-center">
-          <div className="bg-white rounded-[2rem] p-5">
-            <Image
-              src="/logo.png"
-              alt="Jasaen Hotel"
-              width={120}
-              height={70}
-              className="object-contain"
-            />
-          </div>
-
+          <div className="flex items-center justify-between gap-6">
           <span className="mt-6 text-gold text-xs tracking-[0.45em] uppercase">
             Admin
           </span>
+          </div>
         </Link>
       </div>
 
@@ -88,26 +80,26 @@ const AdminSidebar = ({ isMobileOpen, onMobileClose }: AdminSidebarProps) => {
                 href={item.href}
                 onClick={() => onMobileClose?.()}
                 className={`
-    flex
-    items-center
-    gap-4
-    mx-5
-    px-6
-    py-4
-    rounded-full
-    transition-all
-    duration-300
+flex
+items-center
+gap-4
+mx-5
+px-4
+py-3
+rounded-full
+transition-all
+duration-300
 
-    ${
-      isActive
-        ? "bg-gold text-charcoal shadow-lg"
-        : "text-white/70 hover:text-white hover:bg-white/5"
-    }
-  `}
+${
+  isActive
+    ? "bg-[#D8B24A] text-black"
+    : "text-white/70 hover:text-white hover:bg-white/5"
+}
+`}
               >
                 <Icon size={22} strokeWidth={1.8} />
 
-                <span className="font-medium text-lg">{item.name}</span>
+                <span className="font-medium text-sm">{item.name}</span>
               </Link>
             );
           })}

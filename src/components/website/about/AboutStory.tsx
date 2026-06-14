@@ -63,7 +63,7 @@ const AboutStory = () => {
   {/* Stats */}
   <div className="grid grid-cols-3 gap-6 mt-10">
     <div>
-      <div className="font-display text-4xl text-maroon">
+      <div className="font-playfair text-4xl text-maroon">
         32
       </div>
 
@@ -73,7 +73,7 @@ const AboutStory = () => {
     </div>
 
     <div>
-      <div className="font-display text-4xl text-maroon">
+      <div className="font-playfair text-4xl text-maroon">
         BTS
       </div>
 
@@ -83,7 +83,7 @@ const AboutStory = () => {
     </div>
 
     <div>
-      <div className="font-display text-4xl text-maroon">
+      <div className="font-playfair text-4xl text-maroon">
         24/7
       </div>
 

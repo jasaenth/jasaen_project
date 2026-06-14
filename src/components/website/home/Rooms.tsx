@@ -35,7 +35,7 @@ const Rooms = () => {
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         {/* Section Header */}
         <div className="text-center">
-          <span className="gold-divider justify-center mb-5">
+          <span className="maroon-divider justify-center mb-5 font-md">
             Suites & Residences
           </span>
 
@@ -108,7 +108,7 @@ const Rooms = () => {
 
                   <div className="mt-6 flex items-end justify-between">
                     <div>
-                      <span className="font-display text-3xl text-charcoal">
+                      <span className="font-playfair text-2xl text-charcoal">
                         ฿{room.price}
                       </span>
 
