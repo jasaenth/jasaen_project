@@ -125,20 +125,20 @@ export default function Footer() {
             <li className="flex gap-3">
               <MapPin size={16} className="text-gold mt-0.5 shrink-0" />
               <span>
-                168 Thanon Prachathipat,
+               Charoen Krung 57, Yan Nawa,
                 <br />
-                Bangkhlo 10200, Thailand
+                 Sathon, Bangkok 10120
               </span>
             </li>
 
             <li className="flex gap-3">
               <Phone size={16} className="text-gold mt-0.5 shrink-0" />
-              <span>+66 123 456 789</span>
+              <span>+66 94 8082994</span>
             </li>
 
             <li className="flex gap-3">
               <Mail size={16} className="text-gold mt-0.5 shrink-0" />
-              <span>info@jasaenhotel.com</span>
+              <span>info@jasaen.com , jasaen168@gmail.com </span>
             </li>
           </ul>
         </div>

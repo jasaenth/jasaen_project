@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  FaPaperPlane,
-  FaCar,
-  FaTrain,
-} from "react-icons/fa";
+import { FaPaperPlane, FaCar, FaTrain } from "react-icons/fa";
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +24,7 @@ const ContactForm = () => {
   const handleWhatsAppSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const phoneNumber = "7007458210";
+    const phoneNumber = "66948082994";
 
     const message = `
 Hello Jasaen Hotel,
@@ -42,10 +38,10 @@ Message:
 ${formData.message}
 `;
 
-    window.open(
-      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
-      "_blank"
-    );
+   window.open(
+  `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+  "_blank"
+);
   };
 
   return (
@@ -54,14 +50,11 @@ ${formData.message}
         <div className="grid lg:grid-cols-2 gap-10">
           {/* Contact Form */}
           <div className="bg-white rounded-4xl p-8 md:p-10 border border-borderlight shadow-soft">
-            <span className="gold-divider mb-5">
-              Contact Us
-            </span>
+            <span className="gold-divider mb-5">Contact Us</span>
 
             <h2 className="font-display text-5xl text-maroon leading-tight">
               Send Us
-              <br />
-              A Message
+              <br />A Message
             </h2>
 
             <p className="mt-5 text-textmuted leading-relaxed">
@@ -70,10 +63,7 @@ ${formData.message}
               to assist.
             </p>
 
-            <form
-              onSubmit={handleWhatsAppSubmit}
-              className="space-y-5 mt-8"
-            >
+            <form onSubmit={handleWhatsAppSubmit} className="space-y-5 mt-8">
               <div className="grid md:grid-cols-2 gap-4">
                 <input
                   type="text"
@@ -218,9 +208,7 @@ ${formData.message}
 
             {/* Content */}
             <div className="p-8">
-              <span className="gold-divider mb-4">
-                Location
-              </span>
+              <span className="gold-divider mb-4">Location</span>
 
               <h3 className="font-display text-4xl text-maroon">
                 How To Find Us
@@ -239,9 +227,7 @@ ${formData.message}
                   </div>
 
                   <div>
-                    <h4 className="font-medium text-charcoal">
-                      By Car
-                    </h4>
+                    <h4 className="font-medium text-charcoal">By Car</h4>
 
                     <p className="text-sm text-textmuted mt-1">
                       Parking facilities available for hotel guests.
@@ -270,8 +256,8 @@ ${formData.message}
               {/* Quote */}
               <div className="mt-8 bg-bgmain rounded-2xl p-5 border-l-4 border-gold">
                 <p className="italic text-textmuted">
-                  "Perfectly positioned for exploring Bangkok while enjoying
-                  the comfort of a quiet boutique retreat."
+                  "Perfectly positioned for exploring Bangkok while enjoying the
+                  comfort of a quiet boutique retreat."
                 </p>
               </div>
             </div>

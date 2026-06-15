@@ -31,11 +31,11 @@ const rooms = [
 
 const Rooms = () => {
   return (
-    <section className="py-28 bg-secondary/15">
+    <section className="pb-28 pt-12 bg-secondary/15">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         {/* Section Header */}
         <div className="text-center">
-          <span className="maroon-divider justify-center mb-5 font-md">
+          <span className="gold-divider mb-2">
             Suites & Residences
           </span>
 

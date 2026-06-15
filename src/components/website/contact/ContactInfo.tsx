@@ -9,19 +9,19 @@ const contactItems = [
   {
     title: "Phone",
     icon: FaPhoneAlt,
-    details: "+66 123 456 789",
+    details: "+66 94 8082994",
     subtext: "Available for reservations & inquiries",
   },
   {
     title: "Email",
     icon: FaEnvelope,
-    details: "info@jasaenhotel.com",
+    details: "info@jasaen.com , jasaen168@gmail.com ",
     subtext: "We typically reply within 24 hours",
   },
   {
     title: "Address",
     icon: FaMapMarkerAlt,
-    details: "168 Thanon Prachathipat, Bangkhlo 10200, Thailand",
+    details: "Charoen Krung 57, Yan Nawa, Sathon, Bangkok 10120",
     subtext: "Located in the heart of Bangkok",
   },
   {

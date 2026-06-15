@@ -318,7 +318,7 @@ const guests =
               "
             >
               <div className="text-center">
-                <p className="text-textmuted line-through text-fairplay">
+                <p className="text-textmuted line-through ">
                   ฿{room.pricePerNight}
                 </p>
 

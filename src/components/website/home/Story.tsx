@@ -6,12 +6,29 @@ import { ArrowRight } from "lucide-react";
 
 const Story = () => {
   return (
-    <section className="py-28 bg-bgmain relative overflow-hidden">
+    <section className="pb-28 bg-bgmain relative overflow-hidden">
       {/* Decorative Background */}
       <div className="absolute top-20 right-0 w-96 h-96 bg-gold/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-maroon/5 rounded-full blur-3xl" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-10 relative z-10">
+        {/* Centered Section Heading */}
+        <div className="text-center mb-16">
+          <span className="gold-divider mb-4 inline-block">Our Story</span>
+
+          <h2 className="font-display text-5xl lg:text-7xl leading-[0.95] tracking-tight text-maroon">
+            Where
+            <span className="text-gold"> Character</span>,
+            
+            Comfort &
+            <br />
+            Bangkok Culture Meet
+          </h2>
+
+          
+        </div>
+
+        {/* Main Content Grid */}
         <div className="grid lg:grid-cols-2 gap-20 items-center">
           {/* Image Side */}
           <div className="relative">
@@ -40,26 +57,14 @@ const Story = () => {
 
           {/* Content Side */}
           <div>
-            <span className="gold-divider mb-6">Our Story</span>
-
-            <h2 className="font-display text-5xl lg:text-7xl leading-[0.95] tracking-tight text-maroon">
-              Where
-              <span className="text-gold"> Character</span>,
-              <br />
-              Comfort &
-              <br />
-              Bangkok Culture Meet
-            </h2>
-
-            {/* Intro */}
-            <p className="mt-8 text-lg text-textmain leading-relaxed max-w-xl">
-              Jasaen Boutique Hotel stands apart with its distinctive
-              industrial-vintage design, thoughtfully themed accommodations, and
-              warm hospitality in the heart of Bangkok.
-            </p>
-
             {/* Highlights Grid */}
-            <div className="mt-10 grid md:grid-cols-2 gap-6">
+            <p className="text-lg  leading-relaxed max-w-3xl mx-auto">
+            Jasaen Boutique Hotel stands apart with its distinctive
+            industrial-vintage design, thoughtfully themed accommodations, and
+            warm hospitality in the heart of Bangkok.
+          </p>
+            <div className="grid md:grid-cols-2 gap-6">
+              
               <div>
                 <h4 className="font-display text-2xl text-maroon mb-2">
                   Distinctive Design
@@ -108,7 +113,7 @@ const Story = () => {
             {/* Stats */}
             <div className="flex flex-wrap gap-10 mt-12 py-8 border-y border-borderlight">
               <div>
-                <h3 className="font-playfair text-4xl text-maroon">32</h3>
+                <h3 className="font-playfair text-2xl text-maroon">32</h3>
 
                 <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
                   Unique Rooms
@@ -116,7 +121,7 @@ const Story = () => {
               </div>
 
               <div>
-                <h3 className="font-playfair text-4xl text-maroon">7–10</h3>
+                <h3 className="font-playfair text-2xl text-maroon">7–10</h3>
 
                 <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
                   Minutes To BTS
@@ -124,7 +129,7 @@ const Story = () => {
               </div>
 
               <div>
-                <h3 className="font-playfair text-4xl text-maroon">4.8</h3>
+                <h3 className="font-playfair text-2xl text-maroon">4.8</h3>
 
                 <p className="text-xs uppercase tracking-[0.25em] text-textmuted mt-2">
                   Guest Rating
@@ -149,15 +154,15 @@ const Story = () => {
             <Link
               href="/about"
               className="
-      mt-10
-      inline-flex
-      items-center
-      gap-3
-      text-maroon
-      font-medium
-      hover:text-gold
-      transition
-    "
+                mt-10
+                inline-flex
+                items-center
+                gap-3
+                text-maroon
+                font-medium
+                hover:text-gold
+                transition
+              "
             >
               Discover Our Story
               <ArrowRight size={18} />

@@ -10,7 +10,7 @@ export default function Amenities({ showTitle = true }: ShowTitle) {
   const duplicatedAmenities = [...amenities, ...amenities];
 
   return (
-    <section className="py-28 bg-bgmain overflow-hidden">
+    <section className="pb-28 pt-12 bg-bgmain overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         {showTitle && (
           <div className="text-center mb-16">
