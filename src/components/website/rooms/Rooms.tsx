@@ -208,7 +208,7 @@ const RoomsPage = () => {
                 </div>
               </div>
 
-              {/* Availability Info */}
+              {/* Availability Info
               <div className="bg-white rounded-2xl p-6 shadow-md">
                 <h3 className="text-primary font-bold text-lg mb-4 flex items-center gap-2">
                   <Calendar className="w-5 h-5" />
@@ -230,7 +230,7 @@ const RoomsPage = () => {
                     <span className="text-textmuted">Sold Out</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
 

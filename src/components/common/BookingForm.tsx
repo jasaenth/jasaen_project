@@ -109,10 +109,7 @@ export default function BookingForm({
               <option value="3">3 Guests</option>
               <option value="4">4 Guests</option>
               <option value="5">5 Guests</option>
-              <option value="1">1 Guest + 1 Child</option>
-              <option value="2">2 Guests + 1 Child</option>
-              <option value="3">3 Guests + 1 Child</option>
-              <option value="3">3 Guests + 2 Child</option>
+              <option value="6">6 Guests</option>
             </select>
           </Field>
 

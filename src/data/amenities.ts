@@ -7,10 +7,10 @@ import {
   FaCoffee,
   FaBriefcase,
   FaShower,
-  FaParking,
   FaKey,
   FaBath,
   FaMapMarkedAlt,
+  FaCamera,
 } from "react-icons/fa";
 
 import { MdBalcony, MdElevator, MdOutlineLocalLaundryService } from "react-icons/md";
@@ -27,15 +27,20 @@ export const amenities = [
     description: "All rooms are equipped with modern air conditioning.",
   },
   {
-    name: "SMART TV",
+    name: "TV",
     icon: FaTv,
     description:
-      "Enjoy your favorite shows and movies with smart TV in every room.",
+      "Enjoy your favorite shows and movies with TV in every room.",
   },
   {
-    name: "24-HOUR SECURITY",
+    name: "24-HOUR FRONT DESK",
     icon: FaShieldAlt,
-    description: "Your safety is our priority with 24/7 security and CCTV.",
+    description: "Your safety is our priority with 24/7 front desk and CCTV.",
+  },
+  {
+    name: "CCTV SURVEILLANCE",
+    icon: FaCamera,
+    description: "Ensuring your safety with round-the-clock CCTV monitoring.",
   },
   {
     name: "DAILY HOUSEKEEPING",
@@ -48,7 +53,7 @@ export const amenities = [
     description: "Relish a variety of coffee and beverages anytime.",
   },
   {
-    name: "LAUNDRY SERVICE",
+    name: "LAUNDRY VENDING MACHINE",
     description:
       "Convenient laundry service for a hassle-free stay.",
     icon: MdOutlineLocalLaundryService,
@@ -60,20 +65,11 @@ export const amenities = [
     icon: FaCoffee,
   },
   {
-    name: "WORK DESK",
+    name: "MEETING WORK PLACE",
     icon: FaBriefcase,
-    description: "A comfortable workspace ideal for business travellers.",
+    description: "A dedicated space for business meetings and work-related activities.",
   },
-  {
-    name: "PRIVATE BALCONY",
-    icon: MdBalcony,
-    description: "Select rooms with private balconies and beautiful views.",
-  },
-  {
-    name: "PRIVATE BATHROOM",
-    icon: FaBath,
-    description: "Enjoy a private bathroom with modern amenities.",
-  },
+  
   {
     name: "KEY CARD ACCESS",
     icon: FaKey,
@@ -83,11 +79,6 @@ export const amenities = [
     name: "HOT & COLD SHOWER",
     icon: FaShower,
     description: "Relax and refresh with hot & cold water showers.",
-  },
-  {
-    name: "PARKING FACILITY",
-    icon: FaParking,
-    description: "Safe and convenient parking space for our guests.",
   },
   {
     name: "LIFT ACCESS",

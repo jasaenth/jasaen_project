@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import AmenitiesSelector from "./AmenitiesSelector";
 import RoomImageUploader from "./RoomImageUploader";
 import RoomDescriptionEditor from "./RoomDescriptionEditor";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { 
-  Sparkles, 
+import {
+  Sparkles,
   ArrowLeft,
   Send,
   DollarSign,
@@ -20,7 +20,7 @@ import {
   Hash,
   DoorOpen,
   AlertCircle,
-  Banknote
+  Banknote,
 } from "lucide-react";
 
 const ROOM_CATEGORIES = ["Standard", "Deluxe", "Dormitory", "Suite"];
@@ -60,6 +60,122 @@ const ROOM_CATEGORY_MAP: Record<string, string> = {
   "Executive Suite": "Suite",
 };
 
+// Memoized NumericInputField to prevent unnecessary re-renders and focus loss
+const NumericInputField = memo(
+  ({
+    label,
+    value,
+    onChange,
+    placeholder,
+    required = true,
+    icon: Icon,
+    hint,
+    unit,
+    unitOptions,
+    onUnitChange,
+    min = 0,
+    step = 1,
+  }: any) => (
+    <div className="group">
+      <label className="block text-sm font-medium text-charcoal/80 mb-2">
+        {label} {required && <span className="text-gold">*</span>}
+      </label>
+      <div className="relative">
+        {Icon && (
+          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        )}
+        <div className="flex gap-2">
+          <input
+            type="number"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder={placeholder}
+            min={min}
+            step={step}
+            className={`
+            flex-1 border rounded-xl px-4 py-3
+            ${Icon ? "pl-10" : "pl-4"}
+            focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold
+            bg-white
+          `}
+          />
+          {unitOptions && onUnitChange && (
+            <select
+              value={unit}
+              onChange={(e) => onUnitChange(e.target.value)}
+              className="border rounded-xl px-3 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gold/20"
+            >
+              {unitOptions.map((opt: string) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
+          )}
+          {unit && !unitOptions && (
+            <span className="inline-flex items-center px-4 border rounded-xl bg-gray-50 text-charcoal/70">
+              {unit}
+            </span>
+          )}
+        </div>
+      </div>
+      {hint && (
+        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+          <HelpCircle size={12} />
+          {hint}
+        </p>
+      )}
+    </div>
+  ),
+);
+
+NumericInputField.displayName = "NumericInputField";
+
+// Memoized InputField to prevent unnecessary re-renders and focus loss
+const InputField = memo(
+  ({
+    label,
+    value,
+    onChange,
+    type = "text",
+    placeholder,
+    required = true,
+    icon: Icon,
+    hint,
+  }: any) => (
+    <div className="group">
+      <label className="block text-sm font-medium text-charcoal/80 mb-2">
+        {label} {required && <span className="text-gold">*</span>}
+      </label>
+      <div className="relative">
+        {Icon && (
+          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+        )}
+        <input
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          className={`
+          w-full border rounded-xl px-4 py-3
+          ${Icon ? "pl-10" : "pl-4"}
+          focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold
+          bg-white
+        `}
+        />
+      </div>
+      {hint && (
+        <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
+          <HelpCircle size={12} />
+          {hint}
+        </p>
+      )}
+    </div>
+  ),
+);
+
+InputField.displayName = "InputField";
+
 const AddRoomForm = () => {
   const router = useRouter();
 
@@ -79,7 +195,6 @@ const AddRoomForm = () => {
   const [shortDescription, setShortDescription] = useState("");
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const [focusedField, setFocusedField] = useState<string | null>(null);
 
   // Generate room number inputs when totalUnits changes
   useEffect(() => {
@@ -111,7 +226,7 @@ const AddRoomForm = () => {
 
   const validateForm = () => {
     const errors = [];
-    
+
     if (!roomName) errors.push("Room name");
     if (!roomType) errors.push("Room category");
     if (!description.trim()) errors.push("Description");
@@ -122,24 +237,24 @@ const AddRoomForm = () => {
     if (!roomSize) errors.push("Room size");
     if (!totalUnits) errors.push("Total units");
     if (images.length === 0) errors.push("At least one image");
-    
+
     // Validate room numbers
-    const emptyRoomNumbers = roomNumbers.some(num => !num.trim());
+    const emptyRoomNumbers = roomNumbers.some((num) => !num.trim());
     if (totalUnits && parseInt(totalUnits) > 0 && emptyRoomNumbers) {
       errors.push("All room numbers must be filled");
     }
-    
+
     // Check for duplicate room numbers
-    const uniqueNumbers = new Set(roomNumbers.filter(num => num.trim()));
-    if (uniqueNumbers.size !== roomNumbers.filter(num => num.trim()).length) {
+    const uniqueNumbers = new Set(roomNumbers.filter((num) => num.trim()));
+    if (uniqueNumbers.size !== roomNumbers.filter((num) => num.trim()).length) {
       errors.push("Duplicate room numbers found");
     }
-    
+
     if (errors.length > 0) {
       toast.error(`Please fix: ${errors.join(", ")}`);
       return false;
     }
-    
+
     return true;
   };
 
@@ -148,9 +263,9 @@ const AddRoomForm = () => {
 
     try {
       setLoading(true);
-      
+
       const formData = new FormData();
-      
+
       formData.append("roomName", roomName);
       formData.append("roomType", roomType);
       formData.append("description", description);
@@ -162,25 +277,28 @@ const AddRoomForm = () => {
       formData.append("bedType", bedType);
       formData.append("roomSize", `${roomSize} ${roomSizeUnit}`);
       formData.append("totalUnits", totalUnits);
-      formData.append("roomNumbers", JSON.stringify(roomNumbers.filter(num => num.trim())));
+      formData.append(
+        "roomNumbers",
+        JSON.stringify(roomNumbers.filter((num) => num.trim())),
+      );
       formData.append("amenities", JSON.stringify(selectedAmenities));
-      
+
       images.forEach((image) => {
         formData.append("images", image);
       });
-      
+
       const res = await fetch("/api/rooms", {
         method: "POST",
         body: formData,
       });
-      
+
       const data = await res.json();
-      
+
       if (!res.ok) {
         toast.error(data.message || "Room creation failed");
         return;
       }
-      
+
       toast.success("Room created successfully! 🎉");
       router.push("/admin/rooms");
     } catch (error) {
@@ -191,119 +309,20 @@ const AddRoomForm = () => {
     }
   };
 
-  const NumericInputField = ({ 
-    label, 
-    value, 
-    onChange, 
-    placeholder, 
-    required = true,
-    icon: Icon,
-    hint,
-    unit,
-    unitOptions,
-    onUnitChange,
-    min = 0,
-    step = 1
-  }: any) => (
-    <div className="group">
-      <label className="block text-sm font-medium text-charcoal/80 mb-2">
-        {label} {required && <span className="text-gold">*</span>}
-      </label>
-      <div className={`relative transition-all duration-200 ${focusedField === label ? 'transform scale-[1.02]' : ''}`}>
-        {Icon && (
-          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        )}
-        <div className="flex gap-2">
-          <input
-            type="number"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            onFocus={() => setFocusedField(label)}
-            onBlur={() => setFocusedField(null)}
-            placeholder={placeholder}
-            min={min}
-            step={step}
-            className={`
-              flex-1 border rounded-xl px-4 py-3 transition-all duration-200
-              ${Icon ? 'pl-10' : 'pl-4'}
-              focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold
-              hover:border-gold/50
-              bg-white
-            `}
-          />
-          {unitOptions && onUnitChange && (
-            <select
-              value={unit}
-              onChange={(e) => onUnitChange(e.target.value)}
-              className="border rounded-xl px-3 py-3 bg-white focus:outline-none focus:ring-2 focus:ring-gold/20"
-            >
-              {unitOptions.map((opt: string) => (
-                <option key={opt} value={opt}>{opt}</option>
-              ))}
-            </select>
-          )}
-          {unit && !unitOptions && (
-            <span className="inline-flex items-center px-4 border rounded-xl bg-gray-50 text-charcoal/70">
-              {unit}
-            </span>
-          )}
-        </div>
-      </div>
-      {hint && <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-        <HelpCircle size={12} />
-        {hint}
-      </p>}
-    </div>
-  );
-
-  const InputField = ({ 
-    label, 
-    value, 
-    onChange, 
-    type = "text", 
-    placeholder, 
-    required = true,
-    icon: Icon,
-    hint
-  }: any) => (
-    <div className="group">
-      <label className="block text-sm font-medium text-charcoal/80 mb-2">
-        {label} {required && <span className="text-gold">*</span>}
-      </label>
-      <div className={`relative transition-all duration-200 ${focusedField === label ? 'transform scale-[1.02]' : ''}`}>
-        {Icon && (
-          <Icon className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        )}
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          onFocus={() => setFocusedField(label)}
-          onBlur={() => setFocusedField(null)}
-          placeholder={placeholder}
-          className={`
-            w-full border rounded-xl px-4 py-3 transition-all duration-200
-            ${Icon ? 'pl-10' : 'pl-4'}
-            focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold
-            hover:border-gold/50
-            bg-white
-          `}
-        />
-      </div>
-      {hint && <p className="text-xs text-muted-foreground mt-1 flex items-center gap-1">
-        <HelpCircle size={12} />
-        {hint}
-      </p>}
-    </div>
-  );
-
   // Auto-calculate discount percentage
-  const discountPercentage = pricePerNight && discountPrice 
-    ? Math.round(((parseFloat(pricePerNight) - parseFloat(discountPrice)) / parseFloat(pricePerNight)) * 100)
-    : 0;
+  const discountPercentage =
+    pricePerNight && discountPrice
+      ? Math.round(
+          ((parseFloat(pricePerNight) - parseFloat(discountPrice)) /
+            parseFloat(pricePerNight)) *
+            100,
+        )
+      : 0;
 
   // Check for duplicate room numbers
-  const hasDuplicates = roomNumbers.length > 0 && new Set(roomNumbers).size !== roomNumbers.filter(n => n).length;
+  const hasDuplicates =
+    roomNumbers.length > 0 &&
+    new Set(roomNumbers).size !== roomNumbers.filter((n) => n).length;
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -318,7 +337,7 @@ const AddRoomForm = () => {
                 Room Details
               </h2>
             </div>
-            
+
             <div className="p-6">
               <div className="grid md:grid-cols-2 gap-5">
                 <div>
@@ -430,7 +449,7 @@ const AddRoomForm = () => {
                   onUnitChange={setRoomSizeUnit}
                   min={0}
                   step={1}
-                  hint={`Square ${roomSizeUnit === 'sqm' ? 'meters' : 'feet'} (m²/ft²)`}
+                  hint={`Square ${roomSizeUnit === "sqm" ? "meters" : "feet"} (m²/ft²)`}
                 />
 
                 <NumericInputField
@@ -458,14 +477,15 @@ const AddRoomForm = () => {
                       <span>{roomNumbers.length} rooms to configure</span>
                     </div>
                   </div>
-                  
+
                   {hasDuplicates && (
                     <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-red-600 text-sm">
                       <AlertCircle size={16} />
-                      Duplicate room numbers detected. Please use unique numbers.
+                      Duplicate room numbers detected. Please use unique
+                      numbers.
                     </div>
                   )}
-                  
+
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
                     {roomNumbers.map((roomNumber, index) => (
                       <div key={index} className="relative">
@@ -475,22 +495,27 @@ const AddRoomForm = () => {
                         <input
                           type="text"
                           value={roomNumber}
-                          onChange={(e) => handleRoomNumberChange(index, e.target.value)}
+                          onChange={(e) =>
+                            handleRoomNumberChange(index, e.target.value)
+                          }
                           placeholder={`Room ${index + 1} number`}
                           className={`
                             w-full border rounded-xl px-4 py-3 pl-8 transition-all duration-200
                             focus:outline-none focus:ring-2 focus:ring-gold/20 focus:border-gold
                             hover:border-gold/50 bg-white
-                            ${roomNumber && roomNumbers.filter(n => n === roomNumber).length > 1 
-                              ? 'border-red-400 bg-red-50/30' 
-                              : 'border-border/50'
+                            ${
+                              roomNumber &&
+                              roomNumbers.filter((n) => n === roomNumber)
+                                .length > 1
+                                ? "border-red-400 bg-red-50/30"
+                                : "border-border/50"
                             }
                           `}
                         />
                       </div>
                     ))}
                   </div>
-                  
+
                   <p className="text-xs text-muted-foreground mt-3 flex items-center gap-1">
                     <Hash size={12} />
                     Enter unique room numbers (e.g., 101, 102, 201, 202)
@@ -546,24 +571,36 @@ const AddRoomForm = () => {
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div className="flex items-center gap-3">
               <DollarSign size={20} className="text-gold" />
-              <span className="text-sm font-medium text-charcoal">Price Summary:</span>
+              <span className="text-sm font-medium text-charcoal">
+                Price Summary:
+              </span>
             </div>
             <div className="flex items-center gap-6">
               {pricePerNight && (
                 <div>
-                  <span className="text-xs text-muted-foreground">Original</span>
-                  <p className="text-lg font-bold text-charcoal">฿{parseInt(pricePerNight).toLocaleString()}</p>
+                  <span className="text-xs text-muted-foreground">
+                    Original
+                  </span>
+                  <p className="text-lg font-bold text-charcoal">
+                    ฿{parseInt(pricePerNight).toLocaleString()}
+                  </p>
                 </div>
               )}
               {discountPrice && (
                 <div>
-                  <span className="text-xs text-muted-foreground">Discounted</span>
-                  <p className="text-lg font-bold text-maroon">฿{parseInt(discountPrice).toLocaleString()}</p>
+                  <span className="text-xs text-muted-foreground">
+                    Discounted
+                  </span>
+                  <p className="text-lg font-bold text-maroon">
+                    ฿{parseInt(discountPrice).toLocaleString()}
+                  </p>
                 </div>
               )}
               {discountPercentage > 0 && (
                 <div className="bg-gold/20 px-3 py-1 rounded-full">
-                  <span className="text-xs font-bold text-gold">Save {discountPercentage}%</span>
+                  <span className="text-xs font-bold text-gold">
+                    Save {discountPercentage}%
+                  </span>
                 </div>
               )}
             </div>
@@ -572,15 +609,19 @@ const AddRoomForm = () => {
       )}
 
       {/* Room Numbers Summary */}
-      {roomNumbers.length > 0 && roomNumbers.every(num => num.trim()) && !hasDuplicates && (
-        <div className="mt-4 bg-green-50 rounded-xl p-3 border border-green-200">
-          <div className="flex items-center gap-2 text-sm text-green-700">
-            <DoorOpen size={16} />
-            <span>Ready to create {roomNumbers.length} room(s):</span>
-            <span className="font-medium">{roomNumbers.filter(n => n).join(", ")}</span>
+      {roomNumbers.length > 0 &&
+        roomNumbers.every((num) => num.trim()) &&
+        !hasDuplicates && (
+          <div className="mt-4 bg-green-50 rounded-xl p-3 border border-green-200">
+            <div className="flex items-center gap-2 text-sm text-green-700">
+              <DoorOpen size={16} />
+              <span>Ready to create {roomNumbers.length} room(s):</span>
+              <span className="font-medium">
+                {roomNumbers.filter((n) => n).join(", ")}
+              </span>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
       {/* Action Buttons */}
       <div className="mt-10 flex flex-col sm:flex-row justify-end gap-4">
@@ -588,7 +629,10 @@ const AddRoomForm = () => {
           onClick={handleCancel}
           className="group px-8 py-3 border-2 border-gray-200 rounded-xl hover:border-maroon/30 hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-2"
         >
-          <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+          <ArrowLeft
+            size={18}
+            className="group-hover:-translate-x-1 transition-transform"
+          />
           Cancel
         </button>
 
@@ -605,7 +649,10 @@ const AddRoomForm = () => {
             </>
           ) : (
             <>
-              <Send size={18} className="group-hover:translate-x-1 transition-transform" />
+              <Send
+                size={18}
+                className="group-hover:translate-x-1 transition-transform"
+              />
               Save & Publish
             </>
           )}
