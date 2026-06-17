@@ -121,7 +121,9 @@ export async function POST(req: Request) {
     const roomNumbers = JSON.parse(
       (formData.get("roomNumbers") as string) || "[]",
     );
+
     const files = formData.getAll("images") as File[];
+   
 
     // Validation
     if (

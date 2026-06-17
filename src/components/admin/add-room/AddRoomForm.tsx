@@ -287,16 +287,23 @@ const AddRoomForm = () => {
         formData.append("images", image);
       });
 
-      const res = await fetch("/api/rooms", {
+      const response = await fetch("/api/rooms", {
         method: "POST",
         body: formData,
       });
 
-      const data = await res.json();
+      const text = await response.text();
 
-      if (!res.ok) {
-        toast.error(data.message || "Room creation failed");
-        return;
+      let data;
+
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(text);
+      }
+
+      if (!response.ok) {
+        throw new Error(data.message || "Request failed");
       }
 
       toast.success("Room created successfully! 🎉");

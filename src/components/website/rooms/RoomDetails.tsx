@@ -199,7 +199,7 @@ const guests =
           </h2>
 
           <p className="text-textmuted leading-8 mt-6 text-lg">
-            {room.shortDescription}
+            {room.description}
           </p>
 
           {/* Stats */}
@@ -323,7 +323,7 @@ const guests =
                 </p>
 
                 <div className="flex items-center justify-center gap-2">
-                  <h3 className="font-fairplay text-4xl text-maroon">
+                  <h3 className="font-playfair text-4xl text-maroon">
                   ฿{room.discountPrice}
                 </h3>
 

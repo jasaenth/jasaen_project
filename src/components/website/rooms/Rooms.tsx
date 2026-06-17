@@ -107,14 +107,7 @@ const RoomsPage = () => {
         bg: "bg-red-100",
         icon: XCircle,
       };
-    } else if (available <= 2) {
-      return {
-        text: `Only ${available} left!`,
-        color: "text-orange-600",
-        bg: "bg-orange-100",
-        icon: AlertCircle,
-      };
-    } else {
+    }  else {
       return {
         text: `${available} available`,
         color: "text-green-600",
@@ -357,9 +350,7 @@ const RoomsPage = () => {
                           </div>
                         )} */}
                         {/* Units Badge */}
-                        <div className="absolute bottom-3 left-3 bg-black/60 backdrop-blur-sm text-white px-2 py-1 rounded-lg text-xs">
-                          📦 {availableUnits} / {room.totalUnits} units
-                        </div>
+                        
                       </div>
 
                       {/* Details */}
@@ -370,7 +361,7 @@ const RoomsPage = () => {
                               {room.roomName}
                             </h3>
                             <p className="text-secondary font-semibold text-sm mt-1">
-                              {room.description}
+                              {room.shortDescription}
                             </p>
                           </div>
                           <div className="text-right">
