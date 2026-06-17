@@ -156,6 +156,10 @@ export async function PUT(req: Request, context: RouteContext) {
       (formData.get("existingImages") as string) || "[]",
     );
 
+    const preuploadedImages = JSON.parse(
+      (formData.get("uploadedImages") as string) || "[]",
+    ) as { url: string; publicId: string }[];
+
     const newFiles = formData.getAll("images") as File[];
 
     // Normalize and validate roomType against schema
@@ -214,7 +218,7 @@ export async function PUT(req: Request, context: RouteContext) {
     }
 
     // upload new images
-    const uploadedImages = [];
+    const uploadedImages = [...preuploadedImages];
 
     for (const file of newFiles) {
       if (file.size > 2 * 1024 * 1024) {

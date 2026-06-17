@@ -60,6 +60,11 @@ const ROOM_CATEGORY_MAP: Record<string, string> = {
   "Executive Suite": "Suite",
 };
 
+type UploadedRoomImage = {
+  url: string;
+  publicId: string;
+};
+
 // Memoized NumericInputField to prevent unnecessary re-renders and focus loss
 const NumericInputField = memo(
   ({
@@ -224,6 +229,24 @@ const AddRoomForm = () => {
     router.push("/admin/rooms");
   };
 
+  const uploadRoomImage = async (image: File): Promise<UploadedRoomImage> => {
+    const formData = new FormData();
+    formData.append("image", image);
+
+    const response = await fetch("/api/uploads/room-images", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Image upload failed");
+    }
+
+    return data.data as UploadedRoomImage;
+  };
+
   const validateForm = () => {
     const errors = [];
 
@@ -264,6 +287,10 @@ const AddRoomForm = () => {
     try {
       setLoading(true);
 
+      const uploadedImages = await Promise.all(
+        images.map((image) => uploadRoomImage(image)),
+      );
+
       const formData = new FormData();
 
       formData.append("roomName", roomName);
@@ -282,10 +309,7 @@ const AddRoomForm = () => {
         JSON.stringify(roomNumbers.filter((num) => num.trim())),
       );
       formData.append("amenities", JSON.stringify(selectedAmenities));
-
-      images.forEach((image) => {
-        formData.append("images", image);
-      });
+      formData.append("uploadedImages", JSON.stringify(uploadedImages));
 
       const response = await fetch("/api/rooms", {
         method: "POST",

@@ -12,8 +12,6 @@ import { RoomData } from "@/types/room";
 
 const ITEMS_PER_PAGE = 5;
 
-
-
 export default function RoomsPage() {
   const [rooms, setRooms] = useState<RoomData[]>([]);
   const [search, setSearch] = useState("");
@@ -106,6 +104,26 @@ export default function RoomsPage() {
     }[],
   ) => {
     try {
+      const uploadedImages = await Promise.all(
+        newImages.map(async (file) => {
+          const formData = new FormData();
+          formData.append("image", file);
+
+          const response = await fetch("/api/uploads/room-images", {
+            method: "POST",
+            body: formData,
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || "Image upload failed");
+          }
+
+          return data.data as { url: string; publicId: string };
+        }),
+      );
+
       const formData = new FormData();
 
       formData.append("roomName", updatedRoom.roomName);
@@ -135,10 +153,7 @@ export default function RoomsPage() {
       formData.append("amenities", JSON.stringify(updatedRoom.amenities));
 
       formData.append("existingImages", JSON.stringify(existingImages));
-
-      newImages.forEach((file) => {
-        formData.append("images", file);
-      });
+      formData.append("uploadedImages", JSON.stringify(uploadedImages));
 
       const res = await fetch(`/api/rooms/${updatedRoom._id}`, {
         method: "PUT",
@@ -166,10 +181,7 @@ export default function RoomsPage() {
     }
   };
 
-
   return (
-
-    
     <div className="space-y-6">
       <RoomsFilters
         search={search}

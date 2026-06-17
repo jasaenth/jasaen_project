@@ -23,7 +23,7 @@ export async function GET() {
         success: false,
         message: "Failed to fetch gallery",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -37,15 +37,20 @@ export async function POST(req: Request) {
     const title = formData.get("title") as string;
     const subtitle = formData.get("subtitle") as string;
     const tag = formData.get("tag") as string;
+    const uploadedImageStr = formData.get("uploadedImage") as string;
     const file = formData.get("image") as File;
 
-    if (!title || !subtitle || !tag || !file) {
+    const preuploadedImage = uploadedImageStr
+      ? (JSON.parse(uploadedImageStr) as { url: string; publicId: string })
+      : null;
+
+    if (!title || !subtitle || !tag || (!file && !preuploadedImage)) {
       return NextResponse.json(
         {
           success: false,
           message: "All fields are required",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -56,25 +61,47 @@ export async function POST(req: Request) {
           success: false,
           message: "Image must be less than 5MB",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
+    let imageUrl = "";
+    let publicId = "";
 
-    const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
+    if (preuploadedImage) {
+      imageUrl = preuploadedImage.url;
+      publicId = preuploadedImage.publicId;
+    } else if (file) {
+      // Fallback: upload file directly if still provided
+      if (file.size > 5 * 1024 * 1024) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Image must be less than 5MB",
+          },
+          { status: 400 },
+        );
+      }
 
-    const uploadResponse = await cloudinary.uploader.upload(base64, {
-      folder: "jasaen/gallery",
-    });
+      const bytes = await file.arrayBuffer();
+      const buffer = Buffer.from(bytes);
+
+      const base64 = `data:${file.type};base64,${buffer.toString("base64")}`;
+
+      const uploadResponse = await cloudinary.uploader.upload(base64, {
+        folder: "jasaen/gallery",
+      });
+
+      imageUrl = uploadResponse.secure_url;
+      publicId = uploadResponse.public_id;
+    }
 
     const newImage = await Gallery.create({
       title,
       subtitle,
       tag,
-      image: uploadResponse.secure_url,
-      publicId: uploadResponse.public_id,
+      image: imageUrl,
+      publicId: publicId,
     });
 
     return NextResponse.json(
@@ -83,7 +110,7 @@ export async function POST(req: Request) {
         message: "Image uploaded successfully",
         data: newImage,
       },
-      { status: 201 }
+      { status: 201 },
     );
   } catch (error) {
     console.error(error);
@@ -93,7 +120,7 @@ export async function POST(req: Request) {
         success: false,
         message: "Upload failed",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

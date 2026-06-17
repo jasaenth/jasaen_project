@@ -10,7 +10,6 @@ import GalleryAddModal from "@/components/admin/gallery/GalleryAddModal";
 import toast, { Toaster } from "react-hot-toast";
 import { GalleryItem } from "@/types/gallery";
 
-
 const ITEMS_PER_PAGE = 16;
 
 export default function GalleryPage() {
@@ -83,14 +82,35 @@ export default function GalleryPage() {
 
   const handleSave = async (updatedImage: GalleryItem, file?: File | null) => {
     try {
+      let uploadedImage = null;
+
+      if (file) {
+        const uploadFormData = new FormData();
+        uploadFormData.append("image", file);
+
+        const uploadRes = await fetch("/api/uploads/gallery-images", {
+          method: "POST",
+          body: uploadFormData,
+        });
+
+        const uploadData = await uploadRes.json();
+
+        if (!uploadRes.ok) {
+          toast.error(uploadData.message || "Image upload failed");
+          return;
+        }
+
+        uploadedImage = uploadData.data;
+      }
+
       const formData = new FormData();
 
       formData.append("title", updatedImage.title);
       formData.append("subtitle", updatedImage.subtitle);
       formData.append("tag", updatedImage.tag);
 
-      if (file) {
-        formData.append("image", file);
+      if (uploadedImage) {
+        formData.append("uploadedImage", JSON.stringify(uploadedImage));
       }
 
       const res = await fetch(`/api/gallery/${updatedImage._id}`, {
@@ -130,12 +150,27 @@ export default function GalleryPage() {
         return;
       }
 
+      const uploadFormData = new FormData();
+      uploadFormData.append("image", data.image);
+
+      const uploadRes = await fetch("/api/uploads/gallery-images", {
+        method: "POST",
+        body: uploadFormData,
+      });
+
+      const uploadData = await uploadRes.json();
+
+      if (!uploadRes.ok) {
+        toast.error(uploadData.message || "Image upload failed");
+        return;
+      }
+
       const formData = new FormData();
 
       formData.append("title", data.title);
       formData.append("subtitle", data.subtitle);
       formData.append("tag", data.tag);
-      formData.append("image", data.image);
+      formData.append("uploadedImage", JSON.stringify(uploadData.data));
 
       const res = await fetch("/api/gallery", {
         method: "POST",

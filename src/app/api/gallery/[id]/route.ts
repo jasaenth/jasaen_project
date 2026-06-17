@@ -44,17 +44,28 @@ export async function PUT(req: Request, context: RouteContext) {
     const title = (formData.get("title") as string) || existing.title;
     const subtitle = (formData.get("subtitle") as string) || existing.subtitle;
     const tag = (formData.get("tag") as string) || existing.tag;
+    const uploadedImageStr = formData.get("uploadedImage") as string;
     const file = formData.get("image") as File | null;
+
+    const preuploadedImage = uploadedImageStr
+      ? (JSON.parse(uploadedImageStr) as { url: string; publicId: string })
+      : null;
 
     let imageUrl = existing.image;
     let publicId = existing.publicId;
 
-    if (file && file.size > 0) {
-      if (file.size > 2 * 1024 * 1024) {
+    if (preuploadedImage) {
+      // Delete old image when new one is uploaded
+      await cloudinary.uploader.destroy(existing.publicId);
+      imageUrl = preuploadedImage.url;
+      publicId = preuploadedImage.publicId;
+    } else if (file && file.size > 0) {
+      // Fallback: handle direct file upload if still provided
+      if (file.size > 5 * 1024 * 1024) {
         return NextResponse.json(
           {
             success: false,
-            message: "Image must be less than 2MB",
+            message: "Image must be less than 5MB",
           },
           { status: 400 },
         );

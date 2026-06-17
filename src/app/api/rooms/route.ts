@@ -121,9 +121,11 @@ export async function POST(req: Request) {
     const roomNumbers = JSON.parse(
       (formData.get("roomNumbers") as string) || "[]",
     );
+    const preuploadedImages = JSON.parse(
+      (formData.get("uploadedImages") as string) || "[]",
+    ) as { url: string; publicId: string }[];
 
     const files = formData.getAll("images") as File[];
-   
 
     // Validation
     if (
@@ -135,7 +137,7 @@ export async function POST(req: Request) {
       !bedType ||
       !roomSizeRaw ||
       !totalUnits ||
-      files.length === 0
+      (files.length === 0 && preuploadedImages.length === 0)
     ) {
       return NextResponse.json(
         {
@@ -150,7 +152,7 @@ export async function POST(req: Request) {
             bedType: !bedType,
             roomSize: !roomSizeRaw,
             totalUnits: !totalUnits,
-            images: files.length === 0,
+            images: files.length === 0 && preuploadedImages.length === 0,
           },
         },
         { status: 400 },
@@ -246,8 +248,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // Upload images to Cloudinary
-    const uploadedImages = [];
+    // Upload images to Cloudinary only when the client still sends files directly.
+    const uploadedImages = [...preuploadedImages];
 
     for (const file of files) {
       // Check file size (2MB limit)
