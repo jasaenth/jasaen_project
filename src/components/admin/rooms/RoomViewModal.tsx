@@ -74,7 +74,7 @@ export default function RoomViewModal({ room, onClose }: Props) {
                   {room.units.map((unit) => (
                     <span
                       key={unit.unitNumber}
-                      className="px-3 py-1.5 rounded-full bg-[#f3ecdf] border border-[#e6ddd0] text-sm"
+                      className="px-3 py-1.5 rounded-full bg-[#f3ecdf] border border-[#e6ddd0] text-sm "
                     >
                       {unit.unitNumber}
                     </span>
@@ -93,7 +93,7 @@ export default function RoomViewModal({ room, onClose }: Props) {
 
                   <div className="flex items-center gap-2 mt-2">
                     <IndianRupee size={22} />
-                    <h3 className="text-4xl font-semibold">
+                    <h3 className="text-4xl font-semibold font-playfair">
                       {room.pricePerNight}
                     </h3>
                   </div>
@@ -112,7 +112,7 @@ export default function RoomViewModal({ room, onClose }: Props) {
             </div>
 
             {/* Info Cards */}
-            <div className="grid md:grid-cols-4 gap-4 mt-6">
+            <div className="grid md:grid-cols-4 gap-4 mt-6 ">
               <InfoCard
                 icon={<BedDouble size={18} />}
                 label="Bed Type"
@@ -257,7 +257,7 @@ function InfoCard({
         {label}
       </p>
 
-      <h4 className="text-base font-semibold mt-1">{value}</h4>
+      <h4 className="text-base font-semibold mt-1 font-playfair">{value}</h4>
     </div>
   );
 }

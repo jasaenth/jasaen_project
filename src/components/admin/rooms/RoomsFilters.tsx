@@ -44,8 +44,7 @@ const RoomsFilters = ({
             <option value="STANDARD">STANDARD</option>
             <option value="DELUXE">DELUXE</option>
             <option value="SUITE">SUITE</option>
-            <option value="EXECUTIVE">EXECUTIVE</option>
-            <option value="PRESIDENTIAL">PRESIDENTIAL</option>
+            <option value="DORMITORY">DORMITORY</option>
           </select>
 
           <Link
