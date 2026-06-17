@@ -57,7 +57,7 @@ const AmenitiesGrid = () => {
                 {/* Title */}
                 <h3
                   className="
-                  font-display
+                  font-playfair
                   text-2xl
                   text-maroon
                   mb-4

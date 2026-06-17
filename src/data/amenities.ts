@@ -35,7 +35,7 @@ export const amenities = [
   {
     name: "24-HOUR FRONT DESK",
     icon: FaShieldAlt,
-    description: "Your safety is our priority with 24/7 front desk and CCTV.",
+    description: "Your safety is our priority with 24/7 front desk.",
   },
   {
     name: "CCTV SURVEILLANCE",

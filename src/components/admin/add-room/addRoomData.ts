@@ -9,7 +9,15 @@ import {
   Utensils,
   Dumbbell,
   HeartPulse,
+  MapPinned,
+  Camera,
+  WashingMachine,
+  Refrigerator,
+  Briefcase,
+  Key,
+  ShowerHead,
 } from "lucide-react";
+import { FaElevator } from "react-icons/fa6";
 
 export const roomTypes = [
   "Standard Single",
@@ -33,11 +41,15 @@ export const amenitiesList = [
   { id: "wifi", name: "Free Wi-Fi", icon: Wifi },
   { id: "ac", name: "Air Conditioning", icon: Snowflake },
   { id: "tv", name: "Smart TV", icon: Tv },
-  { id: "security", name: "24-Hour Security", icon: ShieldCheck },
+  { id: "frontdesk", name: "24-Hour Front Desk", icon: ShieldCheck },
+  { id: "cctv", name: "CCTV Surveillance", icon: Camera },
   { id: "housekeeping", name: "Daily Housekeeping", icon: Sparkles },
   { id: "coffee", name: "Coffee Corner", icon: Coffee },
-  { id: "parking", name: "Free Parking", icon: Car },
-  { id: "restaurant", name: "Restaurant", icon: Utensils },
-  { id: "fitness", name: "Fitness Center", icon: Dumbbell },
-  { id: "spa", name: "Spa & Wellness", icon: HeartPulse },
+  { id: "laundry", name: "Laundry Vending Machine", icon: WashingMachine },
+  { id: "fridge", name: "Mini Fridge", icon: Refrigerator },
+  { id: "meeting", name: "Meeting Work Place", icon: Briefcase },
+  { id: "keycard", name: "Key Card Access", icon: Key },
+  { id: "shower", name: "Hot & Cold Shower", icon: ShowerHead },
+  { id: "lift", name: "Lift Access", icon: FaElevator },
+  { id: "tour", name: "Tour Assistance", icon: MapPinned }, 
 ];
