@@ -2,11 +2,7 @@ export type RoomData = {
   _id: string;
   roomName: string;
   slug: string;
-  roomType:
-  | "STANDARD"
-  | "DELUXE"
-  | "DORMITORY"
-  | "SUITE";
+  roomType: "STANDARD" | "DELUXE" | "DORMITORY" | "SUITE";
   description: string;
   shortDescription: string;
   pricePerNight: number;
@@ -19,6 +15,10 @@ export type RoomData = {
   images: {
     url: string;
     publicId: string;
+  }[];
+  units: {
+    unitNumber: string;
+    status: "AVAILABLE" | "BOOKED" | "MAINTENANCE" | "INACTIVE";
   }[];
   totalUnits: number;
   availableUnits: number;

@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 import DeleteConfirmModal from "@/components/common/DeleteConfirmModal";
 import { RoomData } from "@/types/room";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 9;
 
 export default function RoomsPage() {
   const [rooms, setRooms] = useState<RoomData[]>([]);
@@ -102,6 +102,7 @@ export default function RoomsPage() {
       url: string;
       publicId: string;
     }[],
+    roomNumbers: string[],
   ) => {
     try {
       const uploadedImages = await Promise.all(
@@ -148,7 +149,7 @@ export default function RoomsPage() {
 
       formData.append("totalUnits", String(updatedRoom.totalUnits));
 
-      formData.append("isFeatured", String(updatedRoom.isFeatured));
+      formData.append("roomNumbers", JSON.stringify(roomNumbers));
 
       formData.append("amenities", JSON.stringify(updatedRoom.amenities));
 

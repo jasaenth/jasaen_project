@@ -1,13 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import {
-  X,
-  BedDouble,
-  Users,
-  Expand,
-  IndianRupee,
-} from "lucide-react";
+import { X, BedDouble, Users, Expand, IndianRupee } from "lucide-react";
 import { RoomData } from "@/types/room";
 
 interface Props {
@@ -15,16 +9,12 @@ interface Props {
   onClose: () => void;
 }
 
-export default function RoomViewModal({
-  room,
-  onClose,
-}: Props) {
+export default function RoomViewModal({ room, onClose }: Props) {
   if (!room) return null;
 
   return (
     <div className="fixed inset-0 z-100 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="w-full max-w-5xl h-[90vh] overflow-hidden rounded-4xl bg-[#f7f3eb] shadow-2xl relative">
-
         {/* Close */}
         <button
           onClick={onClose}
@@ -47,13 +37,11 @@ export default function RoomViewModal({
         </button>
 
         <div className="h-full overflow-y-auto">
-
           {/* Hero Image */}
           <div className="relative h-70">
             <Image
               src={
-                room.images?.[0]?.url ||
-                "https://via.placeholder.com/1200x700"
+                room.images?.[0]?.url || "https://via.placeholder.com/1200x700"
               }
               alt={room.roomName}
               fill
@@ -67,9 +55,7 @@ export default function RoomViewModal({
                 {room.roomType}
               </span>
 
-              <h2 className="font-display text-4xl mt-3">
-                {room.roomName}
-              </h2>
+              <h2 className="font-display text-4xl mt-3">{room.roomName}</h2>
 
               <p className="mt-2 text-sm text-white/80 max-w-xl">
                 {room.shortDescription}
@@ -78,6 +64,24 @@ export default function RoomViewModal({
           </div>
 
           <div className="p-6">
+            {room.units?.length > 0 && (
+              <div className="bg-white rounded-2xl border border-[#e6ddd0] p-5 mb-6">
+                <p className="uppercase tracking-[0.2em] text-[11px] text-gray-500 mb-3">
+                  Room Numbers
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {room.units.map((unit) => (
+                    <span
+                      key={unit.unitNumber}
+                      className="px-3 py-1.5 rounded-full bg-[#f3ecdf] border border-[#e6ddd0] text-sm"
+                    >
+                      {unit.unitNumber}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Price + Availability */}
             <div className="bg-white rounded-2xl border border-[#e6ddd0] p-5">
@@ -109,7 +113,6 @@ export default function RoomViewModal({
 
             {/* Info Cards */}
             <div className="grid md:grid-cols-4 gap-4 mt-6">
-
               <InfoCard
                 icon={<BedDouble size={18} />}
                 label="Bed Type"
@@ -204,12 +207,15 @@ export default function RoomViewModal({
               </h3>
 
               <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-3">
-                {Array.from(
-                  { length: room.totalUnits },
-                  (_, i) => (
-                    <div
-                      key={i}
-                      className="
+                {(room.units?.length
+                  ? room.units
+                  : Array.from({ length: room.totalUnits }, (_, i) => ({
+                      unitNumber: String(i + 1),
+                    }))
+                ).map((unit, i) => (
+                  <div
+                    key={unit.unitNumber || i}
+                    className="
                         bg-white
                         border
                         border-[#e6ddd0]
@@ -217,20 +223,16 @@ export default function RoomViewModal({
                         p-3
                         text-center
                       "
-                    >
-                      <p className="text-xs text-gray-500">
-                        Unit
-                      </p>
+                  >
+                    <p className="text-xs text-gray-500">Room</p>
 
-                      <h4 className="text-lg font-semibold mt-1">
-                        {i + 1}
-                      </h4>
-                    </div>
-                  )
-                )}
+                    <h4 className="text-lg font-semibold mt-1">
+                      {unit.unitNumber}
+                    </h4>
+                  </div>
+                ))}
               </div>
             </div>
-
           </div>
         </div>
       </div>
@@ -249,17 +251,13 @@ function InfoCard({
 }) {
   return (
     <div className="bg-white rounded-xl border border-[#e6ddd0] p-4">
-      <div className="text-maroon mb-3">
-        {icon}
-      </div>
+      <div className="text-maroon mb-3">{icon}</div>
 
       <p className="uppercase tracking-[0.15em] text-[10px] text-gray-500">
         {label}
       </p>
 
-      <h4 className="text-base font-semibold mt-1">
-        {value}
-      </h4>
+      <h4 className="text-base font-semibold mt-1">{value}</h4>
     </div>
   );
 }

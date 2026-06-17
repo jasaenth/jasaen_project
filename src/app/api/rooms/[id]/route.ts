@@ -150,7 +150,9 @@ export async function PUT(req: Request, context: RouteContext) {
 
     const amenities = JSON.parse((formData.get("amenities") as string) || "[]");
 
-    const isFeatured = formData.get("isFeatured") === "true";
+    const roomNumbers = JSON.parse(
+      (formData.get("roomNumbers") as string) || "[]",
+    ) as string[];
 
     const keptImages = JSON.parse(
       (formData.get("existingImages") as string) || "[]",
@@ -206,6 +208,40 @@ export async function PUT(req: Request, context: RouteContext) {
         },
         { status: 400 },
       );
+    }
+
+    if (roomNumbers.length > 0) {
+      if (roomNumbers.length !== totalUnits) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: `Number of room numbers (${roomNumbers.length}) does not match total units (${totalUnits})`,
+          },
+          { status: 400 },
+        );
+      }
+
+      const hasEmptyNumbers = roomNumbers.some((num) => !num || !num.trim());
+      if (hasEmptyNumbers) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "All room numbers must be filled",
+          },
+          { status: 400 },
+        );
+      }
+
+      const uniqueNumbers = new Set(roomNumbers.map((num) => num.trim()));
+      if (uniqueNumbers.size !== roomNumbers.length) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "Duplicate room numbers found. Please use unique numbers.",
+          },
+          { status: 400 },
+        );
+      }
     }
 
     // delete removed images
@@ -269,19 +305,22 @@ export async function PUT(req: Request, context: RouteContext) {
       );
     }
 
-    // regenerate units
-    let units = existingRoom.units;
+    const units =
+      roomNumbers.length > 0
+        ? roomNumbers.map((unitNumber, index) => ({
+            unitNumber: unitNumber.trim(),
+            status: existingRoom.units?.[index]?.status || "AVAILABLE",
+          }))
+        : Array.from({ length: totalUnits }, (_, index) => ({
+            unitNumber:
+              existingRoom.units?.[index]?.unitNumber ||
+              `${roomType}-${index + 1}`,
+            status: existingRoom.units?.[index]?.status || "AVAILABLE",
+          }));
 
-    if (totalUnits !== existingRoom.totalUnits) {
-      units = [];
-
-      for (let i = 1; i <= totalUnits; i++) {
-        units.push({
-          unitNumber: `${roomType}-${i}`,
-          status: "AVAILABLE",
-        });
-      }
-    }
+    const availableUnits = units.filter(
+      (unit) => unit.status === "AVAILABLE",
+    ).length;
 
     const updatedRoom = await Room.findByIdAndUpdate(
       id,
@@ -297,9 +336,8 @@ export async function PUT(req: Request, context: RouteContext) {
         bedType,
         roomSize,
         totalUnits,
-        availableUnits: totalUnits,
+        availableUnits,
         amenities,
-        isFeatured,
         images: finalImages,
         units,
       },

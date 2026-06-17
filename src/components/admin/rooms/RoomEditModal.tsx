@@ -17,6 +17,7 @@ interface Props {
       url: string;
       publicId: string;
     }[],
+    roomNumbers: string[],
   ) => Promise<void>;
 }
 
@@ -30,19 +31,42 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
   const [saving, setSaving] = useState(false);
   const [existingImages, setExistingImages] = useState<RoomData["images"]>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
+  const [roomNumbers, setRoomNumbers] = useState<string[]>([]);
 
   useEffect(() => {
     if (!room) {
       setFormData(null);
       setExistingImages([]);
       setNewImages([]);
+      setRoomNumbers([]);
       return;
     }
 
     setFormData(room);
     setExistingImages(room.images || []);
     setNewImages([]);
+    setRoomNumbers(
+      room.units?.length
+        ? room.units.map((unit) => unit.unitNumber)
+        : Array.from({ length: room.totalUnits }, () => ""),
+    );
   }, [room]);
+
+  useEffect(() => {
+    if (!formData) return;
+
+    const targetLength = Number(formData.totalUnits) || 0;
+
+    setRoomNumbers((prev) => {
+      if (targetLength <= 0) return [];
+      if (prev.length === targetLength) return prev;
+
+      return Array.from(
+        { length: targetLength },
+        (_, index) => prev[index] || "",
+      );
+    });
+  }, [formData?.totalUnits]);
 
   if (!room) return null;
 
@@ -66,7 +90,8 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
     if (exists) {
       handleChange(
         "amenities",
-        (formData?.amenities || []).filter((a) => a !== amenityId),);
+        (formData?.amenities || []).filter((a) => a !== amenityId),
+      );
     } else {
       handleChange("amenities", [...(formData?.amenities || []), amenityId]);
     }
@@ -109,6 +134,14 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
     setNewImages((prev) => prev.filter((_, i) => i !== index));
   };
 
+  const handleRoomNumberChange = (index: number, value: string) => {
+    setRoomNumbers((prev) => {
+      const updated = [...prev];
+      updated[index] = value;
+      return updated;
+    });
+  };
+
   const handleClose = () => {
     if (!saving) {
       onClose();
@@ -120,7 +153,7 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
 
     try {
       setSaving(true);
-      await onSave(formData, newImages, existingImages);
+      await onSave(formData, newImages, existingImages, roomNumbers);
       // Modal will close after successful save
     } catch (error) {
       console.error(error);
@@ -259,15 +292,29 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
                 />
               </div>
 
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={formData?.isFeatured}
-                  onChange={(e) => handleChange("isFeatured", e.target.checked)}
-                  className="w-4 h-4 text-primary focus:ring-primary/20"
-                />
-                <span className="text-sm">Featured Room</span>
-              </label>
+              <div className="space-y-3">
+                <h3 className="font-bold text-sm">Room Numbers</h3>
+
+                <div className="grid grid-cols-2 gap-3">
+                  {roomNumbers.map((roomNumber, index) => (
+                    <div key={index} className="space-y-1">
+                      <label className="text-xs text-gray-500">
+                        Room {index + 1}
+                      </label>
+
+                      <input
+                        type="text"
+                        value={roomNumber}
+                        onChange={(e) =>
+                          handleRoomNumberChange(index, e.target.value)
+                        }
+                        placeholder={`Enter room ${index + 1} number`}
+                        className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             {/* RIGHT SIDE */}
@@ -298,7 +345,9 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
               <label className="border-2 border-dashed rounded-xl p-8 flex flex-col items-center cursor-pointer hover:border-primary/50 transition">
                 <Upload size={32} className="text-gray-400" />
                 <p className="mt-3 text-sm text-gray-600">Upload New Images</p>
-                <p className="text-xs text-gray-400 mt-1">Max 5 images, 2MB each</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  Max 5 images, 2MB each
+                </p>
 
                 <input
                   type="file"
