@@ -188,108 +188,196 @@ const RoomEditModal = ({ room, onClose, onSave }: Props) => {
           <div className="grid lg:grid-cols-2 gap-8">
             {/* LEFT SIDE */}
             <div className="space-y-5">
-              <input
-                value={formData?.roomName}
-                onChange={(e) => handleChange("roomName", e.target.value)}
-                placeholder="Room Name"
-                className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-
-              <select
-                value={formData?.roomType}
-                onChange={(e) => handleChange("roomType", e.target.value)}
-                className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              >
-                {ROOM_TYPES.map((type) => (
-                  <option key={type} value={type}>
-                    {type}
-                  </option>
-                ))}
-              </select>
-
-              <textarea
-                rows={3}
-                value={formData?.shortDescription}
-                onChange={(e) =>
-                  handleChange("shortDescription", e.target.value)
-                }
-                placeholder="Short Description"
-                className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-
-              <textarea
-                rows={6}
-                value={formData?.description}
-                onChange={(e) => handleChange("description", e.target.value)}
-                placeholder="Description"
-                className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              />
-
-              <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Room Name
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Enter the name of the room (e.g., Deluxe Suite, Standard Room)
+                </p>
                 <input
-                  type="number"
-                  value={formData?.pricePerNight}
+                  value={formData?.roomName}
+                  onChange={(e) => handleChange("roomName", e.target.value)}
+                  placeholder="Room Name"
+                  className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Room Type
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Select the category of the room
+                </p>
+                <select
+                  value={formData?.roomType}
+                  onChange={(e) => handleChange("roomType", e.target.value)}
+                  className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                >
+                  {ROOM_TYPES.map((type) => (
+                    <option key={type} value={type}>
+                      {type}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Short Description
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Brief summary of the room (50-100 characters) for listings
+                </p>
+                <textarea
+                  rows={3}
+                  value={formData?.shortDescription}
                   onChange={(e) =>
-                    handleChange("pricePerNight", Number(e.target.value))
+                    handleChange("shortDescription", e.target.value)
                   }
-                  placeholder="Price"
-                  className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  placeholder="Short Description"
+                  className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
+              </div>
 
-                <input
-                  type="number"
-                  value={formData?.discountPrice || 0}
-                  onChange={(e) =>
-                    handleChange("discountPrice", Number(e.target.value))
-                  }
-                  placeholder="Discount"
-                  className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  Description
+                </label>
+                <p className="text-xs text-gray-500 mb-2">
+                  Detailed description of the room, amenities, and features
+                </p>
+                <textarea
+                  rows={6}
+                  value={formData?.description}
+                  onChange={(e) => handleChange("description", e.target.value)}
+                  placeholder="Description"
+                  className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
+              </div>
 
-                <input
-                  type="number"
-                  value={formData?.maxAdults}
-                  onChange={(e) =>
-                    handleChange("maxAdults", Number(e.target.value))
-                  }
-                  placeholder="Adults"
-                  className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                />
+              <div className="grid grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Price Per Night
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Base price charged per night
+                  </p>
+                  <input
+                    type="number"
+                    value={formData?.pricePerNight}
+                    onChange={(e) =>
+                      handleChange("pricePerNight", Number(e.target.value))
+                    }
+                    placeholder="Price"
+                    className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
 
-                <input
-                  type="number"
-                  value={formData?.maxChildren}
-                  onChange={(e) =>
-                    handleChange("maxChildren", Number(e.target.value))
-                  }
-                  placeholder="Children"
-                  className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                />
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Discount Price
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Discounted price (if any)
+                  </p>
+                  <input
+                    type="number"
+                    value={formData?.discountPrice || 0}
+                    onChange={(e) =>
+                      handleChange("discountPrice", Number(e.target.value))
+                    }
+                    placeholder="Discount"
+                    className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
 
-                <input
-                  value={formData?.bedType}
-                  onChange={(e) => handleChange("bedType", e.target.value)}
-                  placeholder="Bed Type"
-                  className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                />
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Max Adults
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Maximum number of adults allowed
+                  </p>
+                  <input
+                    type="number"
+                    value={formData?.maxAdults}
+                    onChange={(e) =>
+                      handleChange("maxAdults", Number(e.target.value))
+                    }
+                    placeholder="Adults"
+                    className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
 
-                <input
-                  type="text"
-                  value={formData?.roomSize}
-                  onChange={(e) => handleChange("roomSize", e.target.value)}
-                  placeholder="Room Size (e.g. 250 sq ft)"
-                  className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                />
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Max Children
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Maximum number of children allowed
+                  </p>
+                  <input
+                    type="number"
+                    value={formData?.maxChildren}
+                    onChange={(e) =>
+                      handleChange("maxChildren", Number(e.target.value))
+                    }
+                    placeholder="Children"
+                    className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
 
-                <input
-                  type="number"
-                  value={formData?.totalUnits}
-                  onChange={(e) =>
-                    handleChange("totalUnits", Number(e.target.value))
-                  }
-                  placeholder="Total Units"
-                  className="border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                />
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Bed Type
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Type of bed(s) in the room
+                  </p>
+                  <input
+                    value={formData?.bedType}
+                    onChange={(e) => handleChange("bedType", e.target.value)}
+                    placeholder="Bed Type"
+                    className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Room Size
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Total room area (e.g., 250 sq ft)
+                  </p>
+                  <input
+                    type="text"
+                    value={formData?.roomSize}
+                    onChange={(e) => handleChange("roomSize", e.target.value)}
+                    placeholder="Room Size (e.g. 250 sq ft)"
+                    className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    Total Units
+                  </label>
+                  <p className="text-xs text-gray-500 mb-2">
+                    Number of rooms of this type available
+                  </p>
+                  <input
+                    type="number"
+                    value={formData?.totalUnits}
+                    onChange={(e) =>
+                      handleChange("totalUnits", Number(e.target.value))
+                    }
+                    placeholder="Total Units"
+                    className="w-full border rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  />
+                </div>
               </div>
 
               <div className="space-y-3">
