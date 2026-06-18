@@ -1,27 +1,19 @@
-export async function getCloudbedsToken() {
+const API_KEY = process.env.CLOUDBEDS_API_KEY!;
+
+export async function cloudbedsFetch(endpoint: string) {
   const response = await fetch(
-    "https://api.cloudbeds.com/api/v1.3/access_token",
+    `https://api.cloudbeds.com${endpoint}`,
     {
-      method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
+        "x-api-key": API_KEY,
       },
-      body: new URLSearchParams({
-        grant_type:
-          "urn:ietf:params:oauth:grant-type:api-key",
-        client_id: process.env.CLOUDBEDS_CLIENT_ID!,
-        client_secret:
-          process.env.CLOUDBEDS_CLIENT_SECRET!,
-      }),
+      cache: "no-store",
     }
   );
 
-  const data = await response.json();
+  if (!response.ok) {
+    throw new Error("Cloudbeds API Error");
+  }
 
-  return {
-    status: response.status,
-    ok: response.ok,
-    data,
-  };
+  return response.json();
 }
