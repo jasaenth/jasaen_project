@@ -8,13 +8,13 @@ import CloudbedsTabs from "@/components/admin/cloudbeds/CloudbedsTabs";
 
 import OverviewPanel from "@/components/admin/cloudbeds/overview/OverviewPanel";
 
-import ReservationsPanel from "@/components/admin/cloudbeds/reservations/ReservationsPanel";
 import GuestsPanel from "@/components/admin/cloudbeds/guests/GuestsPanel";
 import RoomsPanel from "@/components/admin/cloudbeds/rooms/RoomsPanel";
 import PaymentsPanel from "@/components/admin/cloudbeds/payments/PaymentsPanel";
 import RevenuePanel from "@/components/admin/cloudbeds/revenue/RevenuePanel";
 import ReportsPanel from "@/components/admin/cloudbeds/reports/ReportsPanel";
 import NotificationsPanel from "@/components/admin/cloudbeds/notifications/NotificationsPanel";
+import { ReservationsPanel } from "@/components/admin/cloudbeds/reservations/ReservationsPanel";
 
 export default function CloudbedsPage() {
   const [activeTab, setActiveTab] =
