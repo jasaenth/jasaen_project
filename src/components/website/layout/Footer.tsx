@@ -13,17 +13,7 @@ export default function Footer() {
           {" "}
           <div className="mb-8">
             <div
-              className="
-      w-26.25
-      h-18
-      bg-ivory
-      rounded-2xl
-      flex
-      items-center
-      justify-center
-      shadow-soft
-    "
-            >
+              className="w-26.25 h-18 bg-ivory rounded-2xl flex items-center justify-center shadow-soft">
               <Image
                 src="/logo.png"
                 alt="Jasaen Hotel"
@@ -113,8 +103,6 @@ export default function Footer() {
                 Terms & Conditions
               </Link>
             </li>
-
-            
           </ul>
         </div>
         {/* Contact */}
@@ -125,9 +113,9 @@ export default function Footer() {
             <li className="flex gap-3">
               <MapPin size={16} className="text-gold mt-0.5 shrink-0" />
               <span>
-               Charoen Krung 57, Yan Nawa,
+                Charoen Krung 57, Yan Nawa,
                 <br />
-                 Sathon, Bangkok 10120
+                Sathon, Bangkok 10120
               </span>
             </li>
 

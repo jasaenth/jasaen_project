@@ -55,14 +55,20 @@ const AdminSidebar = ({ isMobileOpen, onMobileClose }: AdminSidebarProps) => {
   };
 
   const SidebarContent = () => (
-    <div className="flex flex-col h-full bg-[#0F1117] text-white">
+    <div className="flex flex-col h-full bg-[#18181B] text-white">
       {/* Logo Section */}
       <div className="px-8 py-8 border-b border-white/10 ">
         <Link href="/admin/dashboard" className="flex flex-col items-center">
           <div className="flex items-center justify-between gap-6">
-          <span className="mt-6 text-gold text-xs tracking-[0.45em] uppercase">
-            Admin
-          </span>
+            <div className="w-26.25 h-18 bg-ivory rounded-2xl flex items-center justify-center shadow-soft">
+              <Image
+                src="/logo.png"
+                alt="Jasaen Hotel"
+                width={90}
+                height={50}
+                className="object-contain"
+              />
+            </div>
           </div>
         </Link>
       </div>
