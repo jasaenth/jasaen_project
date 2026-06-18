@@ -92,9 +92,8 @@ export default function RoomViewModal({ room, onClose }: Props) {
                   </p>
 
                   <div className="flex items-center gap-2 mt-2">
-                    <IndianRupee size={22} />
                     <h3 className="text-4xl font-semibold font-playfair">
-                      {room.pricePerNight}
+                      ฿ {room.pricePerNight}
                     </h3>
                   </div>
                 </div>

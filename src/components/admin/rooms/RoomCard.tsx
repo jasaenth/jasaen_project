@@ -66,8 +66,8 @@ export default function RoomCard({
           </div>
 
           <div className="text-right shrink-0">
-            <h4 className="text-xl font-bold text-charcoal font-playfair">
-              ₹{room.pricePerNight}
+            <h4 className="text-md font-bold text-charcoal font-playfair">
+              ฿ {room.pricePerNight}
             </h4>
 
             <p className="uppercase text-xs  text-gray-500">
