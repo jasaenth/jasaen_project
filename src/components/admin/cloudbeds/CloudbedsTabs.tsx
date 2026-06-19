@@ -8,13 +8,12 @@ import {
   CreditCard,
   TrendingUp,
   FileBarChart,
-  Bell,
 } from "lucide-react";
 
 const tabs = [
   {
-    id: "overview",
-    label: "Overview",
+    id: "dashboard",
+    label: "Dashboard",
     icon: Cloud,
   },
   {
@@ -46,11 +45,6 @@ const tabs = [
     id: "reports",
     label: "Reports",
     icon: FileBarChart,
-  },
-  {
-    id: "notifications",
-    label: "Notifications",
-    icon: Bell,
   },
 ];
 
