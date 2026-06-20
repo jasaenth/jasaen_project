@@ -9,6 +9,7 @@ interface DashboardData {
   roomsOccupied: number;
   percentageOccupied: number;
   arrivals: number;
+  arrivalsConfirmed: number;
   departures: number;
   inHouse: number;
   guestsInHouse: number;
@@ -212,7 +213,7 @@ export default function Dashboard() {
 
             <OperationCard title="Stayovers" value={data.stayovers} />
 
-            <OperationCard title="Bookings" value={data.bookings} />
+            <OperationCard title="Confirmed Arrivals" value={data.arrivalsConfirmed} />
 
             <OperationCard title="Cancelled" value={data.cancellations} />
           </div>

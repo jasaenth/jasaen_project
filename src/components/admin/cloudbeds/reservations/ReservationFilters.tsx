@@ -12,8 +12,8 @@ export default function ReservationFilters({
   setSearch,
 }: Props) {
   return (
-    <div className="bg-white border rounded-3xl p-5">
-      <div className="relative max-w-md">
+    
+      <div className="relative max-w-md bg-white">
         <Search
           size={18}
           className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -39,6 +39,6 @@ export default function ReservationFilters({
           "
         />
       </div>
-    </div>
+    
   );
 }
