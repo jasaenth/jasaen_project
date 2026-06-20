@@ -7,7 +7,7 @@ export default function Page() {
       <PageHero
         title="MY BOOKINGS"
         subtitle="Manage Your Reservations"
-        image="/images/hero/hero-2.jpeg"
+        image="/images/hero/hero2.JPG"
         breadcrumb="My Bookings"
       />
       <MyBookings />;

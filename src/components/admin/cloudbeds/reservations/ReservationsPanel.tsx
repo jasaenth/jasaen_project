@@ -1,13 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-import SectionHead from "../SectionHead";
 import ReservationFilters from "./ReservationFilters";
 import ReservationsTable from "./ReservationsTable";
-
 import { getReservations } from "@/lib/api/cloudbeds";
-import { Hotel } from "lucide-react";
 
 export default function ReservationsPanel() {
   const [reservations, setReservations] = useState<any[]>([]);
@@ -56,7 +52,7 @@ export default function ReservationsPanel() {
           <div>
             <p className="text-gray-500 text-sm">Total Reservations</p>
 
-            <h3 className="text-3xl font-bold mt-2">{totalReservations}</h3>
+            <h3 className="text-2xl font-bold mt-2 font-playfair">{totalReservations}</h3>
           </div>
 
           <div >

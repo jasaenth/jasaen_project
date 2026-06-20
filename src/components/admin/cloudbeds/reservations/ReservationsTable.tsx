@@ -36,11 +36,11 @@ export default function ReservationsTable({ reservations }: Props) {
 
                 <td className="px-6 py-4">{item.guestName}</td>
 
-                <td className="px-6 py-4">{item.dateCreated}</td>
+                <td className="px-6 py-4 text-xs whitespace-nowrap">{new Date(item.dateCreated).toLocaleString("en-GB")}</td>
 
-                <td className="px-6 py-4">{item.startDate}</td>
+                <td className="px-6 py-4 text-xs whitespace-nowrap">{new Date(item.startDate).toLocaleDateString("en-GB")}</td>
 
-                <td className="px-6 py-4">{item.endDate}</td>
+                <td className="px-6 py-4 text-xs whitespace-nowrap">{new Date(item.endDate).toLocaleDateString("en-GB")}</td>
 
                 <td className="px-6 py-4 font-semibold">{item.sourceName}</td>
 

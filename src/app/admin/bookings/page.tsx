@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import BookingFilters from "@/components/admin/bookings/BookingFilters";
 import BookingsTable from "@/components/admin/bookings/BookingsTable";
 import BookingPagination from "@/components/admin/bookings/BookingPagination";
 import BookingViewModal from "@/components/admin/bookings/BookingViewModal";
 import BookingEditModal from "@/components/admin/bookings/BookingEditModal";
 import { IBooking } from "@/types/Booking";
-import { useEffect } from "react";
 import toast from "react-hot-toast";
 
 const ITEMS_PER_PAGE = 10;
@@ -17,7 +16,11 @@ export default function BookingsPage() {
   const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("All");
+
+  const [activeTab, setActiveTab] = useState<
+    "PENDING" | "CONFIRMED" | "IN_HOUSE" | "COMPLETED" | "CANCELLED"
+  >("PENDING");
+
   const [roomType, setRoomType] = useState("All");
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,16 +29,40 @@ export default function BookingsPage() {
 
   const [editBooking, setEditBooking] = useState<IBooking | null>(null);
 
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab]);
+
+  const pendingCount = bookings.filter((b) => b.status === "PENDING").length;
+
+  const confirmedCount = bookings.filter(
+    (b) => b.status === "CONFIRMED",
+  ).length;
+
+  const inHouseCount = bookings.filter((b) => b.status === "IN_HOUSE").length;
+
+  const completedCount = bookings.filter(
+    (b) => b.status === "COMPLETED",
+  ).length;
+
+  const cancelledCount = bookings.filter(
+    (b) => b.status === "CANCELLED",
+  ).length;
+
   const filteredBookings = bookings.filter((booking) => {
     const matchesSearch =
       booking._id.toLowerCase().includes(search.toLowerCase()) ||
-      booking.user.name.toLowerCase().includes(search.toLowerCase()) ||
-      booking.user.email.toLowerCase().includes(search.toLowerCase());
+      booking.user?.name?.toLowerCase().includes(search.toLowerCase()) ||
+      booking.user?.email?.toLowerCase().includes(search.toLowerCase());
 
-    const matchesStatus = status === "All" || booking.status === status;
+    const matchesStatus = booking.status === activeTab;
 
     const matchesRoom =
-      roomType === "All" || booking.room.roomType === roomType;
+      roomType === "All" || booking.room?.roomType === roomType;
 
     return matchesSearch && matchesStatus && matchesRoom;
   });
@@ -46,6 +73,28 @@ export default function BookingsPage() {
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE,
   );
+
+  const fetchBookings = async () => {
+    try {
+      setLoading(true);
+
+      const res = await fetch("/api/admin/bookings");
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        toast.error(data.message);
+
+        return;
+      }
+
+      setBookings(data.data);
+    } catch {
+      toast.error("Failed to load bookings");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleDelete = async (id: string) => {
     const confirmed = window.confirm("Delete booking?");
@@ -61,6 +110,7 @@ export default function BookingsPage() {
 
       if (!res.ok) {
         toast.error(data.message);
+
         return;
       }
 
@@ -76,12 +126,27 @@ export default function BookingsPage() {
     try {
       const res = await fetch(`/api/admin/bookings/${updatedBooking._id}`, {
         method: "PATCH",
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
           status: updatedBooking.status,
+
           paymentStatus: updatedBooking.paymentStatus,
+
+          checkIn: updatedBooking.checkIn,
+
+          checkOut: updatedBooking.checkOut,
+
+          assignedUnit: updatedBooking.assignedUnit,
+
+          confirmedAt: updatedBooking.confirmedAt,
+
+          actualCheckIn: updatedBooking.actualCheckIn,
+
+          actualCheckOut: updatedBooking.actualCheckOut,
         }),
       });
 
@@ -89,6 +154,7 @@ export default function BookingsPage() {
 
       if (!res.ok) {
         toast.error(data.message);
+
         return;
       }
 
@@ -106,92 +172,133 @@ export default function BookingsPage() {
     }
   };
 
-  const handleExport = () => {
-    const csv = filteredBookings
-      .map(
-        (b) =>
-          `${b._id},${b.user.name},${b.user.email},${b.room.roomType},${b.totalAmount},${b.status}`,
-      )
-      .join("\n");
-
-    const blob = new Blob([csv], {
-      type: "text/csv",
-    });
-
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "bookings.csv";
-    a.click();
-  };
-
-  useEffect(() => {
-    fetchBookings();
-  }, []);
-
-  const fetchBookings = async () => {
+  const handleStatusChange = async (
+    id: string,
+    status: "CONFIRMED" | "IN_HOUSE" | "COMPLETED" | "CANCELLED",
+  ) => {
     try {
-      setLoading(true);
+      const payload: any = {
+        status,
+      };
 
-      const res = await fetch("/api/admin/bookings");
+      if (status === "CONFIRMED") {
+        payload.confirmedAt = new Date();
+      }
+
+      if (status === "IN_HOUSE") {
+        payload.actualCheckIn = new Date();
+      }
+
+      if (status === "COMPLETED") {
+        payload.actualCheckOut = new Date();
+      }
+
+      const res = await fetch(`/api/admin/bookings/${id}`, {
+        method: "PATCH",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
 
       if (!res.ok) {
         toast.error(data.message);
+
         return;
       }
 
-      setBookings(data.data);
+      setBookings((prev) =>
+        prev.map((booking) => (booking._id === id ? data.data : booking)),
+      );
+
+      toast.success(`Booking moved to ${status}`);
     } catch {
-      toast.error("Failed to load bookings");
-    } finally {
-      setLoading(false);
+      toast.error("Failed to update booking");
     }
   };
 
   return (
     <div className="space-y-4">
-      {/* Header */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h1 className="font-display text-2xl text-maroon">Bookings</h1>
-        </div>
+      <div>
+        <h1 className="font-display text-2xl text-maroon">Bookings</h1>
       </div>
 
       {/* Stats */}
-      <div className="grid lg:grid-cols-3 gap-6">
+
+      <div className="grid lg:grid-cols-5 gap-4">
         <StatCard
-          title="TOTAL BOOKINGS"
-          value={bookings.length}
-          subtitle="All time"
+          title="PENDING"
+          value={pendingCount}
+          subtitle="Awaiting approval"
         />
 
         <StatCard
           title="CONFIRMED"
-          value={bookings.filter((b) => b.status === "CONFIRMED").length}
-          subtitle="Ready to host"
+          value={confirmedCount}
+          subtitle="Ready for arrival"
         />
 
         <StatCard
-          title="PENDING"
-          value={bookings.filter((b) => b.status === "PENDING").length}
-          subtitle="Need review"
+          title="IN HOUSE"
+          value={inHouseCount}
+          subtitle="Currently staying"
         />
 
+        <StatCard
+          title="COMPLETED"
+          value={completedCount}
+          subtitle="Checked out"
+        />
+
+        <StatCard
+          title="CANCELLED"
+          value={cancelledCount}
+          subtitle="Cancelled bookings"
+        />
       </div>
 
-      {/* Main Table Card */}
+      {/* Tabs */}
+
+      <div className="bg-white rounded-2xl border p-2">
+        <div className="flex flex-wrap gap-2">
+          {[
+            ["PENDING", pendingCount, "bg-yellow-500"],
+
+            ["CONFIRMED", confirmedCount, "bg-blue-500"],
+
+            ["IN_HOUSE", inHouseCount, "bg-green-500"],
+
+            ["COMPLETED", completedCount, "bg-purple-500"],
+
+            ["CANCELLED", cancelledCount, "bg-red-500"],
+          ].map(([status, count, color]) => (
+            <button
+              key={status}
+              onClick={() => setActiveTab(status as any)}
+              className={`
+                  px-5 py-3 rounded-xl text-sm font-medium
+                  ${
+                    activeTab === status ? `${color} text-white` : "bg-gray-100"
+                  }
+                `}
+            >
+              {status} ({count})
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="bg-white rounded-4xl border overflow-hidden">
-        
-
-
         <BookingsTable
           bookings={paginatedBookings}
           onView={setSelectedBooking}
           onEdit={setEditBooking}
           onDelete={handleDelete}
+          onStatusChange={handleStatusChange}
         />
       </div>
 

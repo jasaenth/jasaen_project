@@ -10,30 +10,24 @@ export async function GET(
     params: Promise<{
       id: string;
     }>;
-  }
+  },
 ) {
   try {
     await connectDB();
 
-    const { id } =
-      await params;
+    const { id } = await params;
 
-    const booking =
-      await Booking.findById(id)
-        .populate(
-          "user",
-          "name email mobile"
-        )
-        .populate("room");
+    const booking = await Booking.findById(id)
+      .populate("user", "name email mobile")
+      .populate("room");
 
     if (!booking) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Booking not found",
+          message: "Booking not found",
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
@@ -42,16 +36,15 @@ export async function GET(
         success: true,
         data: booking,
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     return NextResponse.json(
       {
         success: false,
-        message:
-          "Failed to fetch booking",
+        message: "Failed to fetch booking",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
@@ -64,61 +57,87 @@ export async function PATCH(
     params: Promise<{
       id: string;
     }>;
-  }
+  },
 ) {
   try {
     await connectDB();
 
-    const { id } =
-      await params;
+    const { id } = await params;
+
+    const body = await req.json();
 
     const {
       status,
       paymentStatus,
-    } = await req.json();
 
-    const booking =
-      await Booking.findByIdAndUpdate(
-        id,
-        {
-          ...(status && { status }),
-          ...(paymentStatus && {
-            paymentStatus,
-          }),
-        },
-        {
-          new: true,
-          runValidators: true,
-        }
-      )
-        .populate(
-          "user",
-          "name email mobile"
-        )
-        .populate(
-          "room",
-          "roomName roomType"
-        );
+      checkIn,
+      checkOut,
+
+      assignedUnit,
+
+      confirmedAt,
+
+      actualCheckIn,
+      actualCheckOut,
+    } = body;
+
+    const updateData: any = {};
+
+    if (status !== undefined) updateData.status = status;
+
+    if (paymentStatus !== undefined) updateData.paymentStatus = paymentStatus;
+
+    if (checkIn !== undefined) updateData.checkIn = checkIn;
+
+    if (checkOut !== undefined) updateData.checkOut = checkOut;
+
+    if (assignedUnit !== undefined) updateData.assignedUnit = assignedUnit;
+
+    if (confirmedAt !== undefined) updateData.confirmedAt = confirmedAt;
+
+    if (actualCheckIn !== undefined) updateData.actualCheckIn = actualCheckIn;
+
+    if (actualCheckOut !== undefined)
+      updateData.actualCheckOut = actualCheckOut;
+
+    console.log("UPDATE DATA:", updateData);
+
+    const booking = await Booking.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    })
+      .populate("user", "name email mobile")
+      .populate(
+        "room",
+        `
+            roomName
+            roomType
+            roomSize
+            bedType
+          `,
+      );
 
     if (!booking) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Booking not found",
+          message: "Booking not found",
         },
-        { status: 404 }
+        {
+          status: 404,
+        },
       );
     }
 
     return NextResponse.json(
       {
         success: true,
-        message:
-          "Booking updated successfully",
+        message: "Booking updated successfully",
         data: booking,
       },
-      { status: 200 }
+      {
+        status: 200,
+      },
     );
   } catch (error) {
     console.error(error);
@@ -126,10 +145,11 @@ export async function PATCH(
     return NextResponse.json(
       {
         success: false,
-        message:
-          "Failed to update booking",
+        message: "Failed to update booking",
       },
-      { status: 500 }
+      {
+        status: 500,
+      },
     );
   }
 }
@@ -142,37 +162,31 @@ export async function DELETE(
     params: Promise<{
       id: string;
     }>;
-  }
+  },
 ) {
   try {
     await connectDB();
 
-    const { id } =
-      await params;
+    const { id } = await params;
 
-    const booking =
-      await Booking.findByIdAndDelete(
-        id
-      );
+    const booking = await Booking.findByIdAndDelete(id);
 
     if (!booking) {
       return NextResponse.json(
         {
           success: false,
-          message:
-            "Booking not found",
+          message: "Booking not found",
         },
-        { status: 404 }
+        { status: 404 },
       );
     }
 
     return NextResponse.json(
       {
         success: true,
-        message:
-          "Booking deleted successfully",
+        message: "Booking deleted successfully",
       },
-      { status: 200 }
+      { status: 200 },
     );
   } catch (error) {
     console.error(error);
@@ -180,10 +194,9 @@ export async function DELETE(
     return NextResponse.json(
       {
         success: false,
-        message:
-          "Failed to delete booking",
+        message: "Failed to delete booking",
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

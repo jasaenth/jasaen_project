@@ -13,6 +13,10 @@ const BookingSchema = new Schema(
       ref: "Room",
       required: true,
     },
+    assignedUnit: {
+      type: String,
+      default: null,
+    },
 
     checkIn: {
       type: Date,
@@ -48,19 +52,29 @@ const BookingSchema = new Schema(
     // Payment Status
     paymentStatus: {
       type: String,
-      enum: [
-        "PENDING",
-        "PAID",
-        "FAILED",
-        "REFUNDED",
-      ],
+      enum: ["PENDING", "PAID", "FAILED", "REFUNDED"],
       default: "PENDING",
     },
 
     status: {
       type: String,
-      enum: ["PENDING", "CONFIRMED", "CANCELLED"],
+      enum: ["PENDING", "CONFIRMED", "IN_HOUSE", "COMPLETED", "CANCELLED"],
       default: "PENDING",
+    },
+
+    confirmedAt: {
+      type: Date,
+      default: null,
+    },
+
+    actualCheckIn: {
+      type: Date,
+      default: null,
+    },
+
+    actualCheckOut: {
+      type: Date,
+      default: null,
     },
   },
   {

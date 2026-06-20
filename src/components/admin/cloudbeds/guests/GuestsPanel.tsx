@@ -89,12 +89,12 @@ export default function GuestsPanel() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
           <div>
-            <h2 className="text-2xl font-bold">
+            <h2 className="text-sm font-medium ">
               Total Guests
             </h2>
 
-            <p className="text-gray-500 mt-1">
-              {totalCount} guests
+            <p className=" mt-1 font-bold">
+              {totalCount} 
             </p>
           </div>
 

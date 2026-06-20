@@ -47,7 +47,7 @@ export default function RoomStats({ rooms, totalRooms }: Props) {
               <div>
                 <p className="text-gray-500 text-sm">{stat.title}</p>
 
-                <h3 className="text-3xl font-bold mt-2">{stat.value}</h3>
+                <h3 className="text-3xl font-bold mt-2 font-playfair">{stat.value}</h3>
               </div>
 
               <div

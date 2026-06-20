@@ -8,45 +8,203 @@ interface BookingViewModalProps {
   onClose: () => void;
 }
 
-const BookingViewModal = ({ booking, onClose }: BookingViewModalProps) => {
+const statusColors = {
+  PENDING: "bg-yellow-100 text-yellow-700",
+  CONFIRMED: "bg-blue-100 text-blue-700",
+  IN_HOUSE: "bg-green-100 text-green-700",
+  COMPLETED: "bg-purple-100 text-purple-700",
+  CANCELLED: "bg-red-100 text-red-700",
+};
+
+const paymentColors = {
+  PENDING: "bg-yellow-100 text-yellow-700",
+  PAID: "bg-green-100 text-green-700",
+  FAILED: "bg-red-100 text-red-700",
+  REFUNDED: "bg-purple-100 text-purple-700",
+};
+
+export default function BookingViewModal({
+  booking,
+  onClose,
+}: BookingViewModalProps) {
   if (!booking) return null;
 
+  const formatDate = (date?: string | Date | null) => {
+    if (!date) return "-";
+
+    return new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl w-full max-w-xl p-8 relative shadow-2xl">
-        <button
-          onClick={onClose}
-          className="absolute right-5 top-5 text-textmuted hover:text-black"
-        >
-          <X size={22} />
-        </button>
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl w-full max-w-5xl shadow-2xl relative overflow-hidden">
+        {/* Header */}
 
-        <h2 className="text-2xl font-bold text-primary mb-6">
-          Booking Details
-        </h2>
+        <div className="border-b px-8 py-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">Booking Details</h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-          <Info label="Booking ID" value={booking._id} />
-          <Info label="Guest Name" value={booking.user.name} />
-          <Info label="Email" value={booking.user.email} />
-          <Info label="Room Type" value={booking.room.roomType} />
-          <Info label="Check In" value={booking.checkIn} />
-          <Info label="Check Out" value={booking.checkOut} />
-          <Info label="Guests" value={booking.guests.toString()} />
-          <Info label="Amount" value={`₹${booking.totalAmount}`} />
-          <Info label="Status" value={booking.status} />
-          <Info label="Payment Status" value={booking.paymentStatus} />
+            <p className="text-sm text-gray-500 mt-1">
+              Booking ID: {booking._id}
+            </p>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="
+              w-10
+              h-10
+              rounded-xl
+              bg-gray-100
+              hover:bg-gray-200
+              flex
+              items-center
+              justify-center
+            "
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Body */}
+
+        <div className="p-8 space-y-8">
+          {/* Status Cards */}
+
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="border rounded-2xl p-4">
+              <p className="text-xs uppercase text-gray-500">Booking Status</p>
+
+              <span
+                className={`
+                  inline-flex
+                  mt-3
+                  px-4
+                  py-2
+                  rounded-full
+                  text-sm
+                  font-medium
+                  ${statusColors[booking.status as keyof typeof statusColors]}
+                `}
+              >
+                {booking.status.replace("_", " ")}
+              </span>
+            </div>
+
+            <div className="border rounded-2xl p-4">
+              <p className="text-xs uppercase text-gray-500">Payment Status</p>
+
+              <span
+                className={`
+                  inline-flex
+                  mt-3
+                  px-4
+                  py-2
+                  rounded-full
+                  text-sm
+                  font-medium
+                  ${
+                    paymentColors[
+                      booking.paymentStatus as keyof typeof paymentColors
+                    ]
+                  }
+                `}
+              >
+                {booking.paymentStatus}
+              </span>
+            </div>
+
+            <div className="border rounded-2xl p-4">
+              <p className="text-xs uppercase text-gray-500">Total Amount</p>
+
+              <h3 className="text-2xl font-bold mt-2">
+                ₹{booking.totalAmount}
+              </h3>
+            </div>
+          </div>
+
+          {/* Guest & Room */}
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="border rounded-2xl p-6">
+              <h3 className="font-semibold text-lg mb-5">Guest Information</h3>
+
+              <div className="space-y-4">
+                <Info label="Guest Name" value={booking.user?.name || "-"} />
+
+                <Info label="Email" value={booking.user?.email || "-"} />
+
+                <Info label="Phone" value={booking.user?.mobile || "-"} />
+
+                <Info label="Guests" value={String(booking.guests)} />
+              </div>
+            </div>
+
+            <div className="border rounded-2xl p-6">
+              <h3 className="font-semibold text-lg mb-5">Room Information</h3>
+
+              <div className="space-y-4">
+                <Info label="Room Name" value={booking.room?.roomName || "-"} />
+
+                <Info label="Room Type" value={booking.room?.roomType || "-"} />
+
+                <Info label="Room Size" value={booking.room?.roomSize || "-"} />
+
+                <Info label="Bed Type" value={booking.room?.bedType || "-"} />
+              </div>
+            </div>
+          </div>
+
+          {/* Stay Information */}
+
+          <div className="border rounded-2xl p-6">
+            <h3 className="font-semibold text-lg mb-5">Stay Information</h3>
+
+            <div className="grid md:grid-cols-3 gap-6">
+              <Info
+                label="Reserved Check-In"
+                value={formatDate(booking.checkIn)}
+              />
+
+              <Info
+                label="Reserved Check-Out"
+                value={formatDate(booking.checkOut)}
+              />
+
+              <Info
+                label="Confirmed At"
+                value={formatDate(booking.confirmedAt)}
+              />
+
+              <Info
+                label="Actual Check-In"
+                value={formatDate(booking.actualCheckIn)}
+              />
+
+              <Info
+                label="Actual Check-Out"
+                value={formatDate(booking.actualCheckOut)}
+              />
+
+              <Info label="Created At" value={formatDate(booking.createdAt)} />
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
-const Info = ({ label, value }: { label: string; value: string }) => (
-  <div>
-    <p className="text-sm text-textmuted">{label}</p>
-    <p className="font-semibold mt-1">{value}</p>
-  </div>
-);
+function Info({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <p className="text-sm text-gray-500">{label}</p>
 
-export default BookingViewModal;
+      <p className="font-semibold mt-1 break-words">{value}</p>
+    </div>
+  );
+}
