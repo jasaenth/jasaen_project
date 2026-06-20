@@ -1,77 +1,103 @@
-"use client";
-
-import { Mail, Phone } from "lucide-react";
-
-interface GuestCardProps {
-  guest: {
-    id: string;
-    name: string;
-    email: string;
-    phone: string;
-    stays: number;
-    spent: string;
-  };
+interface Props {
+  guest: any;
 }
 
 export default function GuestCard({
   guest,
-}: GuestCardProps) {
+}: Props) {
   return (
-    <div className="bg-white border rounded-3xl p-6 hover:shadow-lg transition-all">
-      
-      <div className="flex items-center gap-4">
-        <div className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-lg">
-          {guest.name.charAt(0)}
-        </div>
+    <div
+      className="
+        bg-white
+        border
+        rounded-3xl
+        p-6
+        shadow-sm
+        hover:shadow-md
+        transition
+      "
+    >
+
+      <div className="flex items-start justify-between">
 
         <div>
-          <h3 className="font-bold text-lg">
-            {guest.name}
+
+          <h3 className="font-semibold text-lg">
+            {guest.guestName}
           </h3>
 
-          <p className="text-sm text-gray-500">
-            Guest ID: {guest.id}
+          <p className="text-sm text-gray-500 mt-1">
+            {guest.guestEmail ||
+              "No Email"}
           </p>
+
         </div>
+
+        {guest.isMainGuest && (
+          <span
+            className="
+              px-3
+              py-1
+              rounded-full
+              bg-green-100
+              text-green-700
+              text-xs
+            "
+          >
+            Main Guest
+          </span>
+        )}
+
       </div>
 
-      <div className="mt-5 space-y-3">
-        <div className="flex items-center gap-3 text-gray-600">
-          <Mail size={16} />
-          <span className="text-sm">
-            {guest.email}
+      <div className="mt-5 space-y-2 text-sm">
+
+        <div className="flex justify-between">
+          <span className="text-gray-500">
+            Guest ID
+          </span>
+
+          <span>
+            {guest.guestID}
           </span>
         </div>
 
-        <div className="flex items-center gap-3 text-gray-600">
-          <Phone size={16} />
-          <span className="text-sm">
-            {guest.phone}
+        <div className="flex justify-between">
+          <span className="text-gray-500">
+            Reservation
+          </span>
+
+          <span>
+            {guest.reservationID}
           </span>
         </div>
-      </div>
 
-      <div className="grid grid-cols-2 gap-4 mt-6">
-        <div className="bg-gray-50 rounded-2xl p-4">
-          <p className="text-xs text-gray-500">
-            Total Stays
-          </p>
+        <div className="flex justify-between">
+          <span className="text-gray-500">
+            Created
+          </span>
 
-          <h4 className="text-xl font-bold mt-1">
-            {guest.stays}
-          </h4>
+          <span>
+            {guest.dateCreated?.split(
+              " "
+            )[0]}
+          </span>
         </div>
 
-        <div className="bg-gray-50 rounded-2xl p-4">
-          <p className="text-xs text-gray-500">
-            Lifetime Spend
-          </p>
+        <div className="flex justify-between">
+          <span className="text-gray-500">
+            Updated
+          </span>
 
-          <h4 className="text-xl font-bold mt-1">
-            {guest.spent}
-          </h4>
+          <span>
+            {guest.dateModified?.split(
+              " "
+            )[0]}
+          </span>
         </div>
+
       </div>
+
     </div>
   );
 }

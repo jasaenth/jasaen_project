@@ -1,108 +1,81 @@
 "use client";
 
-import SectionHead from "../SectionHead";
+import { useEffect, useState } from "react";
 import GuestCard from "./GuestCard";
-
-const guests = [
-  {
-    id: "GST-001",
-    name: "John Smith",
-    email: "john@example.com",
-    phone: "+66 89 123 4567",
-    stays: 8,
-    spent: "฿42,500",
-  },
-  {
-    id: "GST-002",
-    name: "Emily Johnson",
-    email: "emily@example.com",
-    phone: "+66 88 444 5555",
-    stays: 4,
-    spent: "฿18,700",
-  },
-  {
-    id: "GST-003",
-    name: "Michael Brown",
-    email: "michael@example.com",
-    phone: "+66 87 999 8888",
-    stays: 12,
-    spent: "฿71,300",
-  },
-  {
-    id: "GST-004",
-    name: "Sarah Wilson",
-    email: "sarah@example.com",
-    phone: "+66 85 111 2222",
-    stays: 6,
-    spent: "฿29,800",
-  },
-  {
-    id: "GST-005",
-    name: "David Lee",
-    email: "david@example.com",
-    phone: "+66 84 777 9999",
-    stays: 3,
-    spent: "฿11,400",
-  },
-  {
-    id: "GST-006",
-    name: "Sophia Taylor",
-    email: "sophia@example.com",
-    phone: "+66 83 555 7777",
-    stays: 9,
-    spent: "฿53,900",
-  },
-];
+import { getGuests } from "@/lib/api/cloudbeds";
 
 export default function GuestsPanel() {
+  const [page, setPage] = useState(1);
+  const [guests, setGuests] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    loadGuests(page);
+  }, [page]);
+
+  async function loadGuests(pageNumber: number) {
+    try {
+      const response = await getGuests(pageNumber);
+
+      const newGuests = response.data || [];
+
+      setGuests((prev) => [...prev, ...newGuests]);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const filteredGuests = guests.filter((guest) =>
+    [guest.guestName, guest.guestEmail, guest.guestID, guest.reservationID]
+      .join(" ")
+      .toLowerCase()
+      .includes(search.toLowerCase()),
+  );
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-3xl p-10 text-center">
+        Loading guests...
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <SectionHead
-        title="Guest Management"
-        subtitle="Manage guest profiles, contact information and stay history."
-      />
-
-      {/* Stats */}
-      <div className="grid md:grid-cols-3 gap-6">
-        <div className="bg-white border rounded-3xl p-6">
-          <p className="text-sm text-gray-500">
-            Total Guests
-          </p>
-
-          <h3 className="text-3xl font-bold mt-2">
-            324
-          </h3>
-        </div>
-
-        <div className="bg-white border rounded-3xl p-6">
-          <p className="text-sm text-gray-500">
-            Returning Guests
-          </p>
-
-          <h3 className="text-3xl font-bold mt-2">
-            108
-          </h3>
-        </div>
-
-        <div className="bg-white border rounded-3xl p-6">
-          <p className="text-sm text-gray-500">
-            VIP Guests
-          </p>
-
-          <h3 className="text-3xl font-bold mt-2">
-            26
-          </h3>
-        </div>
+      <div className="bg-white border rounded-3xl p-5">
+        <input
+          type="text"
+          placeholder="Search guests..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="
+      w-full
+      border
+      rounded-xl
+      px-4
+      py-3
+    "
+        />
       </div>
-
-      {/* Guest Cards */}
       <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
         {guests.map((guest) => (
-          <GuestCard
-            key={guest.id}
-            guest={guest}
-          />
+          <GuestCard key={guest.guestID} guest={guest} />
         ))}
+      </div>
+      <div className="flex justify-center">
+        <button
+          onClick={() => setPage((prev) => prev + 1)}
+          className="
+      px-6
+      py-3
+      bg-black
+      text-white
+      rounded-xl
+    "
+        >
+          Show More Guests
+        </button>
       </div>
     </div>
   );

@@ -23,6 +23,8 @@ export default function ReservationsTable({ reservations }: Props) {
 
               <th className="px-6 py-4 text-left">Source</th>
 
+              <th className="px-6 py-4 text-left">Total Price</th>
+
               <th className="px-6 py-4 text-left">Status</th>
             </tr>
           </thead>
@@ -42,6 +44,8 @@ export default function ReservationsTable({ reservations }: Props) {
 
                 <td className="px-6 py-4 font-semibold">{item.sourceName}</td>
 
+                <td className="px-6 py-4 font-semibold">${item.balance.toFixed(2)}</td>
+
                 <td className="px-6 py-4">
                   <span
                     className={`
@@ -50,7 +54,7 @@ export default function ReservationsTable({ reservations }: Props) {
                       rounded-full
                       text-sm
                       ${
-                        item.status === "Confirmed"
+                        item.status === "confirmed"
                           ? "bg-green-100 text-green-700"
                           : "bg-yellow-100 text-yellow-700"
                       }
