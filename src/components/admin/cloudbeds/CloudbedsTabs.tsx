@@ -5,9 +5,7 @@ import {
   Calendar,
   Users,
   BedDouble,
-  CreditCard,
-  TrendingUp,
-  FileBarChart,
+  User
 } from "lucide-react";
 
 const tabs = [
@@ -32,19 +30,9 @@ const tabs = [
     icon: BedDouble,
   },
   {
-    id: "payments",
-    label: "Payments",
-    icon: CreditCard,
-  },
-  {
-    id: "revenue",
-    label: "Revenue",
-    icon: TrendingUp,
-  },
-  {
-    id: "reports",
-    label: "Reports",
-    icon: FileBarChart,
+    id: "users",
+    label: "Users",
+    icon: User,
   },
 ];
 
@@ -53,10 +41,7 @@ interface Props {
   setActiveTab: (tab: string) => void;
 }
 
-export default function CloudbedsTabs({
-  activeTab,
-  setActiveTab,
-}: Props) {
+export default function CloudbedsTabs({ activeTab, setActiveTab }: Props) {
   return (
     <div className="flex gap-1 overflow-x-auto pb-1 border-b border-border">
       {tabs.map((tab) => {
@@ -65,9 +50,7 @@ export default function CloudbedsTabs({
         return (
           <button
             key={tab.id}
-            onClick={() =>
-              setActiveTab(tab.id)
-            }
+            onClick={() => setActiveTab(tab.id)}
             className={`
               inline-flex
               items-center

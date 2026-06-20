@@ -4,7 +4,7 @@ import { cloudbedsFetch } from "@/lib/cloudbeds";
 export async function GET() {
   try {
     const data = await cloudbedsFetch(
-      "/api/v1.3/getPaymentMethods"
+      "/datainsights/v1.1/reports"
     );
 
     return NextResponse.json(data);
@@ -14,7 +14,7 @@ export async function GET() {
         error:
           error instanceof Error
             ? error.message
-            : "Failed to fetch payments",
+            : "Failed to fetch users",
       },
       { status: 500 }
     );

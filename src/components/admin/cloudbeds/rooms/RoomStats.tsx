@@ -20,12 +20,6 @@ export default function RoomStats({ rooms, totalRooms }: Props) {
       color: "bg-blue-100 text-blue-600",
     },
     {
-      title: "Available",
-      value: availableRooms,
-      icon: CheckCircle2,
-      color: "bg-green-100 text-green-600",
-    },
-    {
       title: "Blocked",
       value: blockedRooms,
       icon: Wrench,

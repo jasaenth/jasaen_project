@@ -4,9 +4,7 @@ import { useState } from "react";
 import CloudbedsTabs from "@/components/admin/cloudbeds/CloudbedsTabs";
 import GuestsPanel from "@/components/admin/cloudbeds/guests/GuestsPanel";
 import RoomsPanel from "@/components/admin/cloudbeds/rooms/RoomsPanel";
-import PaymentsPanel from "@/components/admin/cloudbeds/payments/PaymentsPanel";
-import RevenuePanel from "@/components/admin/cloudbeds/revenue/RevenuePanel";
-import ReportsPanel from "@/components/admin/cloudbeds/reports/ReportsPanel";
+import ReportsPanel from "@/components/admin/cloudbeds/users/UsersPanel";
 import ReservationsPanel from "@/components/admin/cloudbeds/reservations/ReservationsPanel";
 import Dashboard from "@/components/admin/cloudbeds/overview/OverviewPanel";
 
@@ -38,15 +36,7 @@ export default function CloudbedsPage() {
         <RoomsPanel />
       )}
 
-      {activeTab === "payments" && (
-        <PaymentsPanel />
-      )}
-
-      {activeTab === "revenue" && (
-        <RevenuePanel />
-      )}
-
-      {activeTab === "reports" && (
+      {activeTab === "users" && (
         <ReportsPanel />
       )}
     </div>
