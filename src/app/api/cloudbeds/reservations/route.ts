@@ -4,7 +4,7 @@ import { cloudbedsFetch } from "@/lib/cloudbeds";
 export async function GET() {
   try {
     const data = await cloudbedsFetch(
-      "/api/v1.3/getReservation"
+      "/api/v1.3/getReservations"
     );
 
     return NextResponse.json(data);
