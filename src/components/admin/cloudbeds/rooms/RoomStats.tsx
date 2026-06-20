@@ -4,16 +4,13 @@ import { Hotel, CheckCircle2, BedDouble, Wrench } from "lucide-react";
 
 interface Props {
   rooms: any[];
+  totalRooms: number;
 }
 
-export default function RoomStats({ rooms }: Props) {
-  const totalRooms = rooms.length;
-
+export default function RoomStats({ rooms, totalRooms }: Props) {
   const availableRooms = rooms.filter((r) => !r.roomBlocked).length;
 
   const blockedRooms = rooms.filter((r) => r.roomBlocked).length;
-
-  const privateRooms = rooms.filter((r) => r.isPrivate).length;
 
   const stats = [
     {
@@ -27,12 +24,6 @@ export default function RoomStats({ rooms }: Props) {
       value: availableRooms,
       icon: CheckCircle2,
       color: "bg-green-100 text-green-600",
-    },
-    {
-      title: "Private Rooms",
-      value: privateRooms,
-      icon: BedDouble,
-      color: "bg-orange-100 text-orange-600",
     },
     {
       title: "Blocked",

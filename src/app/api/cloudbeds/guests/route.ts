@@ -10,8 +10,7 @@ export async function GET(
         "page"
       ) || "1";
 
-    const endpoint =
-      `/api/v1.3/getGuestList?pageNumber=${page}&pageSize=100`;
+    const endpoint =`/api/v1.3/getGuestList?pageNumber=${page}&pageSize=100`;
 
     const data =
       await cloudbedsFetch(endpoint);

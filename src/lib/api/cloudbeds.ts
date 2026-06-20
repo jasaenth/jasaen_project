@@ -14,21 +14,35 @@ export async function getDashboard(date?: string) {
 
 export async function getGuests(page = 1) {
   const res = await fetch(`/api/cloudbeds/guests?page=${page}`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch guests");
+  }
   return res.json();
 }
 
 export async function getPayments() {
   const res = await fetch("/api/cloudbeds/payments");
+  if (!res.ok) {
+    throw new Error("Failed to fetch payments");
+  }
   return res.json();
 }
 
-export async function getReservations() {
-  const res = await fetch("/api/cloudbeds/reservations");
+export async function getReservations(page = 1) {
+  const res = await fetch(`/api/cloudbeds/reservations?page=${page}`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch reservations");
+  }
+
   return res.json();
 }
 
-export async function getRooms() {
-  const res = await fetch("/api/cloudbeds/rooms");
+export async function getRooms(page = 1) {
+  const res = await fetch(`/api/cloudbeds/rooms?page=${page}`);
+  if (!res.ok) {
+    throw new Error("Failed to fetch rooms");
+  }
   return res.json();
 }
 
