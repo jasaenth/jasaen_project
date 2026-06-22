@@ -134,7 +134,7 @@ const GalleryAddModal = ({ onClose, onSave }: Props) => {
 
                 <p className="font-medium">Click to upload image</p>
 
-                <p className="text-sm text-gray-500 mt-2">Max file size: 2MB</p>
+                <p className="text-sm text-gray-500 mt-2">Max file size: 5MB</p>
               </>
             )}
 

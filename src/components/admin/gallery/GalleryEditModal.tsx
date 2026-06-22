@@ -55,8 +55,8 @@ const GalleryEditModal = ({
 
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      alert("Image must be less than 2MB");
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image must be less than 5MB");
       return;
     }
 
@@ -153,7 +153,7 @@ const GalleryEditModal = ({
             </p>
 
             <p className="text-sm text-gray-500 mt-1">
-              Max 2MB
+              Max 5MB
             </p>
 
             <input
