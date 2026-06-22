@@ -55,7 +55,7 @@ export async function POST(req: Request) {
     }
 
     // 5MB validation
-    if (file.size > 5 * 1024 * 1024) {
+    if (file && file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
         {
           success: false,
