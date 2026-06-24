@@ -44,7 +44,7 @@ export default function ReservationsTable({ reservations }: Props) {
 
                 <td className="px-6 py-4 font-semibold">{item.sourceName}</td>
 
-                <td className="px-6 py-4 font-semibold">${item.balance.toFixed(2)}</td>
+                <td className="px-6 py-4 font-semibold">฿{item.balance.toFixed(2)}</td>
 
                 <td className="px-6 py-4">
                   <span

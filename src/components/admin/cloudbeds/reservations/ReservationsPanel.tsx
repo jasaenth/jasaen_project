@@ -14,26 +14,110 @@ export default function ReservationsPanel() {
 
   const [page, setPage] = useState(1);
 
+  const [checkInFrom, setCheckInFrom] = useState("");
+  const [checkInTo, setCheckInTo] = useState("");
+
+  const [checkOutFrom, setCheckOutFrom] = useState("");
+  const [checkOutTo, setCheckOutTo] = useState("");
+  const [sourceId, setSourceId] = useState("");
+
   useEffect(() => {
     loadReservations(page);
-  }, [page]);
+  }, [page, checkInFrom, checkInTo, checkOutFrom, checkOutTo, sourceId]);
+
+  const handleExport = () => {
+    const csv = [
+      [
+        "Reservation ID",
+        "Guest",
+        "Check In",
+        "Check Out",
+        "Source",
+        "Status",
+        "Amount",
+      ],
+      ...filteredReservations.map((r) => [
+        r.reservationID,
+        r.guestName,
+        r.startDate,
+        r.endDate,
+        r.sourceName,
+        r.status,
+        r.balance,
+      ]),
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    const blob = new Blob([csv], {
+      type: "text/csv",
+    });
+
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+
+    a.href = url;
+    a.download = `reservations-${Date.now()}.csv`;
+
+    a.click();
+  };
+
+const sources = [
+  ...new Map(
+    reservations
+      .filter((r) => r.sourceName)
+      .map((r) => [
+        String(
+          r.sourceID ||
+          r.sourceId ||
+          r.source ||
+          ""
+        ),
+        {
+          id: String(
+            r.sourceID ||
+            r.sourceId ||
+            r.source ||
+            ""
+          ),
+          name: r.sourceName,
+        },
+      ]),
+  ).values(),
+];
 
   async function loadReservations(pageNumber: number) {
     try {
       setLoading(true);
 
-      const response = await getReservations(pageNumber);
+      const response = await getReservations(
+        pageNumber,
+        checkInFrom,
+        checkInTo,
+        checkOutFrom,
+        checkOutTo,
+        sourceId,
+      );
 
       setReservations(response.data || []);
       setTotalReservations(response.total || 0);
-    } catch (error) {
-      console.error(error);
     } finally {
       setLoading(false);
     }
   }
 
-  const filteredReservations = reservations.filter((reservation) =>
+const filteredReservations = reservations
+  .filter((r) =>
+    !sourceId
+      ? true
+      : String(
+          r.sourceID ||
+          r.sourceId ||
+          r.source
+        ) === sourceId
+  )
+  .filter((reservation) =>
     [
       reservation.guestName,
       reservation.reservationID,
@@ -42,7 +126,7 @@ export default function ReservationsPanel() {
     ]
       .join(" ")
       .toLowerCase()
-      .includes(search.toLowerCase()),
+      .includes(search.toLowerCase())
   );
 
   return (
@@ -52,11 +136,28 @@ export default function ReservationsPanel() {
           <div>
             <p className="text-gray-500 text-sm">Total Reservations</p>
 
-            <h3 className="text-2xl font-bold mt-2 font-playfair">{totalReservations}</h3>
+            <h3 className="text-2xl font-bold mt-2 font-playfair">
+              {totalReservations}
+            </h3>
           </div>
 
-          <div >
-            <ReservationFilters search={search} setSearch={setSearch} />
+          <div>
+            <ReservationFilters
+              search={search}
+              setSearch={setSearch}
+              checkInFrom={checkInFrom}
+              setCheckInFrom={setCheckInFrom}
+              checkInTo={checkInTo}
+              setCheckInTo={setCheckInTo}
+              checkOutFrom={checkOutFrom}
+              setCheckOutFrom={setCheckOutFrom}
+              checkOutTo={checkOutTo}
+              setCheckOutTo={setCheckOutTo}
+              sourceId={sourceId}
+              setSourceId={setSourceId}
+              sources={sources}
+              onExport={handleExport}
+            />
           </div>
         </div>
       </div>

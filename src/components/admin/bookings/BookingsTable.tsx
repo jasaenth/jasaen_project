@@ -108,7 +108,7 @@ const BookingsTable = ({
                   <td className="px-6 py-5 text-xs">{booking.guests}</td>
 
                   <td className="px-6 py-5 font-semibold text-xs">
-                    ₹ {booking.totalAmount}
+                    ฿ {booking.totalAmount}
                   </td>
 
                   <td className="px-6 py-5">

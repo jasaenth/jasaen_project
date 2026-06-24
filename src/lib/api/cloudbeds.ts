@@ -28,14 +28,43 @@ export async function getPayments() {
   return res.json();
 }
 
-export async function getReservations(page = 1) {
-  const res = await fetch(`/api/cloudbeds/reservations?page=${page}`);
+export async function getReservations(
+  page = 1,
+  checkInFrom?: string,
+  checkInTo?: string,
+  checkOutFrom?: string,
+  checkOutTo?: string,
+  sourceId?: string,
+) {
+  const params = new URLSearchParams();
+
+  params.append("page", page.toString());
+
+  if (checkInFrom) {
+    params.append("checkInFrom", checkInFrom);
+  }
+
+  if (checkInTo) {
+    params.append("checkInTo", checkInTo);
+  }
+
+  if (checkOutFrom) {
+    params.append("checkOutFrom", checkOutFrom);
+  }
+
+  if (checkOutTo) {
+    params.append("checkOutTo", checkOutTo);
+  }
+
+  if (sourceId) params.append("sourceId", sourceId);
+
+  const res = await fetch(`/api/cloudbeds/reservations?${params.toString()}`);
 
   if (!res.ok) {
     throw new Error("Failed to fetch reservations");
   }
 
-  return res.json();
+  return await res.json();
 }
 
 export async function getRooms(page = 1) {

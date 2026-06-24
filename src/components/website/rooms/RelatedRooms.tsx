@@ -94,7 +94,7 @@ const guests = searchParams.get("guests");
 
                   <div className="mt-6 flex items-end justify-between">
                     <div>
-                      <span className="font-display text-3xl text-maroon">
+                      <span className="font-playfair text-2xl text-maroon">
                         ฿{room.discountPrice?.toLocaleString()}
                       </span>
 
