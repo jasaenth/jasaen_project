@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { Menu, X, User, LogOut, BookOpen } from "lucide-react";
+import { Menu, X, User, LogOut, BookOpen, Bell } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function Navbar() {
@@ -16,25 +16,50 @@ export default function Navbar() {
   const [profileOpen, setProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  useEffect(() => {
-    fetchUser();
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notificationOpen, setNotificationOpen] = useState(false);
+useEffect(() => {
+  fetchUser();
 
-    const onScroll = () => {
-      setScrolled(window.scrollY > 30);
-    };
+  const onScroll = () => {
+    setScrolled(window.scrollY > 30);
+  };
 
-    onScroll();
+  const handleOutsideClick = () => {
+    setProfileOpen(false);
+    setNotificationOpen(false);
+  };
 
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
+  onScroll();
 
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  window.addEventListener("scroll", onScroll, {
+    passive: true,
+  });
 
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
+  document.addEventListener(
+    "click",
+    handleOutsideClick
+  );
+
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+
+    document.removeEventListener(
+      "click",
+      handleOutsideClick
+    );
+  };
+}, []);
+
+useEffect(() => {
+  setOpen(false);
+
+  setProfileOpen(false);
+
+  setNotificationOpen(false);
+}, [pathname]);
+
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const fetchUser = async () => {
     try {
@@ -43,8 +68,23 @@ export default function Navbar() {
 
       if (data.success) {
         setUser(data.user);
+        fetchNotifications();
       }
     } catch {}
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch("/api/notifications");
+
+      const data = await res.json();
+
+      if (data.success) {
+        setNotifications(data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleLogout = async () => {
@@ -80,13 +120,9 @@ export default function Navbar() {
     { href: "/contact", label: "Contact" },
   ];
 
-const forceSolidPages = [
-  "/login",
-];
+  const forceSolidPages = ["/login"];
 
-const solid =
-  scrolled ||
-  forceSolidPages.includes(pathname);
+  const solid = scrolled || forceSolidPages.includes(pathname);
 
   return (
     <header
@@ -102,7 +138,7 @@ const solid =
         {/* Logo */}{" "}
         <Link href="/">
           <Image
-            src= {solid ? "/logo.png" : "/logowhite.png"}
+            src={solid ? "/logo.png" : "/logowhite.png"}
             alt="Jasaen Hotel"
             width={135}
             height={55}
@@ -144,62 +180,165 @@ const solid =
         {/* Right Side */}
         <div className="flex items-center gap-3">
           {user ? (
-            <div className="relative hidden md:block">
-              <button
-                onClick={() => setProfileOpen((v) => !v)}
-                className={[
-                  "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm border transition",
-                  solid
-                    ? "border-border hover:border-gold text-charcoal"
-                    : "border-ivory/40 hover:border-gold text-ivory",
-                ].join(" ")}
-              >
-                <span className="h-7 w-7 inline-flex items-center justify-center rounded-full bg-maroon text-ivory text-xs font-medium">
-                  {user.name?.slice(0, 1).toUpperCase()}
-                </span>
+  <div className="flex items-center gap-3">
+    {/* Notification */}
 
-                <span className="max-w-25 truncate">
-                  {user.name?.split(" ")[0]}
-                </span>
-              </button>
+    <div className="relative hidden md:block">
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setNotificationOpen((v) => !v);
+        }}
+        className={[
+          "relative p-2 rounded-full border transition",
+          solid
+            ? "border-border text-charcoal hover:border-gold"
+            : "border-ivory/40 text-ivory hover:border-gold",
+        ].join(" ")}
+      >
+        <Bell size={18} />
 
-              {profileOpen && (
-                <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-card border border-border shadow-luxe overflow-hidden text-charcoal">
-                  <div className="px-4 py-3 border-b border-border">
-                    <div className="text-sm font-medium truncate">
-                      {user.name}
-                    </div>
+        {unreadCount > 0 && (
+          <span
+            className="
+              absolute
+              -top-1
+              -right-1
+              w-5
+              h-5
+              bg-red-500
+              text-white
+              text-[10px]
+              rounded-full
+              flex
+              items-center
+              justify-center
+            "
+          >
+            {unreadCount}
+          </span>
+        )}
+      </button>
 
-                    <div className="text-xs text-muted-foreground truncate">
-                      {user.email}
-                    </div>
-                  </div>
+      {notificationOpen && (
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="
+            absolute
+            right-0
+            mt-2
+            w-96
+            rounded-2xl
+            bg-white
+            border
+            shadow-xl
+            overflow-hidden
+            text-charcoal
+          "
+        >
+          <div className="px-4 py-3 border-b font-semibold">
+            Notifications
+          </div>
 
-                  <button
-                    onClick={() => {
-                      router.push("/my-bookings");
-                      setProfileOpen(false);
-                    }}
-                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary text-left"
-                  >
-                    <BookOpen size={14} />
-                    My Bookings
-                  </button>
+          <div className="max-h-96 overflow-y-auto">
+            {notifications.length === 0 ? (
+              <div className="p-4 text-sm text-gray-500">
+                No notifications
+              </div>
+            ) : (
+              notifications.map((notification) => (
+                <div
+                  key={notification._id}
+                  className="
+                    px-4
+                    py-3
+                    border-b
+                    hover:bg-gray-50
+                  "
+                >
+                  <p className="font-medium">
+                    {notification.title}
+                  </p>
 
-                  <button
-                    onClick={() => {
-                      handleLogout();
-                      setProfileOpen(false);
-                    }}
-                    className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary text-left"
-                  >
-                    <LogOut size={14} />
-                    Sign Out
-                  </button>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {notification.message}
+                  </p>
+
+                  <p className="text-xs text-gray-400 mt-2">
+                    {new Date(
+                      notification.createdAt
+                    ).toLocaleString()}
+                  </p>
                 </div>
-              )}
+              ))
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Profile */}
+
+    <div className="relative hidden md:block">
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setProfileOpen((v) => !v);
+        }}
+        className={[
+          "inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm border transition",
+          solid
+            ? "border-border hover:border-gold text-charcoal"
+            : "border-ivory/40 hover:border-gold text-ivory",
+        ].join(" ")}
+      >
+        <span className="h-7 w-7 inline-flex items-center justify-center rounded-full bg-maroon text-ivory text-xs font-medium">
+          {user.name?.slice(0, 1).toUpperCase()}
+        </span>
+
+        <span className="max-w-25 truncate">
+          {user.name?.split(" ")[0]}
+        </span>
+      </button>
+
+      {profileOpen && (
+        <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-card border border-border shadow-luxe overflow-hidden text-charcoal">
+          <div className="px-4 py-3 border-b border-border">
+            <div className="text-sm font-medium truncate">
+              {user.name}
             </div>
-          ) : (
+
+            <div className="text-xs text-muted-foreground truncate">
+              {user.email}
+            </div>
+          </div>
+
+          <button
+            onClick={() => {
+              router.push("/my-bookings");
+              setProfileOpen(false);
+            }}
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary text-left"
+          >
+            <BookOpen size={14} />
+            My Bookings
+          </button>
+
+          <button
+            onClick={() => {
+              handleLogout();
+              setProfileOpen(false);
+            }}
+            className="w-full flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-secondary text-left"
+          >
+            <LogOut size={14} />
+            Sign Out
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+) : (
             <Link
               href="/login"
               className={[

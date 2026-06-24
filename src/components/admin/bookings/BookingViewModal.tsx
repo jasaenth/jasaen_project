@@ -121,8 +121,8 @@ export default function BookingViewModal({
             <div className="border rounded-2xl p-4">
               <p className="text-xs uppercase text-gray-500">Total Amount</p>
 
-              <h3 className="text-2xl font-bold mt-2">
-                ₹{booking.totalAmount}
+              <h3 className="text-2xl font-bold mt-2 font-playfair">
+                ฿ {booking.totalAmount}
               </h3>
             </div>
           </div>
@@ -154,7 +154,7 @@ export default function BookingViewModal({
 
                 <Info label="Room Size" value={booking.room?.roomSize || "-"} />
 
-                <Info label="Bed Type" value={booking.room?.bedType || "-"} />
+                <Info label="Bed Type" value={booking.assignedUnit || "-"} />
               </div>
             </div>
           </div>

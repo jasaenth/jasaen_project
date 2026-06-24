@@ -58,6 +58,8 @@ const BookingsTable = ({
                 <th className="px-6 py-5 tracking-[0.25em] text-xs">GUESTS</th>
 
                 <th className="px-6 py-5 tracking-[0.25em] text-xs">TOTAL</th>
+                
+                <th className="px-6 py-5 tracking-[0.25em] text-xs">ROOM NO</th>
 
                 <th className="px-6 py-5 tracking-[0.25em] text-xs">STATUS</th>
 
@@ -109,6 +111,10 @@ const BookingsTable = ({
 
                   <td className="px-6 py-5 font-semibold text-xs">
                     ฿ {booking.totalAmount}
+                  </td>
+
+                  <td className="px-6 py-5 font-semibold text-xs">
+                     {booking.assignedUnit || "-"}
                   </td>
 
                   <td className="px-6 py-5">

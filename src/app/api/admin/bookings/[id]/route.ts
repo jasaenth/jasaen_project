@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import Booking from "@/models/Booking";
 import { connectDB } from "@/lib/mongodb";
+import Room from "@/models/Room";
 
 export async function GET(
   req: Request,
@@ -69,17 +70,27 @@ export async function PATCH(
     const {
       status,
       paymentStatus,
-
       checkIn,
       checkOut,
-
       assignedUnit,
-
       confirmedAt,
-
       actualCheckIn,
       actualCheckOut,
     } = body;
+
+    const existingBooking = await Booking.findById(id);
+
+    if (!existingBooking) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Booking not found",
+        },
+        {
+          status: 404,
+        },
+      );
+    }
 
     const updateData: any = {};
 
@@ -100,7 +111,50 @@ export async function PATCH(
     if (actualCheckOut !== undefined)
       updateData.actualCheckOut = actualCheckOut;
 
-    console.log("UPDATE DATA:", updateData);
+    /*
+     * IN HOUSE
+     * Mark selected room as BOOKED
+     */
+    if (status === "IN_HOUSE" && assignedUnit) {
+      await Room.updateOne(
+        {
+          _id: existingBooking.room,
+          "units.unitNumber": assignedUnit,
+        },
+        {
+          $set: {
+            "units.$.status": "BOOKED",
+          },
+          $inc: {
+            availableUnits: -1,
+          },
+        },
+      );
+    }
+
+    /*
+     * COMPLETED / CANCELLED
+     * Release room back to AVAILABLE
+     */
+    if (
+      ["COMPLETED", "CANCELLED"].includes(status) &&
+      existingBooking.assignedUnit
+    ) {
+      await Room.updateOne(
+        {
+          _id: existingBooking.room,
+          "units.unitNumber": existingBooking.assignedUnit,
+        },
+        {
+          $set: {
+            "units.$.status": "AVAILABLE",
+          },
+          $inc: {
+            availableUnits: 1,
+          },
+        },
+      );
+    }
 
     const booking = await Booking.findByIdAndUpdate(id, updateData, {
       new: true,
@@ -110,24 +164,12 @@ export async function PATCH(
       .populate(
         "room",
         `
-            roomName
-            roomType
-            roomSize
-            bedType
-          `,
+          roomName
+          roomType
+          roomSize
+          bedType
+        `,
       );
-
-    if (!booking) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Booking not found",
-        },
-        {
-          status: 404,
-        },
-      );
-    }
 
     return NextResponse.json(
       {

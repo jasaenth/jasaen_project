@@ -63,33 +63,27 @@ export default function ReservationsPanel() {
     a.click();
   };
 
-const sources = [
-  ...new Map(
-    reservations
-      .filter((r) => r.sourceName)
-      .map((r) => [
-        String(
-          r.sourceID ||
-          r.sourceId ||
-          r.source ||
-          ""
-        ),
-        {
-          id: String(
-            r.sourceID ||
-            r.sourceId ||
-            r.source ||
-            ""
-          ),
-          name: r.sourceName,
-        },
-      ]),
-  ).values(),
-];
+  const sources = [
+    ...new Map(
+      reservations
+        .filter((r) => r.sourceName)
+        .map((r) => [
+          String(r.sourceID || r.sourceId || r.source || ""),
+          {
+            id: String(r.sourceID || r.sourceId || r.source || ""),
+            name: r.sourceName,
+          },
+        ]),
+    ).values(),
+  ];
 
   async function loadReservations(pageNumber: number) {
     try {
       setLoading(true);
+      console.log({
+        pageNumber,
+        sourceId,
+      });
 
       const response = await getReservations(
         pageNumber,
@@ -107,18 +101,8 @@ const sources = [
     }
   }
 
-const filteredReservations = reservations
-  .filter((r) =>
-    !sourceId
-      ? true
-      : String(
-          r.sourceID ||
-          r.sourceId ||
-          r.source
-        ) === sourceId
-  )
-  .filter((reservation) =>
-    [
+  const filteredReservations = reservations.filter((reservation) => {
+    const matchesSearch = [
       reservation.guestName,
       reservation.reservationID,
       reservation.status,
@@ -126,8 +110,12 @@ const filteredReservations = reservations
     ]
       .join(" ")
       .toLowerCase()
-      .includes(search.toLowerCase())
-  );
+      .includes(search.toLowerCase());
+
+    const matchesSource = !sourceId || reservation.sourceID === sourceId;
+
+    return matchesSearch && matchesSource;
+  });
 
   return (
     <div className="space-y-6">

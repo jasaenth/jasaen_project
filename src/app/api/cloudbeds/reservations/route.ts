@@ -30,6 +30,9 @@ export async function GET(request: NextRequest) {
 
     const endpoint = `/api/v1.3/getReservations?${query.toString()}`;
 
+    console.log("sourceId =", sourceId);
+console.log("endpoint =", endpoint);
+
     const data = await cloudbedsFetch(endpoint);
 
     return NextResponse.json(data);
