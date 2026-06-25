@@ -16,8 +16,6 @@ import {
   Settings,
   HelpCircle,
 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { useRouter } from "next/navigation";
 import { clearUser } from "@/store/slices/authSlice";
@@ -108,7 +106,7 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
 
   const [notifications, setNotifications] = useState<any[]>([]);
 
-  const unreadCount = notifications.filter((n) => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const user = useAppSelector((state) => state.auth.user);
 
@@ -121,6 +119,23 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
       if (data.success) {
         setNotifications(data.data);
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const markNotificationsAsRead = async () => {
+    try {
+      await fetch("/api/admin/notifications/read", {
+        method: "PATCH",
+      });
+
+      setNotifications((prev) =>
+        prev.map((item) => ({
+          ...item,
+          isRead: true,
+        })),
+      );
     } catch (error) {
       console.log(error);
     }
@@ -188,10 +203,17 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
               {/* Notifications */}
               <div className="relative">
                 <button
-                  onClick={(e) => {
+                  onClick={async (e) => {
                     e.stopPropagation();
-                    setIsNotificationsOpen(!isNotificationsOpen);
+
+                    const next = !isNotificationsOpen;
+
+                    setIsNotificationsOpen(next);
                     setIsProfileOpen(false);
+
+                    if (next) {
+                      await markNotificationsAsRead();
+                    }
                   }}
                   className="
 relative
@@ -245,17 +267,12 @@ justify-center
                                 {new Date(notif.createdAt).toLocaleString()}
                               </p>
                             </div>
-                            {!notif.read && (
+                            {!notif.isRead && (
                               <div className="w-2 h-2 bg-blue-300 rounded-full mt-2"></div>
                             )}
                           </div>
                         </div>
                       ))}
-                    </div>
-                    <div className="p-3 text-center border-t border-gray-200 ">
-                      <button className="text-sm text-primary transition">
-                        View all notifications
-                      </button>
                     </div>
                   </div>
                 )}
