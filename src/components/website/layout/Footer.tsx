@@ -92,11 +92,7 @@ export default function Footer() {
           <h4 className="font-display text-gold text-lg mb-5">Legal</h4>
 
           <ul className="space-y-3 text-sm">
-            <li>
-              <Link href="/privacy" className="hover:text-gold transition">
-                Privacy Policy
-              </Link>
-            </li>
+            
 
             <li>
               <Link href="/terms" className="hover:text-gold transition">

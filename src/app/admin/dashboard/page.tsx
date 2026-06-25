@@ -12,13 +12,15 @@ export default function DashboardPage() {
         </h1>
       </div>
 
-      <StatsCards />
+     
 
-      <div className="grid xl:grid-cols-[2fr_1fr] gap-8">
-        <RecentBookingsTable />
+   <div className="space-y-8">
+  <StatsCards />
 
-        <TodaysHouse />
-      </div>
+  <TodaysHouse />
+
+  <RecentBookingsTable />
+</div>
     </div>
   );
 }

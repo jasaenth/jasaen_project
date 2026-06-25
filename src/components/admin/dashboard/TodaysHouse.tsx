@@ -1,73 +1,111 @@
+"use client";
+
+import {
+  BedDouble,
+  LogIn,
+  LogOut,
+} from "lucide-react";
+import { useEffect, useState } from "react";
+
 export default function TodaysHouse() {
+  const [dashboard, setDashboard] = useState<any>(null);
+
+useEffect(() => {
+  fetch("/api/admin/dashboard")
+    .then((res) => res.json())
+    .then((data) => setDashboard(data.data));
+}, []);
+
+if (!dashboard) return null;
+
+console.log(dashboard);
+
+const stats = [
+  {
+    title: "Arrivals",
+    value: dashboard.arrivals,
+    icon: LogIn,
+    color: "bg-blue-100 text-blue-700",
+  },
+  {
+    title: "Departures",
+    value: dashboard.departures,
+    icon: LogOut,
+    color: "bg-orange-100 text-orange-700",
+  },
+  {
+    title: "In House",
+    value: dashboard.inHouse,
+    icon: BedDouble,
+    color: "bg-green-100 text-green-700",
+  },
+];
+
   return (
-    <div className="bg-white rounded-4xl border border-borderlight p-10">
-      <h2 className="font-display text-4xl text-maroon mb-10">
-        Today's house
-      </h2>
+    <div className="space-y-6">
+      {/* Heading */}
 
-      <div className="space-y-6">
-        <Row
-          label="Arrivals"
-          value="7"
-        />
+      <div>
+        <h2 className="font-display text-2xl text-maroon">
+          Today's House
+        </h2>
 
-        <Row
-          label="Departures"
-          value="5"
-        />
-
-        <Row
-          label="In-house"
-          value="29"
-        />
-
-        <Row
-          label="VIP guests"
-          value="3"
-        />
-
-        <Row
-          label="Spa bookings"
-          value="12"
-        />
-
-        <Row
-          label="Restaurant covers"
-          value="84"
-        />
       </div>
 
-      <div className="mt-10 rounded-2xl border bg-[#faf5f7] p-6">
-        <p className="uppercase tracking-[0.3em] text-xs text-maroon mb-4">
-          Note From Concierge
-        </p>
+      {/* Cards */}
 
-        <p className="text-muted-foreground leading-7">
-          Anniversary turn-down requested
-          for Suite 1408. Champagne chilled
-          by 7pm.
-        </p>
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        {stats.map((item) => {
+          const Icon = item.icon;
+
+          return (
+            <div
+              key={item.title}
+              className="
+                bg-white
+                rounded-3xl
+                border
+                border-borderlight
+                p-6
+                hover:shadow-xl
+                transition-all
+                duration-300
+                hover:-translate-y-1
+              "
+            >
+              {/* Icon + Title */}
+
+              <div className="flex items-center gap-3">
+                <div
+                  className={`
+                    w-11
+                    h-11
+                    rounded-2xl
+                    flex
+                    items-center
+                    justify-center
+                    ${item.color}
+                  `}
+                >
+                  <Icon size={20} />
+                </div>
+
+                <p className="text-sm font-medium text-muted-foreground leading-5">
+                  {item.title}
+                </p>
+              </div>
+
+              {/* Value */}
+
+              <div className="mt-6">
+                <h3 className="text-4xl font-playfair font-semibold text-maroon">
+                  {item.value}
+                </h3>
+              </div>
+            </div>
+          );
+        })}
       </div>
-    </div>
-  );
-}
-
-function Row({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex justify-between">
-      <span className="text-muted-foreground">
-        {label}
-      </span>
-
-      <span className="font-semibold">
-        {value}
-      </span>
     </div>
   );
 }
