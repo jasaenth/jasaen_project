@@ -10,7 +10,7 @@ const Hero = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const slides = [
-    "/images/hero/hero1.jpg",
+    "/images/hero/hero11.jpg",
     "/images/hero/hero2.JPG",
     "/images/hero/hero3.JPG",
   ];
@@ -59,18 +59,18 @@ const Hero = () => {
             
 
             {/* Title */}
-            <h1 className="font-display text-5xl md:text-7xl lg:text-8xl xl:text-[7rem] leading-[0.95] font-light text-balance">
-              An ode to{" "}
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl xl:text-[6rem] leading-[0.95] font-light text-balance">
+              Where Every {" "}
               <span className="text-gold">
-                timeless
+                Stay
               </span>
               <br />
-              hospitality
+              Tells a Story
             </h1>
 
             {/* Description */}
-            <p className="mt-8 max-w-2xl mx-auto text-lg md:text-xl text-ivory/85 leading-relaxed">
-              Discover Jasaen — where every corridor tells a story
+            <p className="mt-8 max-w-3xl mx-auto text-xl md:text-2xl text-ivory/85 leading-relaxed">
+              Discover Jasaen Boutique Bangkok — where every corridor tells a story
               and every stay becomes a memory worth returning to.
             </p>
 
