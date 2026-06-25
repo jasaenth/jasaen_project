@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Booking from "@/models/Booking";
 import { connectDB } from "@/lib/mongodb";
 import Room from "@/models/Room";
+import Notification from "@/models/Notification";
 
 export async function GET(
   req: Request,
@@ -164,12 +165,79 @@ export async function PATCH(
       .populate(
         "room",
         `
-          roomName
-          roomType
-          roomSize
-          bedType
-        `,
+      roomName
+      roomType
+      roomSize
+      bedType
+    `,
       );
+
+    if (!booking) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Booking not found",
+        },
+        {
+          status: 404,
+        },
+      );
+    }
+
+    /*
+|--------------------------------------------------------------------------
+| Notifications
+|--------------------------------------------------------------------------
+*/
+
+    // Booking Confirmed
+    if (status === "CONFIRMED" && existingBooking.status !== "CONFIRMED") {
+      await Notification.create({
+        user: booking.user._id,
+
+        title: "Booking Confirmed",
+
+        message:
+          "Your booking has been confirmed. We look forward to welcoming you.",
+      });
+    }
+
+    // Guest Checked In
+    if (status === "IN_HOUSE" && existingBooking.status !== "IN_HOUSE") {
+      await Notification.create({
+        user: booking.user._id,
+
+        title: "Check-In Completed",
+
+        message: `Room ${
+          booking.assignedUnit || assignedUnit
+        } has been assigned successfully.`,
+      });
+    }
+
+    // Guest Checked Out
+    if (status === "COMPLETED" && existingBooking.status !== "COMPLETED") {
+      await Notification.create({
+        user: booking.user._id,
+
+        title: "Thank You",
+
+        message:
+          "Your stay has been completed. Thank you for choosing Jasaen Hotel.",
+      });
+    }
+
+    // Booking Cancelled
+    if (status === "CANCELLED" && existingBooking.status !== "CANCELLED") {
+      await Notification.create({
+        user: booking.user._id,
+
+        title: "Booking Cancelled",
+
+        message:
+          "Your booking has been cancelled. Please contact us if you need assistance.",
+      });
+    }
 
     return NextResponse.json(
       {

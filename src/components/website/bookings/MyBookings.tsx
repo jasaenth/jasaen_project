@@ -203,7 +203,7 @@ export default function MyBookings() {
 
                         <Info
                           label="Total"
-                          value={`₹${booking.totalAmount}`}
+                          value={`฿${booking.totalAmount}`}
                         />
                       </div>
 

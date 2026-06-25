@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import Booking from "@/models/Booking";
 import { getUser } from "@/lib/getUser";
 import { connectDB } from "@/lib/mongodb";
+import Notification from "@/models/Notification";
 
 export async function POST(req: Request) {
   try {
@@ -70,12 +71,18 @@ export async function POST(req: Request) {
         `,
       );
 
+    await Notification.create({
+      title: "New Booking",
+      message: `${(populatedBooking as any).user.name} booked ${(populatedBooking as any).room.roomName}`,
+      type: "BOOKING",
+      target: "ADMIN",
+      isRead: false,
+    });
+
     return NextResponse.json(
       {
         success: true,
-
         message: "Booking created successfully",
-
         data: populatedBooking,
       },
       {

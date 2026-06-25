@@ -77,11 +77,24 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
   };
 
   useEffect(() => {
+    fetchNotifications();
+
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 5000);
+
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
+
+    handleScroll();
+
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   useEffect(() => {
@@ -93,45 +106,25 @@ const AdminNavbar = ({ onMenuClick, isMobileMenuOpen }: AdminNavbarProps) => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, [isProfileOpen, isNotificationsOpen]);
 
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    if (!isDarkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
-  };
-
-  const notifications = [
-    {
-      id: 1,
-      title: "New Booking",
-      message: "John Doe booked a Deluxe Room",
-      time: "5 min ago",
-      read: false,
-      icon: "📅",
-    },
-    {
-      id: 2,
-      title: "Payment Received",
-      message: "Payment of ฿2,500 received",
-      time: "1 hour ago",
-      read: false,
-      icon: "💰",
-    },
-    {
-      id: 3,
-      title: "Room Review",
-      message: "New 5-star review",
-      time: "3 hours ago",
-      read: true,
-      icon: "⭐",
-    },
-  ];
+  const [notifications, setNotifications] = useState<any[]>([]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
   const user = useAppSelector((state) => state.auth.user);
+
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch("/api/admin/notifications");
+
+      const data = await res.json();
+
+      if (data.success) {
+        setNotifications(data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -249,7 +242,7 @@ justify-center
                                 {notif.message}
                               </p>
                               <p className="text-xs text-gray-400  mt-1">
-                                {notif.time}
+                                {new Date(notif.createdAt).toLocaleString()}
                               </p>
                             </div>
                             {!notif.read && (
@@ -271,21 +264,21 @@ justify-center
               {/* Profile Dropdown */}
               <div className="relative">
                 <button
-  onClick={(e) => {
-    e.stopPropagation();
-    setIsProfileOpen(!isProfileOpen);
-    setIsNotificationsOpen(false);
-  }}
-  className="
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsProfileOpen(!isProfileOpen);
+                    setIsNotificationsOpen(false);
+                  }}
+                  className="
     flex
     items-center
     gap-3
     rounded-full
     px-2
   "
->
-  <div
-    className="
+                >
+                  <div
+                    className="
       h-12
       w-12
       rounded-full
@@ -296,10 +289,10 @@ justify-center
       justify-center
       font-semibold
     "
-  >
-    {user?.fullName?.charAt(0) || "A"}
-  </div>
-</button>
+                  >
+                    {user?.fullName?.charAt(0) || "A"}
+                  </div>
+                </button>
 
                 {isProfileOpen && (
                   <div className="absolute right-0 mt-2 w-72 bg-white  rounded-4xl shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
