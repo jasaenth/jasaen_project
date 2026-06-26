@@ -85,17 +85,18 @@ export async function POST(req: Request) {
     });
 
     return response;
-  } catch (error) {
-    console.error(error);
+  } catch (error: any) {
+  console.error("GOOGLE LOGIN ERROR");
+  console.error(error);
 
-    return NextResponse.json(
-      {
-        success: false,
-        message: "Google login failed",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
+  return NextResponse.json(
+    {
+      success: false,
+      message: error.message,
+    },
+    {
+      status: 500,
+    }
+  );
+}
 }
