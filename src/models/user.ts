@@ -30,8 +30,9 @@ const UserSchema = new Schema(
 
     mobile: {
       type: String,
-      default: null,
       trim: true,
+      default: undefined,
+      sparse: true,
     },
 
     password: {
