@@ -18,8 +18,8 @@ export default function BookingsPage() {
   const [search, setSearch] = useState("");
 
   const [activeTab, setActiveTab] = useState<
-    "PENDING" | "CONFIRMED" | "IN_HOUSE" | "COMPLETED" | "CANCELLED"
-  >("PENDING");
+     "CONFIRMED" | "IN_HOUSE" | "COMPLETED" | "CANCELLED"
+  >("CONFIRMED");
 
   const [roomType, setRoomType] = useState("All");
 
@@ -37,7 +37,6 @@ export default function BookingsPage() {
     setCurrentPage(1);
   }, [activeTab]);
 
-  const pendingCount = bookings.filter((b) => b.status === "PENDING").length;
 
   const confirmedCount = bookings.filter(
     (b) => b.status === "CONFIRMED",
@@ -230,11 +229,7 @@ export default function BookingsPage() {
       {/* Stats */}
 
       <div className="grid lg:grid-cols-5 gap-4">
-        <StatCard
-          title="PENDING"
-          value={pendingCount}
-          subtitle="Awaiting approval"
-        />
+        
 
         <StatCard
           title="CONFIRMED"
@@ -266,8 +261,7 @@ export default function BookingsPage() {
       <div className="bg-white rounded-2xl border p-2">
         <div className="flex flex-wrap gap-2">
           {[
-            ["PENDING", pendingCount, "bg-yellow-500"],
-
+          
             ["CONFIRMED", confirmedCount, "bg-blue-500"],
 
             ["IN_HOUSE", inHouseCount, "bg-green-500"],

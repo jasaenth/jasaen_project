@@ -122,8 +122,6 @@ export default function BookingEditModal({ booking, onClose, onSave }: Props) {
                   onChange={(e) => handleChange("status", e.target.value)}
                   className="w-full border rounded-xl px-4 py-3"
                 >
-                  <option value="PENDING">PENDING</option>
-
                   <option value="CONFIRMED">CONFIRMED</option>
 
                   <option value="IN_HOUSE">IN HOUSE</option>

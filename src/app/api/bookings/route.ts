@@ -44,9 +44,9 @@ export async function POST(req: Request) {
 
       paymentStatus: "PAID",
 
-      status: "PENDING",
+      status: "CONFIRMED",
 
-      confirmedAt: null,
+      confirmedAt: new Date(),
 
       actualCheckIn: null,
 
@@ -70,9 +70,15 @@ export async function POST(req: Request) {
           mobile
         `,
       );
+    await Notification.create({
+      user: booking.user,
+      title: "Booking Confirmed",
+      message: "Your booking has been confirmed successfully.",
+      target: "USER",
+    });
 
     await Notification.create({
-      title: "New Booking",
+      title: "New Confirmed Booking",
       message: `${(populatedBooking as any).user.name} booked ${(populatedBooking as any).room.roomName}`,
       type: "BOOKING",
       target: "ADMIN",

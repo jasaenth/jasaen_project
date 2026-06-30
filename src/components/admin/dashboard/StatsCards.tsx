@@ -18,7 +18,6 @@ export default function StatsCards() {
     {
       title: "ACTIVE BOOKINGS",
       value: stats.totalBookings,
-      subtitle: `${stats.pendingBookings} Pending`,
       icon: CalendarDays,
     },
     {

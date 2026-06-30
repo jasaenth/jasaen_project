@@ -20,7 +20,6 @@ interface Props {
 }
 
 const statusStyles = {
-  PENDING: "bg-yellow-100 text-yellow-700",
 
   CONFIRMED: "bg-blue-100 text-blue-700",
 
