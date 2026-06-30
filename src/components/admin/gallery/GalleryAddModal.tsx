@@ -9,7 +9,7 @@ interface Props {
   onSave: (data: {
     title: string;
     subtitle: string;
-    image: File | null;
+    images: File[];
     tag: string;
   }) => Promise<void>;
 }
@@ -17,49 +17,53 @@ interface Props {
 const GalleryAddModal = ({ onClose, onSave }: Props) => {
   const [title, setTitle] = useState("");
   const [subtitle, setSubtitle] = useState("");
-  const [image, setImage] = useState<File | null>(null);
   const [tag, setTag] = useState("HOTEL");
 
-  const [preview, setPreview] = useState<string | null>(null);
+  const [images, setImages] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<string[]>([]);
 
   const [uploading, setUploading] = useState(false);
-
   const [error, setError] = useState("");
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0] || null;
+    const files = Array.from(e.target.files || []);
 
-    if (!selectedFile) return;
+    if (files.length === 0) return;
 
-    if (selectedFile.size > 5 * 1024 * 1024) {
-      setError("Image must be less than 5MB");
-      return;
-    }
+    for (const file of files) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Each image must be less than 5MB");
+        return;
+      }
 
-    if (!selectedFile.type.startsWith("image/")) {
-      setError("Only image files allowed");
-      return;
+      if (!file.type.startsWith("image/")) {
+        setError("Only image files are allowed");
+        return;
+      }
     }
 
     setError("");
-    setImage(selectedFile);
-    setPreview(URL.createObjectURL(selectedFile));
+
+    setImages(files);
+
+    setPreviews(files.map((file) => URL.createObjectURL(file)));
   };
 
   const handleSubmit = async () => {
-    if (!title || !subtitle || !tag || !image) {
-      setError("Please fill all fields");
+    if (!title || !subtitle || !tag || images.length === 0) {
+      setError("Please fill all fields and select images");
       return;
     }
 
     try {
       setUploading(true);
+
       setError("");
 
       await onSave({
         title,
         subtitle,
-        image,
+        images,
         tag,
       });
     } catch {
@@ -71,7 +75,7 @@ const GalleryAddModal = ({ onClose, onSave }: Props) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl w-full max-w-2xl p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-2xl w-full max-w-4xl p-8 relative shadow-2xl max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           disabled={uploading}
@@ -80,9 +84,7 @@ const GalleryAddModal = ({ onClose, onSave }: Props) => {
           <X size={22} />
         </button>
 
-        <h2 className="text-2xl font-bold text-primary mb-6">
-          Upload New Image
-        </h2>
+        <h2 className="text-2xl font-bold text-primary mb-6">Upload Images</h2>
 
         <div className="grid gap-5">
           <input
@@ -115,32 +117,44 @@ const GalleryAddModal = ({ onClose, onSave }: Props) => {
           />
 
           <label className="border-2 border-dashed border-borderlight rounded-xl p-8 text-center cursor-pointer hover:bg-bgmain transition">
-            {preview ? (
+            {previews.length > 0 ? (
               <div className="space-y-4">
-                <div className="relative w-full h-64 rounded-xl overflow-hidden">
-                  <Image
-                    src={preview}
-                    alt="Preview"
-                    fill
-                    className="object-cover"
-                  />
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {previews.map((preview, index) => (
+                    <div
+                      key={index}
+                      className="relative h-40 rounded-xl overflow-hidden"
+                    >
+                      <Image
+                        src={preview}
+                        alt={`Preview ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
 
-                <p className="text-sm text-gray-500">Click to change image</p>
+                <p className="text-sm text-gray-500">
+                  {images.length} image(s) selected. Click to change.
+                </p>
               </div>
             ) : (
               <>
                 <Upload size={32} className="mx-auto mb-3 text-primary" />
 
-                <p className="font-medium">Click to upload image</p>
+                <p className="font-medium">Click to upload multiple images</p>
 
-                <p className="text-sm text-gray-500 mt-2">Max file size: 5MB</p>
+                <p className="text-sm text-gray-500 mt-2">
+                  Select one or more images (Max 5MB each)
+                </p>
               </>
             )}
 
             <input
               type="file"
               accept="image/*"
+              multiple
               hidden
               disabled={uploading}
               onChange={handleImageChange}
@@ -154,7 +168,7 @@ const GalleryAddModal = ({ onClose, onSave }: Props) => {
               <Loader2 className="animate-spin text-blue-600" />
 
               <span className="text-blue-700 font-medium">
-                Uploading image...
+                Uploading {images.length} image(s)...
               </span>
             </div>
           )}
@@ -176,7 +190,9 @@ const GalleryAddModal = ({ onClose, onSave }: Props) => {
           >
             {uploading && <Loader2 className="animate-spin" size={18} />}
 
-            {uploading ? "Uploading..." : "Upload Image"}
+            {uploading
+              ? `Uploading ${images.length} Images...`
+              : "Upload Images"}
           </button>
         </div>
       </div>

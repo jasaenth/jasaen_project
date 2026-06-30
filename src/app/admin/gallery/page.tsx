@@ -141,55 +141,62 @@ export default function GalleryPage() {
   const handleAddImage = async (data: {
     title: string;
     subtitle: string;
-    image: File | null;
+    images: File[];
     tag: string;
   }) => {
     try {
-      if (!data.image) {
-        toast.error("Please select image");
-        return;
+      const newGalleryItems: GalleryItem[] = [];
+
+      for (const image of data.images) {
+        // Upload image
+        const uploadFormData = new FormData();
+        uploadFormData.append("image", image);
+
+        const uploadRes = await fetch("/api/uploads/gallery-images", {
+          method: "POST",
+          body: uploadFormData,
+        });
+
+        const uploadData = await uploadRes.json();
+
+        if (!uploadRes.ok) {
+          toast.error(uploadData.message || "Image upload failed");
+          continue;
+        }
+
+        // Create gallery document
+        const formData = new FormData();
+
+        formData.append("title", data.title);
+        formData.append("subtitle", data.subtitle);
+        formData.append("tag", data.tag);
+        formData.append("uploadedImage", JSON.stringify(uploadData.data));
+
+        const res = await fetch("/api/gallery", {
+          method: "POST",
+          body: formData,
+        });
+
+        const result = await res.json();
+
+        if (res.ok) {
+          newGalleryItems.push(result.data);
+        }
       }
 
-      const uploadFormData = new FormData();
-      uploadFormData.append("image", data.image);
+      if (newGalleryItems.length > 0) {
+        setImages((prev) => [...newGalleryItems, ...prev]);
 
-      const uploadRes = await fetch("/api/uploads/gallery-images", {
-        method: "POST",
-        body: uploadFormData,
-      });
+        setCurrentPage(1);
 
-      const uploadData = await uploadRes.json();
+        setShowAddModal(false);
 
-      if (!uploadRes.ok) {
-        toast.error(uploadData.message || "Image upload failed");
-        return;
+        toast.success(
+          `${newGalleryItems.length} image(s) uploaded successfully`,
+        );
+      } else {
+        toast.error("No images uploaded");
       }
-
-      const formData = new FormData();
-
-      formData.append("title", data.title);
-      formData.append("subtitle", data.subtitle);
-      formData.append("tag", data.tag);
-      formData.append("uploadedImage", JSON.stringify(uploadData.data));
-
-      const res = await fetch("/api/gallery", {
-        method: "POST",
-        body: formData,
-      });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        toast.error(result.message);
-        return;
-      }
-
-      setImages((prev) => [result.data, ...prev]);
-
-      setCurrentPage(1);
-      setShowAddModal(false);
-
-      toast.success("Image uploaded successfully");
     } catch (error) {
       console.error(error);
       toast.error("Upload failed");
