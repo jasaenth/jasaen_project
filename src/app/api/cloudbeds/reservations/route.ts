@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     const params = request.nextUrl.searchParams;
 
-    const page = params.get("page") || "1";
+    const page = params.get("page") || "2";
 
     const checkInFrom = params.get("checkInFrom");
     const checkInTo = params.get("checkInTo");
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
     const query = new URLSearchParams({
       pageNumber: page,
-      pageSize: "100",
+      pageSize: "50",
     });
 
     if (checkInFrom) query.append("checkInFrom", checkInFrom);

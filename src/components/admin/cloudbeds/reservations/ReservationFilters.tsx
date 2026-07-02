@@ -89,13 +89,12 @@ export default function ReservationFilters({
 
       {/* Filters */}
 
-
       <div className="border-t pt-4">
         <p className="text-sm font-semibold text-gray-700 mb-3">
           Filter Reservations
         </p>
 
-        <div className="grid lg:grid-cols-6 md:grid-cols-3 gap-3">
+        <div className="grid lg:grid-cols-7 md:grid-cols-3 gap-3">
           {/* Check In From */}
 
           <div>
@@ -156,7 +155,27 @@ export default function ReservationFilters({
             />
           </div>
 
-        
+          {/* Source */}
+
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">
+              Source
+            </label>
+
+            <select
+              value={sourceId}
+              onChange={(e) => setSourceId(e.target.value)}
+              className="w-full border rounded-xl px-4 py-3"
+            >
+              <option value="">All Sources</option>
+
+              {sources.map((source) => (
+                <option key={source.id} value={source.id}>
+                  {source.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {/* Clear Filters */}
 

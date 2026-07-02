@@ -112,8 +112,11 @@ export default function ReservationsPanel() {
       .toLowerCase()
       .includes(search.toLowerCase());
 
-    const matchesSource = !sourceId || reservation.sourceID === sourceId;
+    const reservationSourceId = String(
+      reservation.sourceID || reservation.sourceId || reservation.source || "",
+    );
 
+    const matchesSource = !sourceId || reservationSourceId === sourceId;
     return matchesSearch && matchesSource;
   });
 
