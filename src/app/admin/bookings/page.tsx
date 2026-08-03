@@ -1,3 +1,4 @@
+// app/admin/bookings/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,25 +9,20 @@ import BookingViewModal from "@/components/admin/bookings/BookingViewModal";
 import BookingEditModal from "@/components/admin/bookings/BookingEditModal";
 import { IBooking } from "@/types/Booking";
 import toast from "react-hot-toast";
+import { Download, FileSpreadsheet } from "lucide-react";
 
 const ITEMS_PER_PAGE = 10;
 
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<IBooking[]>([]);
   const [loading, setLoading] = useState(false);
-
   const [search, setSearch] = useState("");
-
   const [activeTab, setActiveTab] = useState<
      "CONFIRMED" | "IN_HOUSE" | "COMPLETED" | "CANCELLED"
   >("CONFIRMED");
-
   const [roomType, setRoomType] = useState("All");
-
   const [currentPage, setCurrentPage] = useState(1);
-
   const [selectedBooking, setSelectedBooking] = useState<IBooking | null>(null);
-
   const [editBooking, setEditBooking] = useState<IBooking | null>(null);
 
   useEffect(() => {
@@ -36,7 +32,6 @@ export default function BookingsPage() {
   useEffect(() => {
     setCurrentPage(1);
   }, [activeTab]);
-
 
   const confirmedCount = bookings.filter(
     (b) => b.status === "CONFIRMED",
@@ -83,7 +78,6 @@ export default function BookingsPage() {
 
       if (!res.ok) {
         toast.error(data.message);
-
         return;
       }
 
@@ -109,7 +103,6 @@ export default function BookingsPage() {
 
       if (!res.ok) {
         toast.error(data.message);
-
         return;
       }
 
@@ -220,17 +213,109 @@ export default function BookingsPage() {
     }
   };
 
+  // ============ CSV Export Function ============
+  const exportBookingsToCSV = () => {
+    try {
+      // Get all bookings or filtered bookings
+      const bookingsToExport = filteredBookings.length > 0 ? filteredBookings : bookings;
+
+      if (bookingsToExport.length === 0) {
+        toast.error("No bookings to export");
+        return;
+      }
+
+      // CSV Headers matching the template
+      const headers = [
+        "First Name*",
+        "Last Name*",
+        "Email*",
+        "Arrival Date*",
+        "Departure Date*",
+        "Accommodation*",
+        "Phone",
+        "Address",
+        "Country*",
+        "State",
+        "Zip Code",
+        "Source*",
+        "Status*",
+        "Adults*",
+        "Children*",
+        "External Reference ID",
+      ];
+
+      // Map booking data to CSV format
+      const csvRows = bookingsToExport.map((booking) => {
+        const firstName = booking.user?.name?.split(" ")[0] || "";
+        const lastName = booking.user?.name?.split(" ").slice(1).join(" ") || "";
+        
+        return [
+          firstName,
+          lastName,
+          booking.user?.email || "",
+          booking.checkIn ? new Date(booking.checkIn).toISOString().split("T")[0] : "",
+          booking.checkOut ? new Date(booking.checkOut).toISOString().split("T")[0] : "",
+          booking.room?.roomType || booking.room?.roomName || "Standard",
+          booking.user?.mobile || "",
+          booking.user?.address || "",
+          booking.user?.country || "",
+          booking.user?.state || "",
+          booking.user?.zipCode || "",
+          "JASAEN", // Source - can be adjusted based on your data
+          booking.status || "CONFIRMED",
+          String(booking.guests || 1),
+          "0", // Children - adjust if you have this field
+          booking._id || "",
+        ];
+      });
+
+      // Combine headers and rows
+      const csvContent = [
+        headers.join(","),
+        ...csvRows.map(row => row.join(","))
+      ].join("\n");
+
+      // Create and download the CSV file
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      
+      link.setAttribute("href", url);
+      link.setAttribute("download", `bookings_${new Date().toISOString().split("T")[0]}.csv`);
+      link.style.visibility = "hidden";
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast.success(`Downloaded ${bookingsToExport.length} bookings`);
+    } catch (error) {
+      console.error("CSV Export Error:", error);
+      toast.error("Failed to export bookings");
+    }
+  };
+
   return (
     <div className="space-y-4">
-      <div>
-        <h1 className="font-display text-2xl text-maroon">Bookings</h1>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="font-display text-2xl text-maroon">Bookings</h1>
+        </div>
+        
+        {/* Download CSV Button */}
+        <button
+          onClick={exportBookingsToCSV}
+          className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition shadow-sm"
+        >
+          <FileSpreadsheet size={18} />
+          <span className="hidden sm:inline">Download CSV</span>
+          <Download size={16} />
+        </button>
       </div>
 
       {/* Stats */}
 
       <div className="grid lg:grid-cols-5 gap-4">
-        
-
         <StatCard
           title="CONFIRMED"
           value={confirmedCount}
@@ -261,13 +346,9 @@ export default function BookingsPage() {
       <div className="bg-white rounded-2xl border p-2">
         <div className="flex flex-wrap gap-2">
           {[
-          
             ["CONFIRMED", confirmedCount, "bg-blue-500"],
-
             ["IN_HOUSE", inHouseCount, "bg-green-500"],
-
             ["COMPLETED", completedCount, "bg-purple-500"],
-
             ["CANCELLED", cancelledCount, "bg-red-500"],
           ].map(([status, count, color]) => (
             <button
