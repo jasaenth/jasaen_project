@@ -233,15 +233,16 @@ export default function BookingsPage() {
         "Departure Date*",
         "Accommodation*",
         "Phone",
-        "Address",
-        "Country*",
-        "State",
-        "Zip Code",
+        
         "Source*",
         "Status*",
         "Adults*",
         "Children*",
         "External Reference ID",
+        "Address",
+        "Country*",
+        "State",
+        "Zip Code",
       ];
 
       // Map booking data to CSV format
@@ -257,10 +258,7 @@ export default function BookingsPage() {
           booking.checkOut ? new Date(booking.checkOut).toISOString().split("T")[0] : "",
           booking.room?.roomType || booking.room?.roomName || "Standard",
           booking.user?.mobile || "",
-          booking.user?.address || "",
-          booking.user?.country || "",
-          booking.user?.state || "",
-          booking.user?.zipCode || "",
+         
           "JASAEN", // Source - can be adjusted based on your data
           booking.status || "CONFIRMED",
           String(booking.guests || 1),
