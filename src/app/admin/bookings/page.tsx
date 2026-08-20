@@ -18,7 +18,7 @@ export default function BookingsPage() {
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<
-     "CONFIRMED" | "IN_HOUSE" | "COMPLETED" | "CANCELLED"
+    "CONFIRMED" | "IN_HOUSE" | "COMPLETED" | "CANCELLED"
   >("CONFIRMED");
   const [roomType, setRoomType] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -217,7 +217,8 @@ export default function BookingsPage() {
   const exportBookingsToCSV = () => {
     try {
       // Get all bookings or filtered bookings
-      const bookingsToExport = filteredBookings.length > 0 ? filteredBookings : bookings;
+      const bookingsToExport =
+        filteredBookings.length > 0 ? filteredBookings : bookings;
 
       if (bookingsToExport.length === 0) {
         toast.error("No bookings to export");
@@ -233,14 +234,15 @@ export default function BookingsPage() {
         "Departure Date*",
         "Accommodation*",
         "Phone",
-        
+
         "Source*",
         "Status*",
         "Adults*",
         "Children*",
         "External Reference ID",
-        "Address",
         "Country*",
+        "Address",
+
         "State",
         "Zip Code",
       ];
@@ -248,44 +250,74 @@ export default function BookingsPage() {
       // Map booking data to CSV format
       const csvRows = bookingsToExport.map((booking) => {
         const firstName = booking.user?.name?.split(" ")[0] || "";
-        const lastName = booking.user?.name?.split(" ").slice(1).join(" ") || "";
-        
+        const lastName =
+          booking.user?.name?.split(" ").slice(1).join(" ") || "";
+
         return [
           firstName,
           lastName,
           booking.user?.email || "",
-          booking.checkIn ? new Date(booking.checkIn).toISOString().split("T")[0] : "",
-          booking.checkOut ? new Date(booking.checkOut).toISOString().split("T")[0] : "",
-          booking.room?.roomType || booking.room?.roomName || "Standard",
+          booking.checkIn
+            ? (() => {
+                const date = new Date(booking.checkIn);
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const day = String(date.getDate()).padStart(2, "0");
+                const year = date.getFullYear();
+                return `${month}-${day}-${year}`;
+              })()
+            : "",
+          booking.checkOut
+            ? (() => {
+                const date = new Date(booking.checkOut);
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const day = String(date.getDate()).padStart(2, "0");
+                const year = date.getFullYear();
+                return `${month}-${day}-${year}`;
+              })()
+            : "",
+          booking.room?.roomType
+            ? booking.room.roomType.charAt(0).toUpperCase() +
+              booking.room.roomType.slice(1).toLowerCase()
+            : booking.room?.roomName
+              ? booking.room.roomName.charAt(0).toUpperCase() +
+                booking.room.roomName.slice(1).toLowerCase()
+              : "Standard",
           booking.user?.mobile || "",
-         
+
           "JASAEN", // Source - can be adjusted based on your data
-          booking.status || "CONFIRMED",
+          booking.status
+            ? booking.status.charAt(0).toUpperCase() +
+              booking.status.slice(1).toLowerCase()
+            : "Confirmed",
           String(booking.guests || 1),
           "0", // Children - adjust if you have this field
           booking._id || "",
+          booking.countryCode || "TH",
         ];
       });
 
       // Combine headers and rows
       const csvContent = [
         headers.join(","),
-        ...csvRows.map(row => row.join(","))
+        ...csvRows.map((row) => row.join(",")),
       ].join("\n");
 
       // Create and download the CSV file
       const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
       const link = document.createElement("a");
       const url = URL.createObjectURL(blob);
-      
+
       link.setAttribute("href", url);
-      link.setAttribute("download", `bookings_${new Date().toISOString().split("T")[0]}.csv`);
+      link.setAttribute(
+        "download",
+        `bookings_${new Date().toISOString().split("T")[0]}.csv`,
+      );
       link.style.visibility = "hidden";
-      
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-      
+
       toast.success(`Downloaded ${bookingsToExport.length} bookings`);
     } catch (error) {
       console.error("CSV Export Error:", error);
@@ -299,7 +331,7 @@ export default function BookingsPage() {
         <div>
           <h1 className="font-display text-2xl text-maroon">Bookings</h1>
         </div>
-        
+
         {/* Download CSV Button */}
         <button
           onClick={exportBookingsToCSV}

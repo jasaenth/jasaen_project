@@ -58,7 +58,7 @@ const BookingSchema = new Schema(
 
     status: {
       type: String,
-      enum: [ "CONFIRMED", "IN_HOUSE", "COMPLETED", "CANCELLED"],
+      enum: ["CONFIRMED", "IN_HOUSE", "COMPLETED", "CANCELLED"],
       default: "CONFIRMED",
     },
 
@@ -75,6 +75,10 @@ const BookingSchema = new Schema(
     actualCheckOut: {
       type: Date,
       default: null,
+    },
+    countryCode: {
+      type: String,
+      default: "TH",
     },
   },
   {
