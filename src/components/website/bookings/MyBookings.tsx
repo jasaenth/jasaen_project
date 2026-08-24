@@ -132,7 +132,7 @@ export default function MyBookings() {
                       {/* Booking ID + Status */}
                       <div className="flex flex-wrap items-center gap-3 mb-4">
                         <span className="text-[11px] uppercase tracking-[0.25em] text-gold">
-                          Booking #{booking._id.slice(-8)}
+                          Booking-ID : {booking.bookingId}
                         </span>
 
                         <span

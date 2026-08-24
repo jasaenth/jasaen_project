@@ -17,12 +17,9 @@ export default function RoomDetails({ id }: Props) {
   const [selectedImage, setSelectedImage] = useState(0);
   const searchParams = useSearchParams();
   
-  const [showBookingModal, setShowBookingModal] =
-  useState(false);
-
+  const [showBookingModal, setShowBookingModal] =useState(false);
   const router = useRouter();
-
-const getLocalDate = (date: Date) => {
+  const getLocalDate = (date: Date) => {
   const offset = date.getTimezoneOffset();
   const localDate = new Date(date.getTime() - offset * 60 * 1000);
 
@@ -85,49 +82,105 @@ const guests =
     );
   }
 
+  // const handleBooking = async () => {
+  //   try {
+  //     const userRes = await fetch("/api/me");
+
+  //     if (!userRes.ok) {
+  //       router.push("/login");
+  //       return;
+  //     }
+
+  //     const { user } = await userRes.json();
+
+  //     if (!user) {
+  //       router.push("/login");
+  //       return;
+  //     }
+
+  //     const res = await fetch("/api/payment/create-session", {
+  //       method: "POST",
+
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+
+  //       body: JSON.stringify({
+  //         roomId: room._id,
+  //         roomName: room.roomName,
+  //         amount: totalAmount,
+  //         checkIn,
+  //         checkOut,
+  //         guests,
+  //         currency: "thb",
+  //       }),
+  //     });
+
+  //     const data = await res.json();
+
+  //     if (data.success) {
+  //       window.location.href = data.url;
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const handleBooking = async () => {
-    try {
-      const userRes = await fetch("/api/me");
+  try {
+    // Check login
+    const userRes = await fetch("/api/me");
 
-      if (!userRes.ok) {
-        router.push("/login");
-        return;
-      }
-
-      const { user } = await userRes.json();
-
-      if (!user) {
-        router.push("/login");
-        return;
-      }
-
-      const res = await fetch("/api/payment/create-session", {
-        method: "POST",
-
-        headers: {
-          "Content-Type": "application/json",
-        },
-
-        body: JSON.stringify({
-          roomId: room._id,
-          roomName: room.roomName,
-          amount: totalAmount,
-          checkIn,
-          checkOut,
-          guests,
-          currency: "thb",
-        }),
-      });
-
-      const data = await res.json();
-
-      if (data.success) {
-        window.location.href = data.url;
-      }
-    } catch (error) {
-      console.log(error);
+    if (!userRes.ok) {
+      router.push("/login");
+      return;
     }
-  };
+
+    const { user } = await userRes.json();
+
+    if (!user) {
+      router.push("/login");
+      return;
+    }
+
+    // Create booking directly
+    const res = await fetch("/api/bookings", {
+      method: "POST",
+
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify({
+        roomId: room._id,
+        roomName: room.roomName,
+        totalAmount: totalAmount,
+        checkIn,
+        checkOut,
+        guests,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      alert(data.message || "Booking failed");
+      return;
+    }
+
+    // Booking successful
+    console.log("Booking created:", data.data);
+
+    alert("Booking successful!");
+
+    // Optional: redirect to bookings page
+    router.push("/my-bookings");
+  } catch (error) {
+    console.error("Booking error:", error);
+
+    alert("Something went wrong while creating your booking.");
+  }
+};
 
   return (
     <>

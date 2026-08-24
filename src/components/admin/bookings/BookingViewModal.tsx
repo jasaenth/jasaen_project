@@ -49,7 +49,7 @@ export default function BookingViewModal({
             <h2 className="text-2xl font-bold">Booking Details</h2>
 
             <p className="text-sm text-gray-500 mt-1">
-              Booking ID: {booking._id}
+              Booking ID: {booking.bookingId}
             </p>
           </div>
 

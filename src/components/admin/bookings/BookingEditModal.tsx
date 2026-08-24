@@ -63,7 +63,7 @@ export default function BookingEditModal({ booking, onClose, onSave }: Props) {
             <h2 className="text-2xl font-bold">Update Booking</h2>
 
             <p className="text-sm text-gray-500 mt-1">
-              Booking ID: {formData._id}
+              Booking ID: {formData.bookingId}
             </p>
           </div>
 

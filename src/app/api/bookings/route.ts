@@ -22,10 +22,41 @@ export async function POST(req: Request) {
       );
     }
 
-    const { roomId, checkIn, checkOut, guests, totalAmount, paymentId } =
-      await req.json();
+    const {
+      roomId,
+      checkIn,
+      checkOut,
+      guests,
+      totalAmount,
+    } = await req.json();
+
+    // Validate required fields
+    if (
+      !roomId ||
+      !checkIn ||
+      !checkOut ||
+      !guests ||
+      totalAmount === undefined
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Missing required booking details",
+        },
+        {
+          status: 400,
+        },
+      );
+    }
+
+     // Generate booking ID
+    const bookingId = `BK-${Date.now()}-${Math.floor(
+      1000 + Math.random() * 9000
+    )}`;
 
     const booking = await Booking.create({
+      bookingId,
+
       user: (user as any).userId,
 
       room: roomId,
@@ -38,12 +69,14 @@ export async function POST(req: Request) {
 
       totalAmount,
 
-      paymentId,
+      // Payment temporarily disabled
+      paymentId: null,
 
-      paymentMethod: "STRIPE",
+      paymentMethod: "NONE",
 
-      paymentStatus: "PAID",
+      paymentStatus: "PENDING",
 
+      // Booking is immediately confirmed
       status: "CONFIRMED",
 
       confirmedAt: new Date(),
@@ -70,25 +103,34 @@ export async function POST(req: Request) {
           mobile
         `,
       );
+
+    // User notification
     await Notification.create({
       user: booking.user,
       title: "Booking Confirmed",
-      message: "Your booking has been confirmed successfully.",
+      message: `Your booking ${bookingId} has been confirmed successfully.`,
       target: "USER",
     });
 
+    // Admin notification
     await Notification.create({
       title: "New Confirmed Booking",
+
       message: `${(populatedBooking as any).user.name} booked ${(populatedBooking as any).room.roomName}`,
+
       type: "BOOKING",
+
       target: "ADMIN",
+
       isRead: false,
     });
 
     return NextResponse.json(
       {
         success: true,
+
         message: "Booking created successfully",
+        bookingId: booking.bookingId,
         data: populatedBooking,
       },
       {
@@ -96,7 +138,7 @@ export async function POST(req: Request) {
       },
     );
   } catch (error) {
-    console.error(error);
+    console.error("Booking error:", error);
 
     return NextResponse.json(
       {

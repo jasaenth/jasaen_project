@@ -21,6 +21,7 @@ export interface IBooking {
   };
 
 
+  bookingId: string;
 
   checkIn: string;
 

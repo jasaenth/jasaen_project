@@ -247,6 +247,7 @@ export default function BookingsPage() {
         "Zip Code",
       ];
 
+    
       // Map booking data to CSV format
       const csvRows = bookingsToExport.map((booking) => {
         const firstName = booking.user?.name?.split(" ")[0] || "";
