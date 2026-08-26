@@ -274,29 +274,36 @@ export default function Navbar() {
                         </div>
                       ) : (
                         notifications.map((notification) => (
-                          <div
-                            key={notification._id}
-                            className={`
-                    px-4
-                    py-3
-                    border-b
-                    hover:bg-gray-50
-                    ${!notification.isRead ? "bg-blue-50" : ""}
-                  `}
-                          >
-                            <p className="font-medium">{notification.title}</p>
+  <button
+    key={notification._id}
+    type="button"
+    onClick={() => {
+      setNotificationOpen(false);
+      router.push("/my-bookings");
+    }}
+    className={`
+      w-full
+      text-left
+      px-4
+      py-3
+      border-b
+      hover:bg-gray-50
+      transition
+      cursor-pointer
+      ${!notification.isRead ? "bg-blue-50" : ""}
+    `}
+  >
+    <p className="font-medium">{notification.title}</p>
 
-                            <p className="text-sm text-gray-500 mt-1">
-                              {notification.message}
-                            </p>
+    <p className="text-sm text-gray-500 mt-1">
+      {notification.message}
+    </p>
 
-                            <p className="text-xs text-gray-400 mt-2">
-                              {new Date(
-                                notification.createdAt,
-                              ).toLocaleString()}
-                            </p>
-                          </div>
-                        ))
+    <p className="text-xs text-gray-400 mt-2">
+      {new Date(notification.createdAt).toLocaleString()}
+    </p>
+  </button>
+))
                       )}
                     </div>
                   </div>

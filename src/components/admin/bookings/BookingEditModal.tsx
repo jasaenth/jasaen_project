@@ -45,7 +45,24 @@ export default function BookingEditModal({ booking, onClose, onSave }: Props) {
     return new Date(date).toISOString().split("T")[0];
   }
 
+  function canChangeBookingStatusOnDate(
+    reservedCheckIn?: string | Date | null,
+  ) {
+    if (!reservedCheckIn) return false;
+
+    const reservedDate = new Date(reservedCheckIn);
+    const today = new Date();
+
+    // Compare calendar dates only
+    reservedDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+
+    return today >= reservedDate;
+  }
+
   if (!formData) return null;
+
+  const canChangeBookingStatus = canChangeBookingStatusOnDate(formData.checkIn);
 
   const handleChange = (key: string, value: any) => {
     setFormData({
@@ -112,25 +129,60 @@ export default function BookingEditModal({ booking, onClose, onSave }: Props) {
 
             <div className="grid md:grid-cols-2 gap-5">
               {/* Status */}
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Booking Status
-                </label>
+             {/* Booking Status */}
+<div>
+  <label className="block text-sm font-medium mb-2">
+    Booking Status
+  </label>
 
-                <select
-                  value={formData.status}
-                  onChange={(e) => handleChange("status", e.target.value)}
-                  className="w-full border rounded-xl px-4 py-3"
-                >
-                  <option value="CONFIRMED">CONFIRMED</option>
+  <select
+    value={formData.status}
+    disabled={!canChangeBookingStatus}
+    onChange={(e) =>
+      handleChange("status", e.target.value)
+    }
+    className={`
+      w-full
+      border
+      rounded-xl
+      px-4
+      py-3
+      outline-none
+      ${
+        !canChangeBookingStatus
+          ? "bg-gray-100 text-gray-500 cursor-not-allowed"
+          : "bg-white focus:border-primary"
+      }
+    `}
+  >
+    <option value="CONFIRMED">
+      CONFIRMED
+    </option>
 
-                  <option value="IN_HOUSE">IN HOUSE</option>
+    <option value="IN_HOUSE">
+      IN HOUSE
+    </option>
 
-                  <option value="COMPLETED">COMPLETED</option>
+    <option value="COMPLETED">
+      COMPLETED
+    </option>
 
-                  <option value="CANCELLED">CANCELLED</option>
-                </select>
-              </div>
+    <option value="CANCELLED">
+      CANCELLED
+    </option>
+  </select>
+
+  {!canChangeBookingStatus ? (
+    <p className="text-xs text-gray-400 mt-2">
+      Booking status can only be changed on or after
+      the reserved check-in date.
+    </p>
+  ) : (
+    <p className="text-xs text-green-600 mt-2">
+      Booking status can be changed.
+    </p>
+  )}
+</div>
 
               {/* Payment */}
               <div>
@@ -201,8 +253,17 @@ export default function BookingEditModal({ booking, onClose, onSave }: Props) {
                 <input
                   type="date"
                   value={formatInputDate(formData.checkIn)}
-                  onChange={(e) => handleChange("checkIn", e.target.value)}
-                  className="w-full border rounded-xl px-4 py-3"
+                  disabled
+                  className="
+                    w-full
+                    border
+                    rounded-xl
+                    px-4
+                    py-3
+                    bg-gray-100
+                    text-gray-500
+                    cursor-not-allowed
+                  "
                 />
               </div>
 
@@ -215,8 +276,17 @@ export default function BookingEditModal({ booking, onClose, onSave }: Props) {
                 <input
                   type="date"
                   value={formatInputDate(formData.checkOut)}
-                  onChange={(e) => handleChange("checkOut", e.target.value)}
-                  className="w-full border rounded-xl px-4 py-3"
+                  disabled
+                  className="
+                    w-full
+                    border
+                    rounded-xl
+                    px-4
+                    py-3
+                    bg-gray-100
+                    text-gray-500
+                    cursor-not-allowed
+                  "
                 />
               </div>
 

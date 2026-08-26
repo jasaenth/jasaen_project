@@ -177,8 +177,7 @@ const page = () => {
 
       toast.success("Logged in with Google");
 
-      router.push("/");
-      router.refresh();
+       window.location.href = "/";
     } catch (error) {
       toast.error("Google login failed");
     } finally {

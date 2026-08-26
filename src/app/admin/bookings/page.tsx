@@ -276,13 +276,11 @@ export default function BookingsPage() {
                 return `${month}-${day}-${year}`;
               })()
             : "",
-          booking.room?.roomType
-            ? booking.room.roomType.charAt(0).toUpperCase() +
-              booking.room.roomType.slice(1).toLowerCase()
-            : booking.room?.roomName
-              ? booking.room.roomName.charAt(0).toUpperCase() +
-                booking.room.roomName.slice(1).toLowerCase()
-              : "Standard",
+          booking.room?.roomName
+            ? booking.room.roomName.charAt(0).toUpperCase() +
+              booking.room.roomName.slice(1).toLowerCase()
+            : booking.room?.roomName,
+            
           booking.user?.mobile || "",
 
           "JASAEN", // Source - can be adjusted based on your data
