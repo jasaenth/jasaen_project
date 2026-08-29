@@ -4,7 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Eye, EyeOff } from "lucide-react";
 import { GoogleLogin } from "@react-oauth/google";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 
 const page = () => {
@@ -20,6 +20,9 @@ const page = () => {
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
 
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const redirect = searchParams.get("redirect") || "/";
 
   const validateForm = () => {
     if (!name.trim() && isSignup) {
@@ -140,12 +143,12 @@ const page = () => {
           setError(data.message);
           return;
         }
-
         toast.success("Login successful");
 
         setTimeout(() => {
-          window.location.href = "/";
-        }, 1000);
+          router.push(redirect);
+          router.refresh();
+        }, 500);
       }
     } catch (error) {
       setError("Something went wrong");
@@ -177,7 +180,10 @@ const page = () => {
 
       toast.success("Logged in with Google");
 
-       window.location.href = "/";
+      setTimeout(() => {
+        router.push(redirect);
+        router.refresh();
+      }, 500);
     } catch (error) {
       toast.error("Google login failed");
     } finally {

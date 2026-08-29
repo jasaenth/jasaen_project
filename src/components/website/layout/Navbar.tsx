@@ -18,39 +18,40 @@ export default function Navbar() {
 
   const [notifications, setNotifications] = useState<any[]>([]);
   const [notificationOpen, setNotificationOpen] = useState(false);
+ 
+  
   useEffect(() => {
-    fetchUser();
+  fetchUser();
 
-    const onScroll = () => {
-      setScrolled(window.scrollY > 30);
-    };
+  const onScroll = () => {
+    setScrolled(window.scrollY > 30);
+  };
 
-    const handleOutsideClick = (e: MouseEvent) => {
-      const target = e.target as HTMLElement;
+  const handleOutsideClick = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
 
-      if (
-        !target.closest(".profile-menu") &&
-        !target.closest(".notification-menu")
-      ) {
-        setProfileOpen(false);
-        setNotificationOpen(false);
-      }
-    };
+    if (
+      !target.closest(".profile-menu") &&
+      !target.closest(".notification-menu")
+    ) {
+      setProfileOpen(false);
+      setNotificationOpen(false);
+    }
+  };
 
-    onScroll();
+  onScroll();
 
-    window.addEventListener("scroll", onScroll, {
-      passive: true,
-    });
+  window.addEventListener("scroll", onScroll, {
+    passive: true,
+  });
 
-    document.addEventListener("click", handleOutsideClick);
+  document.addEventListener("click", handleOutsideClick);
 
-    return () => {
-      window.removeEventListener("scroll", onScroll);
-
-      document.removeEventListener("click", handleOutsideClick);
-    };
-  }, []);
+  return () => {
+    window.removeEventListener("scroll", onScroll);
+    document.removeEventListener("click", handleOutsideClick);
+  };
+}, [pathname]);
 
   useEffect(() => {
     setOpen(false);
@@ -63,16 +64,23 @@ export default function Navbar() {
   const unreadCount = notifications.filter((n) => !n.isRead).length;
 
   const fetchUser = async () => {
-    try {
-      const res = await fetch("/api/me");
-      const data = await res.json();
+  try {
+    const res = await fetch("/api/me", {
+      cache: "no-store",
+    });
 
-      if (data.success) {
-        setUser(data.user);
-        fetchNotifications();
-      }
-    } catch {}
-  };
+    const data = await res.json();
+
+    if (data.success) {
+      setUser(data.user);
+      fetchNotifications();
+    } else {
+      setUser(null);
+    }
+  } catch {
+    setUser(null);
+  }
+};
 
   const fetchNotifications = async () => {
     try {
@@ -97,6 +105,38 @@ export default function Navbar() {
 
     return () => clearInterval(interval);
   }, [user]);
+
+  useEffect(() => {
+  const refreshUser = async () => {
+    try {
+      const res = await fetch("/api/me", {
+        cache: "no-store",
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setUser(data.user);
+      } else {
+        setUser(null);
+      }
+    } catch {
+      setUser(null);
+    }
+  };
+
+  refreshUser();
+
+  const handleFocus = () => {
+    refreshUser();
+  };
+
+  window.addEventListener("focus", handleFocus);
+
+  return () => {
+    window.removeEventListener("focus", handleFocus);
+  };
+}, [pathname]);
 
   const handleLogout = async () => {
     try {
@@ -274,14 +314,14 @@ export default function Navbar() {
                         </div>
                       ) : (
                         notifications.map((notification) => (
-  <button
-    key={notification._id}
-    type="button"
-    onClick={() => {
-      setNotificationOpen(false);
-      router.push("/my-bookings");
-    }}
-    className={`
+                          <button
+                            key={notification._id}
+                            type="button"
+                            onClick={() => {
+                              setNotificationOpen(false);
+                              router.push("/my-bookings");
+                            }}
+                            className={`
       w-full
       text-left
       px-4
@@ -292,18 +332,20 @@ export default function Navbar() {
       cursor-pointer
       ${!notification.isRead ? "bg-blue-50" : ""}
     `}
-  >
-    <p className="font-medium">{notification.title}</p>
+                          >
+                            <p className="font-medium">{notification.title}</p>
 
-    <p className="text-sm text-gray-500 mt-1">
-      {notification.message}
-    </p>
+                            <p className="text-sm text-gray-500 mt-1">
+                              {notification.message}
+                            </p>
 
-    <p className="text-xs text-gray-400 mt-2">
-      {new Date(notification.createdAt).toLocaleString()}
-    </p>
-  </button>
-))
+                            <p className="text-xs text-gray-400 mt-2">
+                              {new Date(
+                                notification.createdAt,
+                              ).toLocaleString()}
+                            </p>
+                          </button>
+                        ))
                       )}
                     </div>
                   </div>
